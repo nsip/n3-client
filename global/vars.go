@@ -3,17 +3,17 @@ package global
 import "github.com/nsip/n3-messages/n3grpc"
 
 var (
-	// N3pub :
-	N3pub *n3grpc.Client
+	// N3clt :
+	N3clt *n3grpc.Client
 )
 
 type (
-	SQType int
+	SQDType int
 )
 
 const (
-	SIF       SQType = 0
-	XAPI      SQType = 1
-	META_SIF  SQType = 2
-	META_XAPI SQType = 3
+	SIF       SQDType = 0
+	XAPI      SQDType = 1
+	META_SIF  SQDType = 2
+	META_XAPI SQDType = 3
 )

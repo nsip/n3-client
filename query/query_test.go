@@ -8,10 +8,7 @@ import (
 )
 
 func TestN3LoadConfig(t *testing.T) {
-	cfg := c.GetConfig("./config.toml", "../config/config.toml")
-	// fPln(cfg.RPC)
-	// fPln(cfg.Filewatcher)
-	Init(cfg)
+	Init(c.GetConfig("./config.toml", "../config/config.toml"))
 }
 
 func TestQueryMetaSif(t *testing.T) {

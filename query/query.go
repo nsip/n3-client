@@ -11,21 +11,18 @@ import (
 // Init :
 func Init(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
-	Cfg = config
-	if g.N3pub == nil {
-		g.N3pub = n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port)
-	}
+	Cfg = config	
+	g.N3clt = u.TerOp(g.N3clt == nil, n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
-func query(t g.SQType, sp []string) (s, p, o []string, v []int64) {
-	if Cfg == nil || g.N3pub == nil {
-		Cfg = c.GetConfig("./config.toml", "../config/config.toml")
-		Init(Cfg)
+func query(t g.SQDType, sp []string) (s, p, o []string, v []int64) {
+	if Cfg == nil || g.N3clt == nil {
+		Init(c.GetConfig("./config.toml", "../config/config.toml"))
 	}
 
 	qTuple := &pb.SPOTuple{Subject: sp[0], Predicate: sp[1], Object: ""}
 	ctx := u.CaseAssign(t, g.SIF, g.XAPI, g.META_SIF, g.META_XAPI, Cfg.RPC.CtxSif, Cfg.RPC.CtxXapi, Cfg.RPC.CtxMetaSif, Cfg.RPC.CtxMetaXapi).(string)
-	for _, t := range g.N3pub.Query(qTuple, Cfg.RPC.Namespace, ctx) {
+	for _, t := range g.N3clt.Query(qTuple, Cfg.RPC.Namespace, ctx) {
 		s, p, o, v = append(s, t.Subject), append(p, t.Predicate), append(o, t.Object), append(v, t.Version)
 	}
 	return
@@ -42,7 +39,7 @@ func Xapi(sp ...string) (s, p, o []string, v []int64) {
 }
 
 // Meta :
-func Meta(t g.SQType, sp ...string) (s, p, o []string, v []int64) {
+func Meta(t g.SQDType, sp ...string) (s, p, o []string, v []int64) {
 	switch t {
 	case g.SIF:
 		return query(g.META_SIF, sp)

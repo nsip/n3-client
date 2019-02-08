@@ -16,33 +16,31 @@ import (
 
 // Junk :
 func Junk(n int) {
-	PC(Cfg == nil || g.N3pub == nil, fEf("Missing Init, do 'Init(&config) before sending'\n"))
+	PC(Cfg == nil || g.N3clt == nil, fEf("Missing Init, do 'Init(&config) before sending'\n"))
 	for i := 0; i < n; i++ {
 		tuple := Must(messages.NewTuple("ab", "pre", "obj")).(*pb.SPOTuple)
 		tuple.Version = int64(i)
-		PE(g.N3pub.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
+		PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
 	}
 }
 
 // Terminate :
-func Terminate(t g.SQType, objID, termID string) {
+func Terminate(t g.SQDType, objID, termID string) {
 	defer func() { ver++ }()
-	if Cfg == nil || g.N3pub == nil {
-		Cfg = c.GetConfig("./config.toml", "../config/config.toml")
-		Init(Cfg)
+	if Cfg == nil || g.N3clt == nil {		
+		Init(c.GetConfig("./config.toml", "../config/config.toml"))
 	}
 
 	tuple := Must(messages.NewTuple(termID, TERMMARK, objID)).(*pb.SPOTuple)
 	tuple.Version = ver
 	ctx := u.CaseAssign(t, g.SIF, g.XAPI, Cfg.RPC.CtxSif, Cfg.RPC.CtxXapi).(string)
-	PE(g.N3pub.Publish(tuple, Cfg.RPC.Namespace, ctx))
+	PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, ctx))
 }
 
 // RequireVer :
-func RequireVer(t g.SQType, objID string) (ver int64, termID string) {
-	if Cfg == nil || g.N3pub == nil {
-		Cfg = c.GetConfig("./config.toml", "../config/config.toml")
-		Init(Cfg)
+func RequireVer(t g.SQDType, objID string) (ver int64, termID string) {
+	if Cfg == nil || g.N3clt == nil {		
+		Init(c.GetConfig("./config.toml", "../config/config.toml"))
 	}
 	_, p, o, _ := q.Meta(t, objID, "V")
 	PC(len(p) == 0, fEf("Got Version Error"))
@@ -57,14 +55,12 @@ func RequireVer(t g.SQType, objID string) (ver int64, termID string) {
 func Init(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
 	Cfg = config
-	if g.N3pub == nil {
-		g.N3pub = n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port)
-	}
+	g.N3clt = u.TerOp(g.N3clt == nil, n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
 // Sif is
 func Sif(str string) (cntV, cntS, cntA int, termID string) {
-	PC(Cfg == nil || g.N3pub == nil, fEf("Missing Send Init, do 'Init(&config) before sending'\n"))
+	PC(Cfg == nil || g.N3clt == nil, fEf("Missing Send Init, do 'Init(&config) before sending'\n"))
 
 	content, sqType := u.Str(str), g.SIF
 	PC(content.L() == 0 || !content.IsXMLSegSimple(), fEf("Incoming string is invalid xml segment\n"))
@@ -74,13 +70,13 @@ func Sif(str string) (cntV, cntS, cntA int, termID string) {
 			defer func() { ver, cntS = ver+1, cntS+1 }()
 			tuple := Must(messages.NewTuple(u.Str(p).RmPrefix(HEADTRIM), "::", v)).(*pb.SPOTuple)
 			tuple.Version = ver
-			PE(g.N3pub.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
+			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
 		},
 		func(p, objID string, arrCnt int) {
 			defer func() { ver, cntA = ver+1, cntA+1 }()
 			tuple := Must(messages.NewTuple(u.Str(p).RmPrefix(HEADTRIM), objID, u.I32(arrCnt).ToStr())).(*pb.SPOTuple)
 			tuple.Version = ver
-			PE(g.N3pub.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
+			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
 		},
 	)
 
@@ -97,7 +93,7 @@ func Sif(str string) (cntV, cntS, cntA int, termID string) {
 			}
 			tuple := Must(messages.NewTuple(id, u.Str(p).RmPrefix(HEADTRIM), v)).(*pb.SPOTuple)
 			tuple.Version = ver
-			PE(g.N3pub.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
+			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxSif))
 		},
 		doneV)
 	<-doneV
@@ -132,7 +128,7 @@ func Xapi(str string) (cnt int, termID string) {
 		}
 		tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 		tuple.Version = ver
-		PE(g.N3pub.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))
+		PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))
 	}, done)
 	<-done
 

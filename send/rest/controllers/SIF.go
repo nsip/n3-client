@@ -12,7 +12,7 @@ import (
 // PublishSIF :
 func PublishSIF(c echo.Context) error {
 	defer func() {
-		s.PHE(recover(), s.Cfg.Global.ErrLog, false, func(msg string, others ...interface{}) {
+		s.PHE(recover(), s.Cfg.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()

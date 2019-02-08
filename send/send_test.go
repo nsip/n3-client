@@ -18,11 +18,7 @@ func TestJunk(t *testing.T) {
 /************************************************************/
 
 func TestN3LoadConfig(t *testing.T) {
-	cfg := c.GetConfig("./config.toml", "../config/config.toml")
-	// fPln(cfg.Grpc)
-	// fPln(cfg.Filewatcher)
-	// fPln(cfg.Path)
-	Init(cfg)
+	Init(c.GetConfig("./config.toml", "../config/config.toml"))
 }
 
 func TestSendSif(t *testing.T) {
