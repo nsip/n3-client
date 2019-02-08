@@ -190,6 +190,7 @@ func YAMLLines2Nodes(lines []string, idmark string, dt DataType) *[]Node {
 
 		/* only get 'top' ID */
 		if (fromSIF || (fromXAPI && YAMLLevel(l) == 0)) && sI(l, idmark) >= 0 {
+			PC(!u.Str(pn.value).IsUUID(), fEf("%s is not a valid UUID", pn.value))
 			objID = pn.value
 			hasXapiID = true
 		}

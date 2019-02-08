@@ -11,7 +11,7 @@ import (
 
 // StartFileWatcherAsync :
 func StartFileWatcherAsync() {
-	defer func() { s.PH(recover(), s.Cfg.Global.ErrLog, true) }()
+	defer func() { s.PH(recover(), s.Cfg.Global.ErrLog) }()
 
 	watcher := s.Must(fsnotify.NewWatcher()).(*fsnotify.Watcher)
 

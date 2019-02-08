@@ -53,7 +53,7 @@ func GetConfig(cfgfiles ...string) *Config {
 
 // set is
 func (cfg *Config) set() *Config {
-	defer func() { PH(recover(), "./log.txt", true) }()
+	defer func() { PH(recover(), "./log.txt") }()
 	path := cfg.Path /* make a copy of original path for restoring */
 	Must(toml.DecodeFile(cfg.Path, cfg))
 	cfg.Path = path
@@ -62,7 +62,7 @@ func (cfg *Config) set() *Config {
 
 // Save is
 func (cfg *Config) Save() {
-	defer func() { PH(recover(), cfg.Global.ErrLog, true) }()
+	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 	f := Must(os.OpenFile(cfg.Path, os.O_WRONLY|os.O_TRUNC, 0666)).(*os.File)
 	defer f.Close()
 	PE(toml.NewEncoder(f).Encode(cfg))

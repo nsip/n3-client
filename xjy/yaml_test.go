@@ -9,7 +9,7 @@ import (
 
 func TestYAMLScanAsync(t *testing.T) {
 	cfg := c.GetConfig("./config.toml", "../config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog, true) }()
+	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 
 	//yamlstr, done := Xfile2Y("./files/nswdig.xml"), make(chan int)
 	//ioutil.WriteFile(`./files/nswdig.yaml`, []byte(yamlstr), 0666)

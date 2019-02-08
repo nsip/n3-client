@@ -1,15 +1,15 @@
 
-*** Panic Error *** Fatal : true ***
-2019/02/05 13:43:49 *status.statusError rpc error: code = Unavailable desc = transport is closing
-C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/publisher.go:60 (0x8589a9)
-	(*Publisher).Query: PE(err)
-c:/Users/qmiao/Desktop/n3-client/query/query.go:28 (0x8595d0)
+*** Panic Error *** Fatal : false ***
+2019/02/07 17:09:06 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: <nil>
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x858f0b)
+	(*Client).Query: PE(err)
+c:/Users/qmiao/Desktop/NSIP NIAS/n3-client/query/query.go:28 (0x859fe0)
 	query: for _, t := range g.N3pub.Query(qTuple, Cfg.RPC.Namespace, ctx) {
-c:/Users/qmiao/Desktop/n3-client/query/query.go:36 (0x859c8a)
+c:/Users/qmiao/Desktop/NSIP NIAS/n3-client/query/query.go:36 (0x85a69a)
 	Sif: return query(g.SIF, sp)
-c:/Users/qmiao/Desktop/n3-client/send/send.go:108 (0x8d3d64)
+c:/Users/qmiao/Desktop/NSIP NIAS/n3-client/send/send.go:109 (0x8d4864)
 	Sif: if _, _, _, v := q.Sif(prevTermID, TERMMARK); v == nil || len(v) == 0 {
-c:/Users/qmiao/Desktop/n3-client/send/send_test.go:35 (0x8d47bd)
+c:/Users/qmiao/Desktop/NSIP NIAS/n3-client/send/send_test.go:35 (0x8d52bd)
 	TestSendSif: Sif(string(bytes))
 C:/Go/src/testing/testing.go:827 (0x5007b6)
 	tRunner: fn(t)

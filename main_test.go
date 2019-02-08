@@ -12,7 +12,7 @@ import (
 
 func TestMain(t *testing.T) {
 	cfg := c.GetConfig("./config.toml", "./config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog, true) }()
+	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 	s.Init(cfg)
 	q.Init(cfg)
 

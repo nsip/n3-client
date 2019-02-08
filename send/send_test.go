@@ -9,7 +9,7 @@ import (
 )
 
 func TestJunk(t *testing.T) {
-	defer func() { PH(recover(), Cfg.Global.ErrLog, true) }()
+	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 	Junk(10)
 	time.Sleep(2 * time.Second)
@@ -26,17 +26,17 @@ func TestN3LoadConfig(t *testing.T) {
 }
 
 func TestSendSif(t *testing.T) {
-	defer func() { PH(recover(), Cfg.Global.ErrLog, true) }()
+	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	xmlfile := "../inbound/sif/staffpersonal.xml"
-	// xmlfile := "../inbound/sif/nswdig.xml"
+	// xmlfile := "../inbound/sif/staffpersonal.xml"
+	xmlfile := "../inbound/sif/nswdig.xml"
 	bytes := Must(ioutil.ReadFile(xmlfile)).([]byte)
 	Sif(string(bytes))
 }
 
 func TestSendXapi(t *testing.T) {
-	defer func() { PH(recover(), Cfg.Global.ErrLog, true) }()
+	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
 	jsonfile := "../inbound/xapi/xapifile.json"

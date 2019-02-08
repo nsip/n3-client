@@ -46,6 +46,7 @@ func RequireVer(t g.SQType, objID string) (ver int64, termID string) {
 	}
 	_, p, o, _ := q.Meta(t, objID, "V")
 	PC(len(p) == 0, fEf("Got Version Error"))
+	fPln(p, o)
 	ver, termID = u.Str(o[0]).ToInt64()+1, p[0]
 	return
 }
@@ -57,7 +58,7 @@ func Init(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
 	Cfg = config
 	if g.N3pub == nil {
-		g.N3pub = Must(n3grpc.NewPublisher(Cfg.RPC.Server, Cfg.RPC.Port)).(*n3grpc.Publisher)
+		g.N3pub = n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port)
 	}
 }
 

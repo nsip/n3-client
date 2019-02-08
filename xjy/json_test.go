@@ -9,7 +9,7 @@ import (
 
 func TestJSONScanObjects(t *testing.T) {
 	cfg := c.GetConfig("./config.toml", "../config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog, true) }()
+	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 	jsonbytes := Must(ioutil.ReadFile("./files/xapifile.json")).([]byte)
 
 	// ids, objs, pos := JSONScanObjects(string(jsonbytes), "id")
