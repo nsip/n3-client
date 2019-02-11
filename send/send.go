@@ -27,7 +27,7 @@ func Junk(n int) {
 // Terminate :
 func Terminate(t g.SQDType, objID, termID string) {
 	defer func() { ver++ }()
-	if Cfg == nil || g.N3clt == nil {		
+	if Cfg == nil || g.N3clt == nil {
 		Init(c.GetConfig("./config.toml", "../config/config.toml"))
 	}
 
@@ -39,11 +39,11 @@ func Terminate(t g.SQDType, objID, termID string) {
 
 // RequireVer :
 func RequireVer(t g.SQDType, objID string) (ver int64, termID string) {
-	if Cfg == nil || g.N3clt == nil {		
+	if Cfg == nil || g.N3clt == nil {
 		Init(c.GetConfig("./config.toml", "../config/config.toml"))
 	}
 	_, p, o, _ := q.Meta(t, objID, "V")
-	PC(len(p) == 0, fEf("Got Version Error"))
+	PC(len(p) == 0, fEf("Got Version Error, Dead ObjectID is used"))
 	fPln(p, o)
 	ver, termID = u.Str(o[0]).ToInt64()+1, p[0]
 	return

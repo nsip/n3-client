@@ -27,3 +27,7 @@ var (
 	e   error
 	Cfg *c.Config
 )
+
+const (
+	DEADMARK = "TOMBSTONE"
+)
