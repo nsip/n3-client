@@ -1,0 +1,60 @@
+{
+    "StaffPersonal": {
+        "-RefId": {},        
+        "LocalId": "946379881",
+        "StateProvinceId": "C2345681",
+        "OtherIdList": {
+            "OtherId": {
+                "-Type": "0004",
+                "#content": "333333333"
+            }
+        },
+        "PersonInfo": {
+            "Name": {
+                "-Type": "LGL",
+                "FamilyName": "Smith",
+                "GivenName": "Fred",
+                "FullName": "Fred Smith"
+            },
+            "OtherNames": {
+                "Name": [
+                    {},
+                    {}
+                ]
+            },
+            "Demographics": {},
+            "AddressList": {
+                "Address": [
+                    {},
+                    {},
+                    {}
+                ]
+            },
+            "PhoneNumberList": {
+                "PhoneNumber": [
+                    {},
+                    {}
+                ]
+            },
+            "EmailList": {
+                "Email": [
+                    {},
+                    {}
+                ]
+            }
+        },
+        "Title": "Principal",
+        "EmploymentStatus": "A",
+        "MostRecent": {
+            "SchoolLocalId": "S12345",
+            "LocalCampusId": "D",
+            "NAPLANClassList": {
+                "ClassCode": [
+                    {},
+                    {}
+                ]
+            },
+            "HomeGroup": "9G"
+        }
+    }
+}
