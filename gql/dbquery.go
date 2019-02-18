@@ -19,26 +19,25 @@ func Init(config *c.Config) {
 func queryObject(id string) {
 	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
 	Init(c.GetConfig("./config.toml", "../config/config.toml"))
-	root, mapStruct, mapValue, mapArray = "", map[string]string{}, map[string]string{}, map[string]int{}
-
-	_, _, o, _ := q.Sif(id, "") //               *** get Object's Root ***
+	
+	_, _, o, _ := q.Sif(id, "") //               *** Object's Root ***
 	if len(o) > 0 {
 		root = o[0]
 	} else {
 		return
 	}
 
-	s, _, o, _ := q.Sif(root, "::") //           *** get Object's Struct ***
+	s, _, o, _ := q.Sif(root, "::") //           *** Object's Struct ***
 	for i := range s {
 		mapStruct[s[i]] = o[i]
 	}
 
-	s, p, o, _ := q.Sif(id, root) //             *** get Object's Values ***
+	s, p, o, _ := q.Sif(id, root) //             *** Object's Values ***
 	for i := range s {
-		mapValue[p[i]] = o[i]
+		mapValue[p[i]] = append(mapValue[p[i]], o[i])
 	}
 
-	s, p, o, _ = q.Sif(id, "ARR") //             *** get Object's array info ***
+	s, p, o, _ = q.Sif(id, "ARR") //             *** Object's array count ***
 	for i := range s {
 		mapArray[p[i]] = u.Str(o[i]).ToInt()
 	}
@@ -46,16 +45,37 @@ func queryObject(id string) {
 	return
 }
 
-func isEndValue(path string) bool {
-	_, ok := mapValue[path]
-	return ok
+func isEndValue(path string) ([]string, bool) {
+	v, ok := mapValue[path]
+	return v, ok
 }
 
-func isArrStruct(path string) (string, bool) {
+func isArr(path string) (string, int, bool) {
 	if v, ok := mapStruct[path]; ok {
 		if sHP(v, "[]") {
-			return v[2:], true
+			return v[2:], mapArray[path], true
 		}
 	}
-	return "", false
+	return "", 0, false
+}
+
+func isParentArr(path string) (int, bool) {
+	if p := sLI(path, "."); p > 0 {
+		ppath := path[:p]
+		_, cnt, ok := isArr(ppath)
+		return cnt, ok
+	}
+	return 0, false
+}
+
+func isArrPath(path string) (int, bool) {
+	xpath, arrCnt, OK := "", 1, false
+	for _, seg := range sSpl(path, ".") {
+		xpath += (seg + ".")
+		if _, cnt, ok := isArr(xpath[:len(xpath)-1]); ok {
+			arrCnt *= cnt
+			OK = ok
+		}
+	}
+	return arrCnt, OK
 }

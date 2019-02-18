@@ -34,7 +34,8 @@ var (
 	e         error
 	Cfg       *c.Config
 	mapStruct = map[string]string{}
-	mapValue  = map[string]string{}
+	mapValue  = map[string][]string{}
 	mapArray  = map[string]int{}
 	root      = ""
+	// mapValueIndex = map[string]int{}
 )
