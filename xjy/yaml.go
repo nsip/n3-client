@@ -92,12 +92,17 @@ func YAMLTag(line string) string {
 
 // YAMLValue is
 func YAMLValue(line string) (value string, arrEleValue bool) {
+
 	if IsYAMLValueLine(line) {
 		if p := sI(line, ": "); p >= 0 { /* Normal 'Sub: Obj' line */
-			return sT(line[p+2:len(line)], "\""), false
+			value := line[p+2 : len(line)]
+			value = u.TerOp(value != `""`, sT(value, `"`), value).(string)
+			return value, false
 		}
 		if p := sI(line, "- "); p >= 0 { /* Pure Array Element '- Obj' line */
-			return sT(line[p+2:len(line)], "\""), true
+			value := line[p+2 : len(line)]
+			value = u.TerOp(value != `""`, sT(value, `"`), value).(string)
+			return value, true
 		}
 	}
 	return "", false /* Pure One Path Section */

@@ -25,8 +25,8 @@ func TestSendSif(t *testing.T) {
 	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	xmlfile := "../inbound/sif/staffpersonal.xml"
-	// xmlfile := "../inbound/sif/nswdig.xml"
+	// xmlfile := "../inbound/sif/staffpersonal.xml"
+	xmlfile := "../inbound/sif/nswdig.xml"
 	bytes := Must(ioutil.ReadFile(xmlfile)).([]byte)
 	Sif(string(bytes))
 }

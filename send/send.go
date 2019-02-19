@@ -81,8 +81,11 @@ func Sif(str string) (cntV, cntS, cntA int, termID string) {
 	)
 
 	doneV, prevID, prevTermID := make(chan int), "", ""
-	go xjy.YAMLScanAsync(xjy.Xstr2Y(content.V()), "RefId", xjy.XML, true,
+	yaml := xjy.Xstr2Y(content.V())
+	// ioutil.WriteFile("temp.yaml", []byte(yaml), 0666)
+	go xjy.YAMLScanAsync(yaml, "RefId", xjy.XML, true,
 		func(p, v, id string) {
+			// fPln(p, v, id)
 			defer func() { ver, cntV, prevID, prevTermID = ver+1, cntV+1, id, termID }()
 			if id != prevID {
 				ver, termID = RequireVer(sqType, id)

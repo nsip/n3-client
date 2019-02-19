@@ -1,170 +1,82 @@
 {
     "StaffPersonal": {
-        "-RefId": {},
-        "LocalId": "946379881",
-        "StateProvinceId": "C2345681",
+        "-RefId": "D7BF9628-14ED-491E-AC96-93C54DA35FD1",
+        "LocalId": "ufgpr250",
+        "StateProvinceId": {},
         "OtherIdList": {
             "OtherId": {
-                "-Type": "0004",
-                "#content": "333333333"
+                "-Type": {},
+                "#content": {}
             }
         },
         "PersonInfo": {
             "Name": {
                 "-Type": "LGL",
-                "FamilyName": "Smith",
-                "GivenName": "Fred",
-                "FullName": "Fred Smith"
+                "FamilyName": "Myers",
+                "GivenName": "Alfred",
+                "FullName": {}
             },
             "OtherNames": {
-                "Name": [
-                    {
-                        "-Type": "AKA",
-                        "FamilyName": "Anderson",
-                        "GivenName": "Samuel",
-                        "FullName": "Samuel Anderson"
-                    },
-                    {
-                        "-Type": "PRF",
-                        "FamilyName": "Rowinski",
-                        "GivenName": "Sam",
-                        "FullName": "Sam Rowinski"
-                    }
-                ]
+                "Name": []
             },
             "Demographics": {
-                "IndigenousStatus": "3",
+                "IndigenousStatus": {},
                 "Sex": "1",
-                "BirthDate": "1990-09-26",
-                "BirthDateVerification": "1004",
-                "PlaceOfBirth": "Clayton",
-                "StateOfBirth": "VIC",
-                "CountryOfBirth": "1101",
+                "BirthDate": {},
+                "BirthDateVerification": {},
+                "PlaceOfBirth": {},
+                "StateOfBirth": {},
+                "CountryOfBirth": {},
                 "CountriesOfCitizenship": {
-                    "CountryOfCitizenship": [
-                        "8104",
-                        "1101"
-                    ]
+                    "CountryOfCitizenship": []
                 },
                 "CountriesOfResidency": {
-                    "CountryOfResidency": [
-                        "8104",
-                        "1101"
-                    ]
+                    "CountryOfResidency": []
                 },
-                "CountryArrivalDate": "1990-09-26",
-                "AustralianCitizenshipStatus": "1",
+                "CountryArrivalDate": {},
+                "AustralianCitizenshipStatus": {},
                 "EnglishProficiency": {
-                    "Code": "1"
+                    "Code": {}
                 },
                 "LanguageList": {
                     "Language": {
-                        "Code": "0001",
-                        "LanguageType": "1"
+                        "Code": {},
+                        "LanguageType": {}
                     }
                 },
                 "DwellingArrangement": {
-                    "Code": "1671"
+                    "Code": {}
                 },
                 "Religion": {
-                    "Code": "2013"
+                    "Code": {}
                 },
                 "ReligiousEventList": {
-                    "ReligiousEvent": [
-                        {
-                            "Type": "Baptism",
-                            "Date": "2000-09-01"
-                        },
-                        {
-                            "Type": "Christmas",
-                            "Date": "2009-12-24"
-                        }
-                    ]
+                    "ReligiousEvent": []
                 },
-                "ReligiousRegion": "The Religion Region",
-                "PermanentResident": "P",
-                "VisaSubClass": "101",
-                "VisaStatisticalCode": "05"
+                "ReligiousRegion": {},
+                "PermanentResident": {},
+                "VisaSubClass": {},
+                "VisaStatisticalCode": {}
             },
             "AddressList": {
-                "Address": [
-                    {
-                        "-Type": "0123",
-                        "-Role": "012A",
-                        "Street": {
-                            "Line1": "Unit1/111",
-                            "Line2": "Barkley Street"
-                        },
-                        "City": "Yarra Glenn",
-                        "StateProvince": "VIC",
-                        "Country": "1101",
-                        "PostalCode": "9999"
-                    },
-                    {
-                        "-Type": "0123A",
-                        "-Role": "1073",
-                        "Street": {
-                            "Line1": "34 Term Address Street",
-                            "Line2": "Hello World Street"
-                        },
-                        "City": "Home Town",
-                        "StateProvince": "WA",
-                        "Country": "1101",
-                        "PostalCode": "9999"
-                    },
-                    {
-                        "-Type": "0123B",
-                        "-Role": "012B",
-                        "Street": {
-                            "Line1": "Unit2/100"
-                        },
-                        "City": "Hello Yarra Glenn",
-                        "StateProvince": "VIC",
-                        "Country": "1101",
-                        "PostalCode": "9999"
-                    }
-                ]
+                "Address": []
             },
             "PhoneNumberList": {
-                "PhoneNumber": [
-                    {
-                        "-Type": "0096",
-                        "Number": "03 9637-2289",
-                        "Extension": "72289",
-                        "ListedStatus": "Y"
-                    },
-                    {
-                        "-Type": "0888",
-                        "Number": "0437-765-234",
-                        "ListedStatus": "N"
-                    }
-                ]
+                "PhoneNumber": []
             },
             "EmailList": {
-                "Email": [
-                    {
-                        "-Type": "01",
-                        "#content": "fsmith@yahoo.com"
-                    },
-                    {
-                        "-Type": "02",
-                        "#content": "freddy@gmail.com"
-                    }
-                ]
+                "Email": []
             }
         },
-        "Title": "Principal",
+        "Title": {},
         "EmploymentStatus": "A",
         "MostRecent": {
-            "SchoolLocalId": "S12345",
-            "LocalCampusId": "D",
+            "SchoolLocalId": {},
+            "LocalCampusId": {},
             "NAPLANClassList": {
-                "ClassCode": [
-                    "9",
-                    "7"
-                ]
+                "ClassCode": []
             },
-            "HomeGroup": "9G"
+            "HomeGroup": {}
         }
     }
 }

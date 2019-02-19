@@ -13,13 +13,17 @@ func TestYAMLScanAsync(t *testing.T) {
 
 	//yamlstr, done := Xfile2Y("./files/nswdig.xml"), make(chan int)
 	//ioutil.WriteFile(`./files/nswdig.yaml`, []byte(yamlstr), 0666)
-	//yamlstr, done := Xfile2Y("./files/staffpersonal.xml"), make(chan int)
-	//ioutil.WriteFile(`./files/staffpersonal.yaml`, []byte(yamlstr), 0666)
-	yamlstr, done := Jfile2Y(`./files/xapifile.json`), make(chan int)
-	ioutil.WriteFile(`./files/xapifile.yaml`, []byte(yamlstr), 0666)
+	yamlstr, done := Xfile2Y("./files/staffpersonal.xml"), make(chan int)
+	ioutil.WriteFile(`./files/staffpersonal.yaml`, []byte(yamlstr), 0666)
+	//yamlstr, done := Jfile2Y(`./files/xapifile.json`), make(chan int)
+	//ioutil.WriteFile(`./files/xapifile.yaml`, []byte(yamlstr), 0666)
+
+	// done := make(chan int)
+	// yamlbytes, _ := ioutil.ReadFile("../temp.yaml")
+	// yamlstr := string(yamlbytes)
 
 	idx := 0
-	go YAMLScanAsync(yamlstr, "id", JSON, true, func(path, value, id string) {
+	go YAMLScanAsync(yamlstr, "RefId", XML, false, func(path, value, id string) {
 		idx++
 		fPf("%06d : %s\n", idx, path)
 		fPf("%s\n", value)

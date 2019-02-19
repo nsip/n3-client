@@ -19,7 +19,7 @@ func Init(config *c.Config) {
 func queryObject(id string) {
 	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
 	Init(c.GetConfig("./config.toml", "../config/config.toml"))
-	
+
 	_, _, o, _ := q.Sif(id, "") //               *** Object's Root ***
 	if len(o) > 0 {
 		root = o[0]
@@ -32,9 +32,9 @@ func queryObject(id string) {
 		mapStruct[s[i]] = o[i]
 	}
 
-	s, p, o, _ := q.Sif(id, root) //             *** Object's Values ***
+	s, p, o, v := q.Sif(id, root) //             *** Object's Values ***
 	for i := range s {
-		mapValue[p[i]] = append(mapValue[p[i]], o[i])
+		mapValue[p[i]] = append(mapValue[p[i]], &valver{value: o[i], ver: v[i]})
 	}
 
 	s, p, o, _ = q.Sif(id, "ARR") //             *** Object's array count ***
@@ -45,9 +45,16 @@ func queryObject(id string) {
 	return
 }
 
-func isEndValue(path string) ([]string, bool) {
+func isEndValue(path string) ([]*valver, bool) {
 	v, ok := mapValue[path]
 	return v, ok
+}
+
+func cntChildren(path string) (cnt int) {
+	if v, ok := mapStruct[path]; ok {
+		cnt = len(sSpl(v, " + "))
+	}
+	return 
 }
 
 func isArr(path string) (string, int, bool) {

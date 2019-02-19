@@ -89,6 +89,7 @@
 			<Address Type="0123A" Role="1073">
 				<Street>
 					<Line1>34 Term Address Street</Line1>
+					<Line2></Line2>
 				</Street>
 				<City>Home Town</City>
 				<StateProvince>WA</StateProvince>
