@@ -37,7 +37,7 @@ var (
 	mapStruct    = map[string]string{}
 	mapValue     = map[string][]*valver{}
 	mapArray     = map[string]int{}
-	mapArrObjLen = map[string]int{}
+	// mapArrObjLen = map[string]int{}
 )
 
 type valver struct {
