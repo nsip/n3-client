@@ -31,13 +31,12 @@ var (
 	sHP  = strings.HasPrefix
 	sHS  = strings.HasSuffix
 
-	e            error
-	Cfg          *c.Config
-	root         = ""
-	mapStruct    = map[string]string{}
-	mapValue     = map[string][]*valver{}
-	mapArray     = map[string]int{}
-	// mapArrObjLen = map[string]int{}
+	e         error
+	Cfg       *c.Config
+	root      = ""
+	mapStruct = map[string]string{}
+	mapValue  = map[string][]*valver{}
+	mapArray  = map[string]int{}
 )
 
 type valver struct {

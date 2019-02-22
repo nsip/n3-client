@@ -179,7 +179,7 @@ func YAMLLines2Nodes(lines []string, idmark string, dt DataType) *[]Node {
 	}
 	hasXapiID := false
 	nodes := make([]Node, len(lines))
-	objID := uuid.New().String() // we create a new GUID, if inbound data's id is not blank, overwrite this one, otherwise use this one
+	objID := u.TerOp(fromXAPI, uuid.New().String(), "").(string) // create a new GUID, if inbound data's id is not blank, overwrite this one, otherwise use this one
 	pn0 := &nodes[0]
 	pn0.tag, pn0.value, pn0.path, pn0.aevalue, pn0.level, pn0.levelXPath, pn0.id = YAMLTag(lines[0]), "", YAMLTag(lines[0]), false, 0, []int{0}, objID
 
@@ -230,16 +230,19 @@ func YAMLLines2Nodes(lines []string, idmark string, dt DataType) *[]Node {
 		pn.path = pn.path[:len(pn.path)-1] /* remove last '.' */
 	}
 
-	/* remove 'RefId' nodes */
+	/* clean up 'ID' nodes */
 	nodesNoID := []Node{}
 	for _, n := range nodes {
 		// fPf("%s : %d\n", n.tag, n.level)
 		if (fromXAPI && n.id == "") || (fromXAPI && hasXapiID) { /* xapi :  */
 			n.id = objID
 		}
-		if n.tag != idmark || (n.level > 0 && fromXAPI) || (n.level > 1 && fromSIF) { /* remove 'ID' nodes */
-			nodesNoID = append(nodesNoID, n)
-		}
+		
+		// if n.tag != idmark || (n.level > 0 && fromXAPI) || (n.level > 1 && fromSIF) { /* remove 'ID' nodes */
+		// 	nodesNoID = append(nodesNoID, n)
+		// }
+
+		nodesNoID = append(nodesNoID, n)
 	}
 
 	return &nodesNoID

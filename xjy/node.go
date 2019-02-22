@@ -10,8 +10,4 @@ type Node struct {
 	levelXPath []int /* index is the level, value is the line number */
 	aevalue    bool
 	id         string
-	// childrenYAML []string /* not implemented */
-
-	/* from xml */
-	// childListInXML string /* keep the children original order from xml file */
 }

@@ -83,7 +83,7 @@ func Sif(str string) (cntV, cntS, cntA int, termID string) {
 	doneV, prevID, prevTermID := make(chan int), "", ""
 	yaml := xjy.Xstr2Y(content.V())
 	// ioutil.WriteFile("temp.yaml", []byte(yaml), 0666)
-	go xjy.YAMLScanAsync(yaml, "RefId", xjy.XML, true,
+	go xjy.YAMLScanAsync(yaml, "RefId", xjy.XML, true, // *** skipDir must be <true>, otherwise dir version might be incorrect number ***
 		func(p, v, id string) {
 			// fPln(p, v, id)
 			defer func() { ver, cntV, prevID, prevTermID = ver+1, cntV+1, id, termID }()
@@ -120,19 +120,20 @@ func Xapi(str string) (cnt int, termID string) {
 	PC(content.L() == 0 || !content.IsJSON(), fEf("Incoming string is invalid json\n"))
 
 	done, prevID, prevTermID := make(chan int), "", ""
-	go xjy.YAMLScanAsync(xjy.Jstr2Y(content.V()), "id", xjy.JSON, true, func(p, v, id string) {
-		defer func() { ver, cnt, prevID, prevTermID = ver+1, cnt+1, id, termID }()
-		if id != prevID {
-			ver, termID = RequireVer(sqType, id)
-			fPln("Got:", ver, termID)
-			if prevID != "" {
-				Terminate(sqType, prevID, prevTermID)
+	go xjy.YAMLScanAsync(xjy.Jstr2Y(content.V()), "id", xjy.JSON, true, // *** skipDir must be <true>, otherwise dir version might be incorrect number ***
+		func(p, v, id string) {
+			defer func() { ver, cnt, prevID, prevTermID = ver+1, cnt+1, id, termID }()
+			if id != prevID {
+				ver, termID = RequireVer(sqType, id)
+				fPln("Got:", ver, termID)
+				if prevID != "" {
+					Terminate(sqType, prevID, prevTermID)
+				}
 			}
-		}
-		tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
-		tuple.Version = ver
-		PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))
-	}, done)
+			tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
+			tuple.Version = ver
+			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))
+		}, done)
 	<-done
 
 	lPln(fSf("<%06d> tuples sent\n", cnt))

@@ -20,26 +20,11 @@ func JSONMake(json, path string) string {
 
 		xpath := path + "." + f
 
-		// if xpath == "StaffPersonal.PersonInfo.OtherNames.Name.FamilyName" ||
-		// 	xpath == "StaffPersonal.PersonInfo.OtherNames.Name.-Type" ||
-		// 	xpath == "StaffPersonal.PersonInfo.OtherNames.Name" {
-		// 	fPln("here")
-		// 	fPln(json)
-		// }
-
 		if valvers, ok := isEndValue(xpath); ok { //                            *** VALUE ***
 
 			if !arrFlag { //										            *** Normal Values ***
 
-				// if len(valvers) > 1 { //                                        *** if > 1, Array Object Items ***
-				// 	// fPln(path)
-				// 	for i, vv := range valvers {
-				// 		json, _ = u.Str(json).JSONBuild(path, ".", i+1, f, vv.value)
-				// 	}
-				// } else {
-				// 	json, _ = u.Str(json).JSONBuild(path, ".", 1, f, valvers[0].value)
-				// }
-
+				//   *** len(valvers) > 1, Array Object Items ***
 				for i, vv := range valvers {
 					json, _ = u.Str(json).JSONBuild(path, ".", i+1, f, vv.value)
 				}
@@ -68,7 +53,6 @@ func JSONMake(json, path string) string {
 			if arrFlag { //                                                     *** Array Objects ***
 
 				// fPln(xpath)
-				// mapArrObjLen[xpath] = cntChildren(xpath)
 
 				content := ""
 				if arrCnt, ok := isArrPath(xpath); ok {
@@ -80,7 +64,7 @@ func JSONMake(json, path string) string {
 					} else {
 						content = "[]"
 					}
-				} 					
+				}
 				json, _ = u.Str(json).JSONBuild(path, ".", 1, f, content)
 
 			} else { //                                                         *** Normal Object ***
