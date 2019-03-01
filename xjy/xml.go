@@ -86,7 +86,7 @@ AGAIN:
 }
 
 // XMLFindAttributes is (ONLY LIKE  <SchoolInfo RefId="D3F5B90C-D85D-4728-8C6F-0D606070606C" Type="LGL">)
-func XMLFindAttributes(xmlele string) (attributes, attriValues []string, attributeList string) { /* 'map' may cause mis-order, so use slice */
+func XMLFindAttributes(xmlele, del string) (attributes, attriValues []string, attributeList string) { /* 'map' may cause mis-order, so use slice */
 	l := len(xmlele)
 	if l == 0 || xmlele[0] != '<' || xmlele[l-1] != '>' {
 		PE(fEf("Not a valid XML section"))
@@ -102,11 +102,11 @@ func XMLFindAttributes(xmlele string) (attributes, attriValues []string, attribu
 			attriValues = append(attriValues, u.Str(kvstrs[1]).RmQuotes())
 		}
 	}
-	return attributes, attriValues, sJ(attributes, " + ")
+	return attributes, attriValues, sJ(attributes, del)
 }
 
 // XMLFindChildren : (NOT search grandchildren)
-func XMLFindChildren(xmlele, id string) (uids, children []string, childList string, arrCnt int) {
+func XMLFindChildren(xmlele, id, del string) (uids, children []string, childList string, arrCnt int) {
 	l := len(xmlele)
 	if l == 0 || xmlele[0] != '<' || xmlele[l-1] != '>' {
 		fPln(xmlele)
@@ -156,24 +156,24 @@ func XMLFindChildren(xmlele, id string) (uids, children []string, childList stri
 		uids = append(uids, id)
 	}
 
-	if len(children) > 1 && u.Strs(children).ToG().AllAreIdentical() {		
+	if len(children) > 1 && u.Strs(children).ToG().AllAreIdentical() {
 		return uids, children, fSf("[]%s", children[0]), len(children) /* get array count from db, not here. */
 	}
 
-	return uids, children, sJ(children, " + "), 0
+	return uids, children, sJ(children, del), 0
 }
 
 // XMLYieldArrInfo :
-func XMLYieldArrInfo(xmlstr string, ids, objs []string, mapkeyprefix string, eleObjIDArrcnts *[]pathIDn) {
+func XMLYieldArrInfo(xmlstr string, ids, objs []string, mapkeyprefix, delPath, delChild string, eleObjIDArrcnts *[]pathIDn) {
 	if len(mapkeyprefix) > 0 {
-		mapkeyprefix += "."
+		mapkeyprefix += delPath
 	}
 	for i, obj := range objs {
 		curPath := mapkeyprefix + obj
 
 		xmlele := XMLEleStrByTag(xmlstr, obj, 1)
-		uids, children, _, arrCnt := XMLFindChildren(xmlele, ids[i]) /* uniform ids, children */
-		attributes, _, _ := XMLFindAttributes(xmlele)                /* attributes */
+		uids, children, _, arrCnt := XMLFindChildren(xmlele, ids[i], delChild) /* uniform ids, children */
+		attributes, _, _ := XMLFindAttributes(xmlele, delChild)                /* attributes */
 
 		/* array children info */
 		if arrCnt > 0 {
@@ -183,15 +183,15 @@ func XMLYieldArrInfo(xmlstr string, ids, objs []string, mapkeyprefix string, ele
 		if len(children) == 0 && len(attributes) == 0 { /* attributes */
 			continue
 		} else {
-			XMLYieldArrInfo(xmlele, uids, children, curPath, eleObjIDArrcnts) /* recursive */
+			XMLYieldArrInfo(xmlele, uids, children, curPath, delPath, delChild, eleObjIDArrcnts) /* recursive */
 		}
 	}
 }
 
-// XMLYieldFamilyTree is (We pack attributes in return map, value like '-...')
-func XMLYieldFamilyTree(xmlstr string, ids, objs []string, skipNoChild bool, mapkeyprefix string, mapEleChildlist *map[string]string) {
+// XMLFamilyTree is (We pack attributes in return map, value like '-...')
+func XMLFamilyTree(xmlstr string, ids, objs []string, skipNoChild bool, mapkeyprefix, delPath, delChild string, mapEleChildlist *map[string]string) {
 	if len(mapkeyprefix) > 0 {
-		mapkeyprefix += "."
+		mapkeyprefix += delPath
 	}
 	for i, obj := range objs {
 		curPath := mapkeyprefix + obj
@@ -201,12 +201,12 @@ func XMLYieldFamilyTree(xmlstr string, ids, objs []string, skipNoChild bool, map
 		}
 
 		xmlele := XMLEleStrByTag(xmlstr, obj, 1)
-		uids, children, childlist, _ := XMLFindChildren(xmlele, ids[i]) /* uniform ids, children */
-		attributes, _, attributeList := XMLFindAttributes(xmlele)       /* attributes */
+		uids, children, childlist, _ := XMLFindChildren(xmlele, ids[i], delChild) /* uniform ids, children */
+		attributes, _, attributeList := XMLFindAttributes(xmlele, delChild)       /* attributes */
 
 		/* attributes */
 		if len(attributes) > 0 {
-			(*mapEleChildlist)[curPath] = attributeList + " + "
+			(*mapEleChildlist)[curPath] = attributeList + delChild
 			if len(children) == 0 {
 				(*mapEleChildlist)[curPath] += "#content"
 			}
@@ -224,7 +224,7 @@ func XMLYieldFamilyTree(xmlstr string, ids, objs []string, skipNoChild bool, map
 		if len(children) == 0 && len(attributeList) == 0 { /* attributes */
 			continue
 		} else {
-			XMLYieldFamilyTree(xmlele, uids, children, skipNoChild, curPath, mapEleChildlist) /* recursive */
+			XMLFamilyTree(xmlele, uids, children, skipNoChild, curPath, delPath, delChild, mapEleChildlist) /* recursive */
 		}
 	}
 }
@@ -237,23 +237,17 @@ type pathIDn struct {
 }
 
 // XMLModelInfo :
-func XMLModelInfo(xmlstr, ObjIDMark string, skipNoChild bool, OnStruFetch func(string, string), OnArrFetch func(string, string, int)) {
+func XMLModelInfo(xmlstr, ObjIDMark, pathDel, childDel string, OnStruFetch func(string, string), OnArrFetch func(string, string, int)) {
 	ids, objs, _ := XMLScanObjects(xmlstr, ObjIDMark)
-	xmlDecStruct(xmlstr, ids, objs, true, OnStruFetch)
-	xmlDecArrInfo(xmlstr, ids, objs, OnArrFetch)
-}
-
-func xmlDecStruct(xmlstr string, ids, objs []string, skipNoChild bool, OnStruFetch func(string, string)) {
+	
 	mapEleChildlist := &map[string]string{}
-	XMLYieldFamilyTree(xmlstr, ids, objs, skipNoChild, "", mapEleChildlist)
+	XMLFamilyTree(xmlstr, ids, objs, true, "", pathDel, childDel, mapEleChildlist)
 	for k, v := range *mapEleChildlist {
-		OnStruFetch(k, sTR(v, "+ "))
+		OnStruFetch(k, v)
 	}
-}
 
-func xmlDecArrInfo(xmlstr string, ids, objs []string, OnArrFetch func(string, string, int)) {
 	eleObjIDArrcnts := &[]pathIDn{}
-	XMLYieldArrInfo(xmlstr, ids, objs, "", eleObjIDArrcnts)
+	XMLYieldArrInfo(xmlstr, ids, objs, "", pathDel, childDel, eleObjIDArrcnts)
 	for _, c := range *eleObjIDArrcnts {
 		OnArrFetch(c.arrPath, c.objID, c.arrCnt)
 	}

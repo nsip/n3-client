@@ -3,14 +3,13 @@ package send
 import (
 	"time"
 
-	"github.com/nsip/n3-messages/messages/pb"
-
 	c "../config"
 	g "../global"
 	q "../query"
 	"../xjy"
 	u "github.com/cdutwhu/go-util"
 	"github.com/nsip/n3-messages/messages"
+	"github.com/nsip/n3-messages/messages/pb"
 	"github.com/nsip/n3-messages/n3grpc"
 )
 
@@ -58,14 +57,16 @@ func Init(config *c.Config) {
 	g.N3clt = u.TerOp(g.N3clt == nil, n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
-// Sif is
+// Sif : SendSif
 func Sif(str string) (cntV, cntS, cntA int, termID string) {
 	PC(Cfg == nil || g.N3clt == nil, fEf("Missing Send Init, do 'Init(&config) before sending'\n"))
 
+	const pathDel = " ~ "
+	const childDel = " + "
 	content, sqType := u.Str(str), g.SIF
 	PC(content.L() == 0 || !content.IsXMLSegSimple(), fEf("Incoming string is invalid xml segment\n"))
 
-	xjy.XMLModelInfo(content.V(), "RefId", true,
+	xjy.XMLModelInfo(content.V(), "RefId", pathDel, childDel,
 		func(p, v string) {
 			defer func() { ver, cntS = ver+1, cntS+1 }()
 			tuple := Must(messages.NewTuple(u.Str(p).RmPrefix(HEADTRIM), "::", v)).(*pb.SPOTuple)
@@ -82,8 +83,8 @@ func Sif(str string) (cntV, cntS, cntA int, termID string) {
 
 	doneV, prevID, prevTermID := make(chan int), "", ""
 	yaml := xjy.Xstr2Y(content.V())
-	// ioutil.WriteFile("temp.yaml", []byte(yaml), 0666)
-	go xjy.YAMLScanAsync(yaml, "RefId", xjy.XML, true, // *** skipDir must be <true>, otherwise dir version might be incorrect number ***
+	// ioutil.WriteFile("sif.yaml", []byte(yaml), 0666)
+	go xjy.YAMLScanAsync(yaml, "RefId", pathDel, xjy.XML, true, // *** skipDir must be <true>, otherwise dir version might be incorrect number ***
 		func(p, v, id string) {
 			// fPln(p, v, id)
 			defer func() { ver, cntV, prevID, prevTermID = ver+1, cntV+1, id, termID }()
@@ -112,17 +113,37 @@ CHECK:
 	return
 }
 
-// Xapi is
-func Xapi(str string) (cnt int, termID string) {
+// Xapi : SendXapi
+func Xapi(str string) (cntV, cntS, cntA int, termID string) {
 	PC(Cfg == nil, fEf("Missing Send Init, do 'Init(&config) before sending'\n"))
 
+	const pathDel = " ~ "
+	const childDel = " + "
 	content, sqType := u.Str(str), g.XAPI
 	PC(content.L() == 0 || !content.IsJSON(), fEf("Incoming string is invalid json\n"))
 
-	done, prevID, prevTermID := make(chan int), "", ""
-	go xjy.YAMLScanAsync(xjy.Jstr2Y(content.V()), "id", xjy.JSON, true, // *** skipDir must be <true>, otherwise dir version might be incorrect number ***
+	xjy.JSONModelInfo(content.V(), "id", pathDel, childDel,
+		func(p, v string) {
+			defer func() { ver, cntS = ver+1, cntS+1 }()
+			tuple := Must(messages.NewTuple(p, "::", v)).(*pb.SPOTuple)
+			tuple.Version = ver
+			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))
+		},
+		func(p, objID string, arrCnt int) {
+			defer func() { ver, cntA = ver+1, cntA+1 }()
+			tuple := Must(messages.NewTuple(p, objID, u.I32(arrCnt).ToStr())).(*pb.SPOTuple)
+			tuple.Version = ver
+			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))
+		},
+	)
+
+	doneV, prevID, prevTermID := make(chan int), "", ""
+	yaml := xjy.Jstr2Y(content.V())
+	// ioutil.WriteFile("xapi.yaml", []byte(yaml), 0666)
+	go xjy.YAMLScanAsync(yaml, "id", pathDel, xjy.JSON, true, // *** skipDir must be <true>, otherwise dir version might be incorrect number ***
 		func(p, v, id string) {
-			defer func() { ver, cnt, prevID, prevTermID = ver+1, cnt+1, id, termID }()
+			defer func() { ver, cntV, prevID, prevTermID = ver+1, cntV+1, id, termID }()
+			// fPln(p, v, id)
 			if id != prevID {
 				ver, termID = RequireVer(sqType, id)
 				fPln("Got:", ver, termID)
@@ -133,10 +154,10 @@ func Xapi(str string) (cnt int, termID string) {
 			tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 			tuple.Version = ver
 			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))
-		}, done)
-	<-done
+		}, doneV)
+	<-doneV
 
-	lPln(fSf("<%06d> tuples sent\n", cnt))
+	lPln(fSf("<%06d> data tuples sent, <%06d> struct tuples sent, <%06d> array tuples sent\n", cntV, cntS, cntA))
 
 	Terminate(sqType, prevID, prevTermID) // *** last object terminator ***
 CHECK:

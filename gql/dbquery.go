@@ -16,30 +16,39 @@ func Init(config *c.Config) {
 }
 
 // filling root, mapStruct, mapValue, mapArray
-func queryObject(id string) {
+func queryObject(id, from string) {
 	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
 	Init(c.GetConfig("./config.toml", "../config/config.toml"))
 
-	_, _, o, _ := q.Sif(id, "") //               *** Object's Root ***
+	fn := u.CaseAssign(from, "sif", "xapi", q.Sif, q.Xapi).(func(sp ...string) (s, p, o []string, v []int64))
+
+	_, _, o, _ := fn(id, "") //               *** Object's Root ***
 	if len(o) > 0 {
 		root = o[0]
 	} else {
 		return
 	}
 
-	s, _, o, _ := q.Sif(root, "::") //           *** Object's Struct ***
+	fPln(root)
+
+	s, _, o, _ := fn(root, "::") //           *** Object's Struct ***
 	for i := range s {
 		mapStruct[s[i]] = o[i]
+		fPln(s[i], "s-------", o[i])
 	}
 
-	s, p, o, v := q.Sif(id, root) //             *** Object's Values ***
+	fPln(id, root)
+
+	s, p, o, v := fn(id, root) //             *** Object's Values ***
 	for i := range s {
 		mapValue[p[i]] = append(mapValue[p[i]], &valver{value: o[i], ver: v[i]})
+		fPln(p[i], "v-------", o[i], v[i])
 	}
 
-	s, p, o, _ = q.Sif(id, "ARR") //             *** Object's array count ***
+	s, p, o, _ = fn(id, "ARR") //             *** Object's array count ***
 	for i := range s {
 		mapArray[p[i]] = u.Str(o[i]).ToInt()
+		fPln(p[i], "a-------", o[i])
 	}
 
 	return
@@ -50,11 +59,11 @@ func isEndValue(path string) ([]*valver, bool) {
 	return v, ok
 }
 
-func cntChildren(path string) (cnt int) {
+func cntChildren(path, childDel string) (cnt int) {
 	if v, ok := mapStruct[path]; ok {
-		cnt = len(sSpl(v, " + "))
+		cnt = len(sSpl(v, childDel))
 	}
-	return 
+	return
 }
 
 func isArr(path string) (string, int, bool) {
@@ -66,8 +75,8 @@ func isArr(path string) (string, int, bool) {
 	return "", 0, false
 }
 
-func isParentArr(path string) (int, bool) {
-	if p := sLI(path, "."); p > 0 {
+func isParentArr(path, del string) (int, bool) {
+	if p := sLI(path, del); p > 0 {
 		ppath := path[:p]
 		_, cnt, ok := isArr(ppath)
 		return cnt, ok
@@ -75,11 +84,11 @@ func isParentArr(path string) (int, bool) {
 	return 0, false
 }
 
-func isArrPath(path string) (int, bool) {
+func isArrPath(path, del string) (int, bool) {
 	xpath, arrCnt, OK := "", 1, false
-	for _, seg := range sSpl(path, ".") {
-		xpath += (seg + ".")
-		if _, cnt, ok := isArr(xpath[:len(xpath)-1]); ok {
+	for _, seg := range sSpl(path, del) {
+		xpath += (seg + del)
+		if _, cnt, ok := isArr(xpath[:len(xpath)-len(del)]); ok {
 			arrCnt *= cnt
 			OK = ok
 		}

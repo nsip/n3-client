@@ -25,11 +25,12 @@ var (
 
 	lPln = log.Println
 
-	sSpl = strings.Split
-	sI   = strings.Index
-	sLI  = strings.LastIndex
-	sHP  = strings.HasPrefix
-	sHS  = strings.HasSuffix
+	sSpl    = strings.Split
+	sI      = strings.Index
+	sLI     = strings.LastIndex
+	sHP     = strings.HasPrefix
+	sHS     = strings.HasSuffix
+	sRepAll = strings.ReplaceAll
 
 	e         error
 	Cfg       *c.Config

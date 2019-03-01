@@ -11,15 +11,18 @@ func TestXMLScanObjects(t *testing.T) {
 	cfg := c.GetConfig("./config.toml", "../config/config.toml")
 	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 
-	//xmlbytes, err := ioutil.ReadFile("./files/staffpersonal.xml")
-	xmlbytes := Must(ioutil.ReadFile("./files/nswdig.xml")).([]byte)
+	xmlbytes := Must(ioutil.ReadFile("./files/staffpersonal.xml")).([]byte)
+	// xmlbytes := Must(ioutil.ReadFile("./files/nswdig.xml")).([]byte)
 
-	XMLModelInfo(string(xmlbytes), "RefId", true,
+	idx := 1
+	XMLModelInfo(string(xmlbytes), "RefId", " ~ ",
 		func(p, v string) {
-			fPf("%-90s:: %s\n", p, v)
+			fPf("%-5d: %-90s:: %s\n", idx, p, v)
+			idx++
 		},
 		func(p, v string, n int) {
-			fPf("%-90s:: %s  -- [%d]\n", p, v, n)
+			fPf("%-5d: %-90s:: %s  -- [%d]\n", idx, p, v, n)
+			idx++
 		},
 	)
 	fPf("finish:\n")
