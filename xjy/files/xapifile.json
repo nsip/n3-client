@@ -1,5 +1,5 @@
-{
-    "id": "6690e6c9-3ef0-4ed3-8b37-7f3964730bee",
+{    
+    "id": "D3E34F41-9D75-101A-8C3D-00AA001A1652",
     "actor": {
         "name": "Team PB",
         "mbox": "mailto:teampb@example.com",
@@ -7,19 +7,31 @@
             {
                 "name": "Andrew Downes",
                 "account": {
-                    "homePage": "http://www.example.com",
-                    "name": "13936749"
+                    "homePage": "http://www.example1.com",
+                    "name": "13936749111"
                 },
+                "openid": "http://toby.openid.example1.org/",
+                "mbox_sha1sum": "ebd31e95054c018b10727ccffd2ef2ec3a016ee9111",
                 "objectType": "Agent"
             },
             {
                 "name": "Toby Nichols",
-                "openid": "http://toby.openid.example.org/",
+                "account": {
+                    "homePage": "http://www.example2.com",
+                    "name": "13936749222"
+                },
+                "openid": "http://toby.openid.example2.org/",
+                "mbox_sha1sum": "ebd31e95054c018b10727ccffd2ef2ec3a016ee9222",
                 "objectType": "Agent"
             },
             {
                 "name": "Ena Hills",
-                "mbox_sha1sum": "ebd31e95054c018b10727ccffd2ef2ec3a016ee9",
+                "account": {
+                    "homePage": "http://www.example3.com",
+                    "name": "13936749333"
+                },
+                "openid": "http://toby.openid.example3.org/",
+                "mbox_sha1sum": "ebd31e95054c018b10727ccffd2ef2ec3a016ee9333",
                 "objectType": "Agent"
             }
         ],
@@ -34,7 +46,7 @@
     },
     "result": {
         "extensions": {
-            "http://example.com/profiles/meetings/resultextensions/minuteslocation": "X:\\meetings\\minutes\\examplemeeting.one"
+            "http://example.com/profiles/meetings/resultextensions/minuteslocation": "X:/meetings/minutes/examplemeeting.one"
         },
         "success": true,
         "completion": true,

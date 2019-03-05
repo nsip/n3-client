@@ -42,14 +42,14 @@
                 "CountryOfBirth": "1101",
                 "CountriesOfCitizenship": {
                     "CountryOfCitizenship": [
-                        "8104",
-                        "1101"
+                        1101,
+                        8104
                     ]
                 },
                 "CountriesOfResidency": {
                     "CountryOfResidency": [
-                        "8104",
-                        "1101"
+                        1101,
+                        8104
                     ]
                 },
                 "CountryArrivalDate": "1990-09-26",
@@ -161,8 +161,8 @@
             "LocalCampusId": "D",
             "NAPLANClassList": {
                 "ClassCode": [
-                    "9",
-                    "7"
+                    7,
+                    9
                 ]
             },
             "HomeGroup": "9G"

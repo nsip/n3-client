@@ -21,7 +21,7 @@ func SchemaMake(gql, path, pathDel, childDel string) string {
 		}
 
 		xpath := path + pathDel + f
-		if _, ok := isEndValue(xpath); ok {
+		if ok, _ := isLeafValue(xpath); ok {
 			if arrFlag {
 				gql = u.Str(gql).GQLBuild(tp, f, "[String]")
 			} else {

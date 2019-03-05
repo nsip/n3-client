@@ -1,90 +1,73 @@
 package gql
 
-import u "github.com/cdutwhu/go-util"
+import (
+	u "github.com/cdutwhu/go-util"
+)
 
+// JSONMake :
 func JSONMake(json, path, pathDel, childDel string) string {
 	if json == "" {
 		json, _ = u.Str("").JSONBuild("", "", 1, path, "{}")
 	}
 
-	for _, f := range sSpl(mapStruct[path], childDel) {
+	for _, f := range sSpl(mapStruct[sRepAll(path, "[]", "")], childDel) {
 
 		if f == "" {
 			return json
 		}
 
-		arrFlag := false
-		if sHP(f, "[]") {
-			f, arrFlag = f[2:], true
-		}
-
 		xpath := path + pathDel + f
-		fPln(xpath)
+		// fPln(xpath)
+		// if xpath == "StaffPersonal ~ MostRecent ~ NAPLANClassList ~ []ClassCode" {
+		// 	fPln("stop")
+		// }
+		// ioutil.WriteFile("debug.json", []byte(json), 0666)
 
-		if xpath == "StaffPersonal ~ PersonInfo ~ OtherNames ~ Name" {
-			fPln("stop")
-		}
+		tp, tf := sRepAll(path, "[]", ""), sRepAll(f, "[]", "")		
 
-		if valvers, ok := isEndValue(xpath); ok { //                            *** VALUE ***
+		if ok, valvers := isLeafValue(xpath); ok { //                           	              *** VALUE ***
 
-			if !arrFlag { //										            *** Normal Values ***
+			if okArr, _, plain := isArray(xpath); okArr && plain { //                             *** PLAIN ARRAY VALUES ***
 
-				//   *** len(valvers) > 1, Array Object Items ***
-				for i, vv := range valvers {
-					json, _ = u.Str(json).JSONBuild(path, pathDel, i+1, f, vv.value)
+				values := []string{}
+				for _, vv := range valvers {
+					values = append(values, vv.value)
 				}
+				json, _ = u.Str(json).JSONBuild(tp, pathDel, 1, tf, "["+sJ(values, ",")+"]")
 
-			} else { //												            *** Plain Array Values ***
+			} else {
 
-				content := ""
-				if len(valvers) > 0 {
-					for _, vv := range valvers {
-						content += (u.Str(vv.value).MkQuotes(u.QDouble) + ",")
+				for i, vv := range valvers { //                                                   ** if len(valvers) > 1, Array Object Items
+					json, _ = u.Str(json).JSONBuild(tp, pathDel, len(valvers)-i, tf, vv.value) // ** if change array order, p3 -> (i+1)
+				}
+			}
+
+		} else { //                                     							              *** ARRAY OR OBJECT ***
+
+			if isObject(xpath) { //                     							              *** OBJECT ***
+
+				if ok, n, plain := isArray(path); ok && !plain {
+					for i := 1; i <= n; i++ {
+						json, _ = u.Str(json).JSONBuild(tp, pathDel, i, tf, "{}")
 					}
-					content = "[" + content[:len(content)-1] + "]"
 				} else {
-					content = "[]"
+					json, _ = u.Str(json).JSONBuild(tp, pathDel, 1, tf, "{}")
 				}
-				json, _ = u.Str(json).JSONBuild(path, pathDel, 1, f, content)
+
 			}
 
-		} else if _, _, ok := isArr(xpath); ok { //                             *** Array, Need further process ***
+			if ok, n, plain := isArray(xpath); ok && !plain { //  						          *** OBJECT ARRAY FRAME ***
 
-			// fPln(xpath)
-			json, _ = u.Str(json).JSONBuild(path, pathDel, 1, f, "{}")
-
-		} else { //                                                             *** OBJECT ***
-
-			if arrFlag { //                                                     *** Array Objects ***
-
-				// fPln(xpath)
-
-				content := ""
-				if arrCnt, ok := isArrPath(xpath, pathDel); ok {
-					if arrCnt > 0 {
-						for i := 0; i < arrCnt; i++ {
-							content += "{},"
-						}
-						content = "[" + content[:len(content)-1] + "]"
-					} else {
-						content = "[]"
-					}
+				objs := []string{}
+				for j := 0; j < n; j++ {
+					objs = append(objs, "{}")
 				}
-				json, _ = u.Str(json).JSONBuild(path, pathDel, 1, f, content)
-
-			} else { //                                                         *** Normal Object ***
-
-				if repeat, ok := isArrPath(xpath, pathDel); ok { //                 *** Objects in Array ***
-					for i := 0; i < repeat; i++ {
-						json, _ = u.Str(json).JSONBuild(path, pathDel, i+1, f, "{}")
-					}
-				} else { //                                                     *** Single Object ***
-					json, _ = u.Str(json).JSONBuild(path, pathDel, 1, f, "{}")
-				}
+				json, _ = u.Str(json).JSONBuild(tp, pathDel, 1, tf, "["+sJ(objs, ",")+"]")
 
 			}
 		}
 
+		// ioutil.WriteFile("debug.json", []byte(json), 0666)
 		json = JSONMake(json, xpath, pathDel, childDel)
 	}
 

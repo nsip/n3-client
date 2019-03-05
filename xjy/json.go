@@ -5,22 +5,23 @@ import (
 )
 
 // JSONGetObjID : (must have top-level "id" like `"id": "6690e6c9-3ef0-4ed3-8b37-7f3964730bee",` )
-func JSONGetObjID(jsonstr, idmark, pathDel string) (id string) {
+func JSONGetObjID(jsonstr, idmark, defaultRoot, pathDel string) (id string) {
 	jsonStr := u.Str(jsonstr)
-	root, ext, newJSON := jsonStr.JSONRootEx("DefaultRoot")
+	root, ext, newJSON := jsonStr.JSONRootEx(defaultRoot)
 	jsonStr = u.TerOp(ext, u.Str(newJSON), jsonStr).(u.Str)
 	id, _, _ = jsonStr.JSONXPathValue(root+pathDel+idmark, pathDel)
 	return
 }
 
 // JSONModelInfo :
-func JSONModelInfo(jsonstr, ObjIDMark, pathDel, childDel string, OnStruFetch func(string, string), OnArrFetch func(string, string, int)) {
+func JSONModelInfo(jsonstr, ObjIDMark, defaultRoot, pathDel, childDel string,
+	OnStruFetch func(string, string), OnArrFetch func(string, string, int)) (addRoot bool) {
 
 	jsonStr := u.Str(jsonstr)
-	root, ext, newJSON := jsonStr.JSONRootEx("DefaultRoot")
+	root, ext, newJSON := jsonStr.JSONRootEx(defaultRoot)
 	jsonStr = u.TerOp(ext, u.Str(newJSON), jsonStr).(u.Str)
 
-	id := JSONGetObjID(jsonstr, ObjIDMark, pathDel) // *** find ID Value by ObjIDMark
+	id := JSONGetObjID(jsonstr, ObjIDMark, pathDel, defaultRoot) // *** find ID Value by ObjIDMark ***
 	id = u.Str(id).RmQuotes()
 
 	mapFT, mapArrInfo := jsonStr.JSONArrInfo(root, pathDel, id)
@@ -30,4 +31,5 @@ func JSONModelInfo(jsonstr, ObjIDMark, pathDel, childDel string, OnStruFetch fun
 	for k, v := range *mapArrInfo {
 		OnArrFetch(k, v.ID, v.Count)
 	}
+	return ext
 }

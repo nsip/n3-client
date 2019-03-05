@@ -39,7 +39,10 @@ var (
 )
 
 const (
-	TERMMARK = "ENDENDEND"
-	HEADTRIM = "sif."
-	DELAY    = 300
+	TERMMARK    = "ENDENDEND"
+	HEADTRIM    = "sif."
+	DELAY       = 300
+	pathDel     = " ~ "
+	childDel    = " + "
+	defaultRoot = "fakeRoot"
 )

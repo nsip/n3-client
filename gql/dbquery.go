@@ -34,7 +34,7 @@ func queryObject(id, from string) {
 	s, _, o, _ := fn(root, "::") //           *** Object's Struct ***
 	for i := range s {
 		mapStruct[s[i]] = o[i]
-		fPln(s[i], "s-------", o[i])
+		fPln("S -------> ", s[i], "   ", o[i])
 	}
 
 	fPln(id, root)
@@ -42,56 +42,79 @@ func queryObject(id, from string) {
 	s, p, o, v := fn(id, root) //             *** Object's Values ***
 	for i := range s {
 		mapValue[p[i]] = append(mapValue[p[i]], &valver{value: o[i], ver: v[i]})
-		fPln(p[i], "v-------", o[i], v[i])
+		fPln("V -------> ", p[i], "   ", o[i], "   ", v[i])
 	}
 
-	s, p, o, _ = fn(id, "ARR") //             *** Object's array count ***
+	s, p, o, _ = fn(id, "[]") //              *** Object's array count ***
 	for i := range s {
 		mapArray[p[i]] = u.Str(o[i]).ToInt()
-		fPln(p[i], "a-------", o[i])
+		fPln("A -------> ", p[i], "   ", o[i])
 	}
 
 	return
 }
 
-func isEndValue(path string) ([]*valver, bool) {
+func isLeafValue(path string) (bool, []*valver) {
+	path = sRepAll(path, "[]", "")
 	v, ok := mapValue[path]
-	return v, ok
+	return ok, v
 }
 
-func cntChildren(path, childDel string) (cnt int) {
-	if v, ok := mapStruct[path]; ok {
-		cnt = len(sSpl(v, childDel))
-	}
-	return
+func isObject(path string) bool {
+	path = sRepAll(path, "[]", "")
+	_, ok1 := mapStruct[path]
+	_, ok2 := mapArray[path]
+	return ok1 && !ok2
 }
 
-func isArr(path string) (string, int, bool) {
-	if v, ok := mapStruct[path]; ok {
-		if sHP(v, "[]") {
-			return v[2:], mapArray[path], true
-		}
-	}
-	return "", 0, false
+func isArray(path string) (fArr bool, nArr int, plain bool) {
+	path = sRepAll(path, "[]", "")
+	nArr, fArr = mapArray[path]
+	_, ok := mapStruct[path]
+	return fArr, nArr, !ok
 }
 
-func isParentArr(path, del string) (int, bool) {
-	if p := sLI(path, del); p > 0 {
-		ppath := path[:p]
-		_, cnt, ok := isArr(ppath)
-		return cnt, ok
-	}
-	return 0, false
-}
+// func cntChildren(path, childDel string) (cnt int) {
+// 	if v, ok := mapStruct[path]; ok {
+// 		cnt = len(sSpl(v, childDel))
+// 	}
+// 	return
+// }
 
-func isArrPath(path, del string) (int, bool) {
-	xpath, arrCnt, OK := "", 1, false
-	for _, seg := range sSpl(path, del) {
-		xpath += (seg + del)
-		if _, cnt, ok := isArr(xpath[:len(xpath)-len(del)]); ok {
-			arrCnt *= cnt
-			OK = ok
-		}
-	}
-	return arrCnt, OK
-}
+// func containsArr(path, pathDel, childDel string) (arrNames []string, arrCnts []int, fContain bool) {
+// 	if v, ok := mapStruct[path]; ok {
+// 		for _, subS := range sSpl(v, childDel) {
+// 			if sHP(subS, "[]") {
+// 				arrNames = append(arrNames, subS[2:])
+// 				arrCnts = append(arrCnts, mapArray[path+pathDel+subS[2:]])
+// 				fContain = true
+// 			} else {
+// 				arrNames = append(arrNames, subS)
+// 				arrCnts = append(arrCnts, 1)
+// 			}
+// 		}
+// 		return arrNames, arrCnts, fContain
+// 	}
+// 	return nil, nil, false
+// }
+
+// func isArrPath(path, pathDel, childDel string) (int, bool) {
+// 	xpath, arrCnt, OK := "", 1, false
+// 	for _, seg := range sSpl(path, pathDel) {
+// 		xpath += (seg + pathDel)
+// 		if _, cnt, ok := containsArr(xpath[:len(xpath)-len(pathDel)], pathDel, childDel); ok {
+// 			arrCnt *= cnt[0]
+// 			OK = ok
+// 		}
+// 	}
+// 	return arrCnt, OK
+// }
+
+// func isParentArr(path, del string) ([]int, bool) {
+// 	if p := sLI(path, del); p > 0 {
+// 		ppath := path[:p]
+// 		_, cnt, ok := containsArr(ppath, del)
+// 		return cnt, ok
+// 	}
+// 	return nil, false
+// }

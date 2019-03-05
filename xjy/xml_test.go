@@ -15,13 +15,13 @@ func TestXMLScanObjects(t *testing.T) {
 	// xmlbytes := Must(ioutil.ReadFile("./files/nswdig.xml")).([]byte)
 
 	idx := 1
-	XMLModelInfo(string(xmlbytes), "RefId", " ~ ",
+	XMLModelInfo(string(xmlbytes), "RefId", pathDel, childDel,
 		func(p, v string) {
-			fPf("%-5d: %-90s:: %s\n", idx, p, v)
+			fPf("S ---> %-5d: %-90s:: %s\n", idx, p, v)
 			idx++
 		},
 		func(p, v string, n int) {
-			fPf("%-5d: %-90s:: %s  -- [%d]\n", idx, p, v, n)
+			fPf("A ---> %-5d: %-90s:: %s  -- [%d]\n", idx, p, v, n)
 			idx++
 		},
 	)

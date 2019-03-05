@@ -20,9 +20,7 @@ func TestYAMLScanAsync(t *testing.T) {
 
 	// done := make(chan int)
 	// yamlbytes, _ := ioutil.ReadFile("../temp.yaml")
-	// yamlstr := string(yamlbytes)
-
-	const pathDel = " ~ "
+	// yamlstr := string(yamlbytes)	
 
 	idx := 0
 	go YAMLScanAsync(yamlstr, "id", pathDel, JSON, true, func(path, value, id string) {

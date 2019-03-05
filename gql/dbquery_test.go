@@ -15,18 +15,15 @@ func TestQueryObject(t *testing.T) {
 	fPln(root)
 	fPln("<------------------------------>")
 
-	const pathDel = " ~ "
-	const childDel = " + "
-
 	json := JSONMake("", root, pathDel, childDel)
 	json = sRepAll(json, `"-`, `"`)
 	json = sRepAll(json, `"#`, `"`)
-	ioutil.WriteFile("./xapi.json", []byte(json), 0666)
+	ioutil.WriteFile("./yield/xapi.json", []byte(json), 0666)
 
 	schema := SchemaMake("", root, pathDel, childDel)
 	schema = sRepAll(schema, "\t-", "\t")
 	schema = sRepAll(schema, "\t#", "\t")
-	ioutil.WriteFile("./schema_xapi.gql", []byte(schema), 0666)
+	ioutil.WriteFile("./yield/schema_xapi.gql", []byte(schema), 0666)
 
 	// for k, v := range mapStruct {
 	// 	fPf("%-100s%s\n", k, v)

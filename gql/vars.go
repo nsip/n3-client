@@ -31,6 +31,7 @@ var (
 	sHP     = strings.HasPrefix
 	sHS     = strings.HasSuffix
 	sRepAll = strings.ReplaceAll
+	sJ      = strings.Join
 
 	e         error
 	Cfg       *c.Config
@@ -44,3 +45,8 @@ type valver struct {
 	value string
 	ver   int64
 }
+
+const (
+	pathDel  = " ~ "
+	childDel = " + "
+)

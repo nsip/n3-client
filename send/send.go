@@ -60,9 +60,7 @@ func Init(config *c.Config) {
 // Sif : SendSif
 func Sif(str string) (cntV, cntS, cntA int, termID string) {
 	PC(Cfg == nil || g.N3clt == nil, fEf("Missing Send Init, do 'Init(&config) before sending'\n"))
-
-	const pathDel = " ~ "
-	const childDel = " + "
+	
 	content, sqType := u.Str(str), g.SIF
 	PC(content.L() == 0 || !content.IsXMLSegSimple(), fEf("Incoming string is invalid xml segment\n"))
 
@@ -116,13 +114,11 @@ CHECK:
 // Xapi : SendXapi
 func Xapi(str string) (cntV, cntS, cntA int, termID string) {
 	PC(Cfg == nil, fEf("Missing Send Init, do 'Init(&config) before sending'\n"))
-
-	const pathDel = " ~ "
-	const childDel = " + "
+	
 	content, sqType := u.Str(str), g.XAPI
 	PC(content.L() == 0 || !content.IsJSON(), fEf("Incoming string is invalid json\n"))
-
-	xjy.JSONModelInfo(content.V(), "id", pathDel, childDel,
+	
+	addedRoot := xjy.JSONModelInfo(content.V(), "id", defaultRoot, pathDel, childDel,
 		func(p, v string) {
 			defer func() { ver, cntS = ver+1, cntS+1 }()
 			tuple := Must(messages.NewTuple(p, "::", v)).(*pb.SPOTuple)
@@ -150,7 +146,9 @@ func Xapi(str string) (cntV, cntS, cntA int, termID string) {
 				if prevID != "" {
 					Terminate(sqType, prevID, prevTermID)
 				}
-			}
+			}			
+
+			p = u.TerOp(addedRoot, defaultRoot + pathDel + p, p).(string)
 			tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 			tuple.Version = ver
 			PE(g.N3clt.Publish(tuple, Cfg.RPC.Namespace, Cfg.RPC.CtxXapi))

@@ -35,6 +35,8 @@ var (
 type DataType int
 
 const (
-	XML  DataType = 0
-	JSON DataType = 1
+	XML      DataType = 0
+	JSON     DataType = 1
+	pathDel           = " ~ "
+	childDel          = " + "
 )

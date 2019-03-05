@@ -171,7 +171,7 @@ func YAMLLevel(line string) int {
 /*******************************************************************/
 
 // YAMLLines2Nodes is ,
-func YAMLLines2Nodes(lines []string, idmark, delPath string, dt DataType) *[]Node {
+func YAMLLines2Nodes(lines []string, idmark, pathDel string, dt DataType) *[]Node {
 	fromSIF, fromXAPI := (dt == XML), (dt == JSON)
 
 	if fromSIF && !sHP(idmark, "-") {
@@ -225,9 +225,9 @@ func YAMLLines2Nodes(lines []string, idmark, delPath string, dt DataType) *[]Nod
 			if len(tag) == 0 {
 				continue
 			}
-			pn.path += (tag + delPath)
+			pn.path += (tag + pathDel)
 		}
-		pn.path = pn.path[:len(pn.path)-len(delPath)] /* remove last ' ~ ' */
+		pn.path = pn.path[:len(pn.path)-len(pathDel)] /* remove last ' ~ ' */
 	}
 
 	/* clean up 'ID' nodes */
@@ -249,9 +249,9 @@ func YAMLLines2Nodes(lines []string, idmark, delPath string, dt DataType) *[]Nod
 }
 
 // YAMLScanAsync is
-func YAMLScanAsync(yamlstr, objIDMark, delPath string, dt DataType, skipDir bool, OnOneValueFetch func(path, value, id string), done chan<- int) {
+func YAMLScanAsync(yamlstr, objIDMark, pathDel string, dt DataType, skipDir bool, OnOneValueFetch func(path, value, id string), done chan<- int) {
 	lines := sFF(yamlstr, func(c rune) bool { return c == '\n' })
-	for _, n := range *YAMLLines2Nodes(lines, objIDMark, delPath, dt) {
+	for _, n := range *YAMLLines2Nodes(lines, objIDMark, pathDel, dt) {
 		if skipDir {
 			if len(sT(n.value, " ")) != 0 {
 				OnOneValueFetch(n.path, n.value, n.id)
