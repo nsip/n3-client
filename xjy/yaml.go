@@ -119,8 +119,12 @@ func YAMLValue(line string) (value string, arrEleValue bool) {
 
 // YAMLLevel is
 func YAMLLevel(line string) int {
+	nLine := len(line)
+	if nLine == 3 && sHP(line, "- ") {
+		return 1
+	}
 	for i, c := range line {
-		if c != ' ' && line[i+1] != ' ' {
+		if i < nLine-1 && c != ' ' && line[i+1] != ' ' {
 			// PC(i%2 == 1, epf("error yaml format %s: in YAMLLevel", line))
 			return i / 2
 		}
@@ -186,12 +190,16 @@ func YAMLLines2Nodes(lines []string, idmark, pathDel string, dt DataType) *[]Nod
 	for i, l := range lines[1:] {
 		i++
 
-		pn, pnlast := &nodes[i], &nodes[i-1]
+		// if i == 71 || i == 46 {
+		// 	fPln(i, l)
+		// }
+
+		pn, pnPrev := &nodes[i], &nodes[i-1]
 		pn.tag = YAMLTag(l)
 		pn.value, pn.aevalue = YAMLValue(l) /* pn.path will be filled below from levelXPath */
 		pn.level = YAMLLevel(l)
 		pn.levelXPath = make([]int, pn.level+1)
-		copy(pn.levelXPath, pnlast.levelXPath)
+		copy(pn.levelXPath, pnPrev.levelXPath)
 
 		/* only get 'top' ID */
 		if (fromSIF || (fromXAPI && YAMLLevel(l) == 0)) && sI(l, idmark) >= 0 {
@@ -200,18 +208,18 @@ func YAMLLines2Nodes(lines []string, idmark, pathDel string, dt DataType) *[]Nod
 			hasXapiID = true
 		}
 		pn.id = objID
-		if (pnlast.level == pn.level || pnlast.level == pn.level-1) && pnlast.id == "" {
-			pnlast.id = pn.id
+		if (pnPrev.level == pn.level || pnPrev.level == pn.level-1) && pnPrev.id == "" {
+			pnPrev.id = pn.id
 		}
 
 		switch {
-		case pn.level == pnlast.level+1: /*jump into*/
+		case pn.level == pnPrev.level+1: /*jump into*/
 			pn.levelXPath[pn.level-1] = i - 1
-		case pn.level == pnlast.level: /*next sibling*/
-			//copy(pn.levelFootPath, pnlast.levelFootPath)
-		case pn.level == pnlast.level-1: /*jump 1 out */
-		case pn.level == pnlast.level-2: /*jump 2 out */
-		case pn.level == pnlast.level-3: /*jump 3 out */
+		case pn.level == pnPrev.level: /*next sibling*/
+			//copy(pn.levelFootPath, pnPrev.levelFootPath)
+		case pn.level == pnPrev.level-1: /*jump 1 out */
+		case pn.level == pnPrev.level-2: /*jump 2 out */
+		case pn.level == pnPrev.level-3: /*jump 3 out */
 		default:
 			/* incorrect file */
 		}

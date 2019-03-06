@@ -29,7 +29,7 @@ func queryObject(id, from string) {
 		return
 	}
 
-	fPln(root)
+	fPln("<id> :", id, "<root> :", root)
 
 	s, _, o, _ := fn(root, "::") //           *** Object's Struct ***
 	for i := range s {
@@ -37,18 +37,16 @@ func queryObject(id, from string) {
 		fPln("S -------> ", s[i], "   ", o[i])
 	}
 
-	fPln(id, root)
+	s, p, o, _ := fn(id, "[]") //              *** Object's array count ***
+	for i := range s {
+		mapArray[p[i]] = u.Str(o[i]).ToInt()
+		fPln("A -------> ", p[i], "   ", o[i])
+	}
 
 	s, p, o, v := fn(id, root) //             *** Object's Values ***
 	for i := range s {
 		mapValue[p[i]] = append(mapValue[p[i]], &valver{value: o[i], ver: v[i]})
 		fPln("V -------> ", p[i], "   ", o[i], "   ", v[i])
-	}
-
-	s, p, o, _ = fn(id, "[]") //              *** Object's array count ***
-	for i := range s {
-		mapArray[p[i]] = u.Str(o[i]).ToInt()
-		fPln("A -------> ", p[i], "   ", o[i])
 	}
 
 	return

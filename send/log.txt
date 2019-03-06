@@ -1,0 +1,17 @@
+
+*** Panic Error *** Fatal : false ***
+2019/03/06 17:07:09 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.76.32:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x89f60c)
+	(*Client).Query: PE(err)
+c:/Users/qmiao/Desktop/n3-client/query/query.go:25 (0x8a06bd)
+	query: for _, t := range g.N3clt.Query(qTuple, Cfg.RPC.Namespace, ctx) {
+c:/Users/qmiao/Desktop/n3-client/query/query.go:33 (0x91cad5)
+	Sif: return query(g.SIF, sp)
+c:/Users/qmiao/Desktop/n3-client/query/query.go:33 (0x91caa9)
+	Sif: return query(g.SIF, sp)
+c:/Users/qmiao/Desktop/n3-client/send/send_test.go:31 (0x91d78f)
+	TestSendSif: Sif(string(bytes))
+C:/Go/src/testing/testing.go:865 (0x503097)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x45d2c1)
+	goexit: BYTE	$0x90	// NOP

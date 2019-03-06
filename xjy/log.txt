@@ -1,0 +1,11 @@
+
+*** Panic Error *** Fatal : false ***
+2019/03/06 15:44:46 *errors.withStack error on ioutil.ReadFile: open ./files/overview.json: The system cannot find the file specified.
+c:/Users/qmiao/Desktop/n3-client/xjy/jy.go:27 (0x5c7b3b)
+	Jfile2Y: PE1(err, "error on ioutil.ReadFile")
+c:/Users/qmiao/Desktop/n3-client/xjy/yaml_test.go:18 (0x5cd95a)
+	TestYAMLScanAsync: yamlstr, done := Jfile2Y(`./files/overview.json`), make(chan int)
+C:/Go/src/testing/testing.go:865 (0x4d36c7)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x45a0c1)
+	goexit: BYTE	$0x90	// NOP

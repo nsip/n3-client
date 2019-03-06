@@ -1,0 +1,73 @@
+concepts:
+- description: the significance of places and what they are like eg location and features of local places and other places in the world
+  name: Place
+- description: the significance of location and spatial distribution, and ways people organise and manage the spaces that we live in eg where activities are located and how spaces can be organised.
+  name: Space
+- description: the significance of the environment in human life, and the important interrelationships between humans and the environment eg natural and human features of a place; daily and seasonal weather patterns of places.
+  name: Environment
+- description: no object of geographical study can be viewed in isolation eg local and global links people have with places and the special connection Aboriginal and Torres Strait Islander Peoples maintain with Country/Place.
+  name: Interconnection
+- description: the way that geographical phenomena and problems can be examined at different spatial levels eg various scales by which places can be defined such as local suburbs, towns and large cities.
+  name: Scale
+id: D3E34F41-9D75-101A-8C3D-00AA001A1652
+inquiry_skills:
+- name: Acquiring geographical information
+  skills:
+  - ac:
+    - ACHGS007
+    - ACHGS013
+    skill: pose geographical questions
+  - ac:
+    - ACHGS008
+    - ACHGS014
+    skill: collect and record geographical data and information, for example, by observing, by interviewing, or using visual representations
+- name: Processing geographical information
+  skills:
+  - ac:
+    - ACHGS009
+    - ACHGS015
+    skill: 'represent data by constructing tables, graphs or maps '
+  - ac:
+    - ACHGS010
+    - ACHGS016
+    skill: draw conclusions based on the interpretation of geographical information sorted into categories
+- name: Communicating geographical information
+  skills:
+  - ac:
+    - ACHGS011
+    - ACHGS017
+    skill: present findings in a range of communication forms
+  - ac:
+    - ACHGS012
+    - ACHGS018
+    skill: reflect on their learning and suggest responses to their findings
+learning_area: HSIE
+overview:
+- In considering the intended learning, teachers will make decisions about the sequence, the emphasis to be given to particular areas of content, and any adjustments required based on the needs, interests and abilities of their students. Content including knowledge and understanding, concepts, skills and tools should be integrated to provide meaningful learning experiences for students.
+- Where appropriate, students are to be provided with opportunities to investigate a wide range of places and environments from local to global scales.
+stage: "1"
+subject: Geography
+tools:
+- code: M
+  examples:
+  - pictorial maps, large-scale maps, world map, globe
+  name: Maps
+- code: F
+  examples:
+  - observing, collecting and recording data, conducting surveys
+  name: Fieldwork
+- code: GS
+  examples:
+  - tally charts, pictographs, data tables, column graphs, weather data
+  name: Graphs and statistics
+- code: ST
+  examples:
+  - virtual maps, satellite images
+  name: Spatial technologies
+- code: VR
+  examples:
+  - photographs, illustrations, diagrams, story books, multimedia, web tools
+  name: Visual representations
+yrLvls:
+- 1
+- 2
