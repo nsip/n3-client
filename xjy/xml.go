@@ -6,8 +6,8 @@ import (
 
 // XMLScanObjects is ( ONLY LIKE  <SchoolInfo RefId="D3F5B90C-D85D-4728-8C6F-0D606070606C"> )
 func XMLScanObjects(xml, idmark string) (ids, objtags []string, posarr []int) {
-	idmark = u.Str(idmark).MkPrefix(" ")
-	idmark = u.Str(idmark).MkSuffix("=")
+	idmark = u.Str(idmark).MkPrefix(" ").V()
+	idmark = u.Str(idmark).MkSuffix("=").V()
 	lengthID := len(idmark)
 	pLastAbs := 0
 LOOKFOROBJ:
@@ -99,7 +99,7 @@ func XMLFindAttributes(xmlele, del string) (attributes, attriValues []string, at
 		for _, kv := range kvs {
 			kvstrs := sFF(kv, func(c rune) bool { return c == '=' })
 			attributes = append(attributes, ("-" + kvstrs[0])) /* mark '-' before attribute for differentiating child */
-			attriValues = append(attriValues, u.Str(kvstrs[1]).RmQuotes())
+			attriValues = append(attriValues, u.Str(kvstrs[1]).RmQuotes().V())
 		}
 	}
 	return attributes, attriValues, sJ(attributes, del)

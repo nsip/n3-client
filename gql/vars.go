@@ -26,15 +26,12 @@ var (
 	lPln = log.Println
 
 	sSpl    = strings.Split
-	sI      = strings.Index
-	sLI     = strings.LastIndex
-	sHP     = strings.HasPrefix
-	sHS     = strings.HasSuffix
 	sRepAll = strings.ReplaceAll
 	sJ      = strings.Join
+	sCnt    = strings.Count
 
 	e         error
-	Cfg       *c.Config
+	CFG       *c.Config
 	root      = ""
 	mapStruct = map[string]string{}
 	mapValue  = map[string][]*valver{}

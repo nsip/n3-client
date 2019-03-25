@@ -31,7 +31,8 @@ func YAMLRmHangStr(yaml string) string {
 	// return sJ(strs, "")
 
 	/* remove surplus blank in value string */
-	return u.Str(sJ(strs, "")).TrimInternalEachLine(' ', 1)
+	str := u.Str(sJ(strs, ""))
+	return str.TrimInternalEachLine(' ', 1).V()
 }
 
 /*******************************************************/
@@ -81,13 +82,14 @@ func YAMLTag(line string) string {
 	// return u.Str(sTL(line[:len(line)-1], " ")).RmQuotes() /* Pure One Path Section */
 
 	if IsYAMLValueLine(line) {
-		k, _ := u.Str(line).KeyValuePair(": ", '~', '~', true, true)
-		if sHP(k, "- ") {
+		k, _ := u.Str(line).KeyValuePair(": ", "~", "~", true, true)
+		//if sHP(k, "- ") {
+		if k.HP("- ") {
 			k = u.Str(k[2:]).RmQuotes()
 		}
-		return k
+		return k.V()
 	}
-	return u.Str(sTL(line[:len(line)-1], " ")).RmQuotes()
+	return u.Str(sTL(line[:len(line)-1], " ")).RmQuotes().V()
 }
 
 // YAMLValue is
@@ -269,4 +271,18 @@ func YAMLScanAsync(yamlstr, objIDMark, pathDel string, dt DataType, skipDir bool
 		}
 	}
 	done <- 1
+}
+
+// YAMLScan is
+func YAMLScan(yamlstr, objIDMark, pathDel string, dt DataType, skipDir bool, OnOneValueFetch func(path, value, id string)) {
+	lines := sFF(yamlstr, func(c rune) bool { return c == '\n' })
+	for _, n := range *YAMLLines2Nodes(lines, objIDMark, pathDel, dt) {
+		if skipDir {
+			if len(sT(n.value, " ")) != 0 {
+				OnOneValueFetch(n.path, n.value, n.id)
+			}
+		} else {
+			OnOneValueFetch(n.path, n.value, n.id)
+		}
+	}
 }

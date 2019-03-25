@@ -13,13 +13,6 @@ var (
 	PH  = u.PanicHandle
 	PC  = u.PanicOnCondition
 
-	sI  = strings.Index
-	sLI = strings.LastIndex
-	sT  = strings.Trim
-	sTL = strings.TrimLeft
-	sTR = strings.TrimRight
-	sHP = strings.HasPrefix
-	sHS = strings.HasSuffix
 	sFF = strings.FieldsFunc
 	sC  = strings.Contains
 	sJ  = strings.Join

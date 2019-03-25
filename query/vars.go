@@ -25,5 +25,5 @@ var (
 	lPln = log.Println
 
 	e   error
-	Cfg *c.Config
+	CFG *c.Config
 )

@@ -9,7 +9,7 @@ import (
 )
 
 func TestJunk(t *testing.T) {
-	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
+	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 	Junk(10)
 	time.Sleep(2 * time.Second)
@@ -18,24 +18,23 @@ func TestJunk(t *testing.T) {
 /************************************************************/
 
 func TestN3LoadConfig(t *testing.T) {
-	Init(c.GetConfig("./config.toml", "../config/config.toml"))
+	InitFrom(c.FromFile("./config.toml", "../config/config.toml"))
 }
 
 func TestSendSif(t *testing.T) {
-	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
+	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	xmlfile := "../inbound/sif/staffpersonal.xml"
-	// xmlfile := "../inbound/sif/nswdig.xml"
+	xmlfile := "../inbound/sif/sif.xml"	
 	bytes := Must(ioutil.ReadFile(xmlfile)).([]byte)
 	Sif(string(bytes))
 }
 
 func TestSendXapi(t *testing.T) {
-	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
+	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	jsonfile := "../inbound/xapi/xapifile.json"
+	jsonfile := "../inbound/xapi/xapi.json"	
 	bytes := Must(ioutil.ReadFile(jsonfile)).([]byte)
 	Xapi(string(bytes))
 }

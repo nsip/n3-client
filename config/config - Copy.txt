@@ -14,10 +14,10 @@ Path = "../config/config.toml"
 
 [Rpc]
   Namespace = "Aa5fKf2UmyfCufY6JFmQpX12j1jjDFSUfbFUEE92t2nx"
-  CtxSif = "abc-sif"
-  CtxXapi = "abc-xapi"
-  CtxMetaSif = "abc-sif-meta"
-  CtxMetaXapi = "abc-xapi-meta"
+  CtxSif = "demo-sif"
+  CtxXapi = "demo-xapi"
+  CtxMetaSif = "demo-sif-meta"
+  CtxMetaXapi = "demo-xapi-meta"
   Server = "192.168.76.32"
   Port = 5777
 

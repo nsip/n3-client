@@ -16,7 +16,7 @@ func SchemaMake(gql, path, pathDel, childDel string) string {
 		}
 
 		arrFlag := false
-		if sHP(f, "[]") {
+		if u.Str(f).HP("[]") {
 			f, arrFlag = f[2:], true
 		}
 

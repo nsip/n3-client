@@ -1,25 +1,22 @@
 package main
 
-// func SendXmlToDataStore(filename string) {
-// 	fi, err := os.Lstat(filename)
-// }
-
 import (
-	c "./config"
-	q "./query"
-	s "./send"
+	cfg "./config"
+	"./query"
+	"./rest"
+	"./send"
 	w "./send/filewatcher"
-	r "./send/rest"
 )
 
 func main() {
-	cfg := c.GetConfig("./config.toml", "./config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog) }()
-	s.Init(cfg)
-	q.Init(cfg)
+	CFG := cfg.FromFile("./config.toml", "./config/config.toml")
+	defer func() { PH(recover(), CFG.Global.ErrLog) }()
+	send.InitFrom(CFG)
+	query.InitFrom(CFG)
+	rest.InitFrom(CFG)
 
 	done := make(chan string)
-	go r.HostHTTPForPubAsync()
+	go rest.HostHTTPAsync()
 	go w.StartFileWatcherAsync()
 	<-done
 }

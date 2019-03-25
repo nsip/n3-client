@@ -6,9 +6,10 @@ import (
 
 func TestLoad(t *testing.T) {
 	cfg := GetConfig("./config.toml")
-	fPln(cfg.RPC)
-	fPln(cfg.Filewatcher)
-	fPln(cfg.Global.ErrLog)
+	fPln(cfg.Rest.PathGQL)
+	// fPln(cfg.RPC)
+	// fPln(cfg.Filewatcher)
+	// fPln(cfg.Global.ErrLog)
 }
 
 func TestSave(t *testing.T) {

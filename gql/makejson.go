@@ -7,7 +7,7 @@ import (
 // JSONMake :
 func JSONMake(json, path, pathDel, childDel string) string {
 	if json == "" {
-		json, _ = u.Str("").JSONBuild("", "", 1, path, "{}")
+		json, _ = u.Str("").JSONBuild("", "", path, "{}")
 	}
 
 	for _, f := range sSpl(mapStruct[sRepAll(path, "[]", "")], childDel) {
@@ -18,46 +18,103 @@ func JSONMake(json, path, pathDel, childDel string) string {
 
 		xpath := path + pathDel + f
 		// fPln(xpath)
-		// if xpath == "StaffPersonal ~ PersonInfo ~ Demographics ~ CountriesOfCitizenship ~ []CountryOfCitizenship" {
+
+		// if xpath == "TeachingGroup ~ StudentList ~ []TeachingGroupStudent ~ Name ~ -Type" {
 		// 	fPln("stop")
 		// }
 		// ioutil.WriteFile("debug.json", []byte(json), 0666)
 
 		tp, tf := sRepAll(path, "[]", ""), sRepAll(f, "[]", "")
+		nSeg := sCnt(tp, pathDel) + 1
 
-		if ok, valvers := isLeafValue(xpath); ok { //                           	              *** VALUE ***
+		if ok, valvers := isLeafValue(xpath); ok { //                   *** VALUE ***
 
-			if okArr, _, plain := isArray(xpath); okArr && plain { //                             *** PLAIN ARRAY VALUES ***
-				for _, vv := range valvers {
-					json, _ = u.Str(json).JSONBuild(tp, pathDel, 1, tf, vv.value)
+			if okArr, _, plain := isArray(xpath); okArr && plain { //   *** PLAIN ARRAY VALUES ***
+				nValvers := len(valvers)
+				for i := range valvers {
+					vv := valvers[nValvers-1-i] //                      *** reverse order ***
+
+					// *** will change to #a ~ #b ...
+					indices := []int{}
+					for i := 0; i < nSeg; i++ {
+						indices = append(indices, 1)
+					}
+					// ***
+
+					json, _ = u.Str(json).JSONBuild(tp, pathDel, tf, vv.value, indices...)
+					// ioutil.WriteFile("debug.json", []byte(json), 0666) // *** DEBUG ***
 				}
 			} else {
-				for i, vv := range valvers { //                                                   ** if len(valvers) > 1, Array Object Items
-					json, _ = u.Str(json).JSONBuild(tp, pathDel, len(valvers)-i, tf, vv.value) // ** if change array order, p3 -> (i+1)
+
+				for i, vv := range valvers { // ** if len(valvers) > 1, Array Object Items **
+
+					// *** will change to #a ~ #b ...
+					indices := []int{}
+					for i := 0; i < nSeg; i++ {
+						indices = append(indices, 1)
+					}
+					if tp == "TeachingGroup ~ StudentList ~ TeachingGroupStudent ~ Name" {
+						indices[len(indices)-2] = len(valvers) - i
+					}
+					indices[len(indices)-1] = len(valvers) - i // ** if revers order, len(valvers)-i <--> (i+1)
+					// ***
+
+					fPln(tp, " : ", tf, " : ", i)
+
+					json, _ = u.Str(json).JSONBuild(tp, pathDel, tf, vv.value, indices...)
+					// ioutil.WriteFile("debug.json", []byte(json), 0666) // *** DEBUG ***
 				}
 			}
 
-		} else { //                                     							              *** ARRAY OR OBJECT ***
+		} else { //                                     				*** ARRAY OR OBJECT ***
 
-			if isObject(xpath) { //                     							              *** OBJECT ***
+			if isObject(xpath) { //                     				*** OBJECT ***
 				if ok, n, plain := isArray(path); ok && !plain {
 					for i := 1; i <= n; i++ {
-						json, _ = u.Str(json).JSONBuild(tp, pathDel, i, tf, "{}")
+
+						// *** will change to #a ~ #b ...
+						indices := []int{}
+						for i := 0; i < nSeg; i++ {
+							indices = append(indices, 1)
+						}
+						indices[len(indices)-1] = i
+						// ***
+
+						json, _ = u.Str(json).JSONBuild(tp, pathDel, tf, "{}", indices...)
+						// ioutil.WriteFile("debug.json", []byte(json), 0666) // *** DEBUG ***
 					}
 				} else {
-					json, _ = u.Str(json).JSONBuild(tp, pathDel, 1, tf, "{}")
+
+					// *** will change to #a ~ #b ...
+					indices := []int{}
+					for i := 0; i < nSeg; i++ {
+						indices = append(indices, 1)
+					}
+					// ***
+
+					json, _ = u.Str(json).JSONBuild(tp, pathDel, tf, "{}", indices...)
+					// ioutil.WriteFile("debug.json", []byte(json), 0666) // *** DEBUG ***
 				}
 			}
 
-			if ok, n, plain := isArray(xpath); ok && !plain { //  						          *** OBJECT ARRAY FRAME ***
+			if ok, n, plain := isArray(xpath); ok && !plain { //  		*** OBJECT ARRAY FRAME ***
 				for j := 0; j < n; j++ {
-					json, _ = u.Str(json).JSONBuild(tp, pathDel, 1, tf, "{}")
+
+					// *** will change to #a ~ #b ...
+					indices := []int{}
+					for i := 0; i < nSeg; i++ {
+						indices = append(indices, 1)
+					}
+					// ***
+
+					json, _ = u.Str(json).JSONBuild(tp, pathDel, tf, "{}", indices...)
+					// ioutil.WriteFile("debug.json", []byte(json), 0666) // *** DEBUG ***
 				}
 			}
 		}
 
-		// ioutil.WriteFile("debug.json", []byte(json), 0666)
 		json = JSONMake(json, xpath, pathDel, childDel)
+		// ioutil.WriteFile("debug.json", []byte(json), 0666) // *** DEBUG ***
 	}
 
 	return json

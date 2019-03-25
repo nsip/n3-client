@@ -11,18 +11,18 @@ import (
 // Init :
 func Init(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
-	Cfg = config
-	g.N3clt = u.TerOp(g.N3clt == nil, n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
+	CFG = config
+	g.N3clt = u.TerOp(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
 func del(t g.SQDType, sub string) {
-	if Cfg == nil || g.N3clt == nil {
+	if CFG == nil || g.N3clt == nil {
 		Init(c.GetConfig("./config.toml", "../config/config.toml"))
 	}
 
 	dTuple := &pb.SPOTuple{Subject: sub, Predicate: DEADMARK}
-	ctx := u.CaseAssign(t, g.SIF, g.XAPI, g.META_SIF, g.META_XAPI, Cfg.RPC.CtxSif, Cfg.RPC.CtxXapi, Cfg.RPC.CtxMetaSif, Cfg.RPC.CtxMetaXapi).(string)
-	g.N3clt.Publish(dTuple, Cfg.RPC.Namespace, ctx)	
+	ctx := u.CaseAssign(t, g.SIF, g.XAPI, g.META_SIF, g.META_XAPI, CFG.RPC.CtxSif, CFG.RPC.CtxXapi, CFG.RPC.CtxMetaSif, CFG.RPC.CtxMetaXapi).(string)
+	g.N3clt.Publish(dTuple, CFG.RPC.Namespace, ctx)	
 }
 
 // Sif :

@@ -1,0 +1,241 @@
+
+*** Panic Error *** Fatal : false ***
+2019/03/23 23:13:24 interface conversion: interface {} is map[string]interface {}, not string
+
+*** Panic Error *** Fatal : false ***
+2019/03/23 23:16:11 interface conversion: interface {} is map[string]interface {}, not string
+
+*** Panic Error *** Fatal : false ***
+2019/03/23 23:16:29 interface conversion: interface {} is map[string]interface {}, not string
+
+*** Panic Error *** Fatal : false ***
+2019/03/23 23:22:04 interface conversion: interface {} is map[string]interface {}, not string
+
+*** Panic Error *** Fatal : false ***
+2019/03/24 11:15:07 runtime error: invalid memory address or nil pointer dereference
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 10:11:56 runtime error: invalid memory address or nil pointer dereference
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 10:13:02 runtime error: invalid memory address or nil pointer dereference
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 10:17:49 runtime error: invalid memory address or nil pointer dereference
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 10:18:00 runtime error: invalid memory address or nil pointer dereference
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 10:20:23 interface conversion: interface {} is map[string]interface {}, not string
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 10:21:29 interface conversion: interface {} is map[string]interface {}, not string
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 10:35:17 *errors.errorString Invalid parameters
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-util/oper.go:24 (0x5a2236)
+	CaseAssign: PC(true, fEf("Invalid parameters"))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/dbquery.go:29 (0x8eeadf)
+	queryObject: fn := u.CaseAssign(from, "sif", "xapi", q.Sif, q.Xapi).(func(sp ...string) (s, p, o []string, v []int64))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:26 (0x8f12af)
+	GetSchemaFromID: queryObject(objID, fType) //                                 *** GET root, mapStruct, mapArray, mapValue ***
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:62 (0x8f16c2)
+	GQuery: schema := GetSchemaFromID(objID, fType, rmStructChildren...)
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/rest/ctrls_host.go:105 (0x9b083f)
+	queryGQL: rst, _ := gql.GQuery("", "", "", queryTxt, nil, nil)
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:488 (0x9a442e)
+	(*Echo).Add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:117 (0x9ab3ef)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9aec8c)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:118 (0x9ae1e7)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:591 (0x99c8d8)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7c13ef)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7bcfd8)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 11:04:37 Unknown Type GradingAssignment
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 11:18:42 runtime error: invalid memory address or nil pointer dereference
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 11:59:30 *json.SyntaxError invalid character ':' after top-level value
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:85 (0x8f2650)
+	GQuery.func1: PE(json.Unmarshal(jsonBytes, &jsonMap))
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1445 (0x8e5852)
+	(*Executor).resolveFieldOnObject: result, err = resolveFn(resolveParams)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1139 (0x8e31b9)
+	(*Executor).getFieldEntry: resolvedObject, err := executor.resolveFieldOnObject(reqCtx, objectType, object, fieldType, firstField)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1117 (0x8e2fa6)
+	(*Executor).resolveGroupedFields: key, value, err := executor.getFieldEntry(reqCtx, objectType, source, groupForResponseKey.ResponseKey, groupForResponseKey.Fields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:864 (0x8dfb2a)
+	(*Executor).selectionSet: return executor.resolveGroupedFields(reqCtx, isParallel, objectType, source, groupedFields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:817 (0x8df4be)
+	(*Executor).Execute: data, err = executor.selectionSet(reqCtx, false, executor.Schema.QueryRoot, map[string]interface{}{}, selectedOperation.SelectionSet)
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:175 (0x8f1ede)
+	GQuery: result := Must(executor.Execute(context, queryStr, variables, ""))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/rest/ctrls_host.go:107 (0x9b01d0)
+	queryGQL: rst, qryPath = gql.GQuery(objID, fType, schemaQuery, queryTxt, mapPV, rmStructChildren) //     *** hard coded QueryRoot ***
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:488 (0x9a448e)
+	(*Echo).Add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:117 (0x9ab44f)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9aecec)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:118 (0x9ae247)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:591 (0x99c938)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7c13ef)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7bcfd8)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 12:00:23 *json.SyntaxError invalid character ':' after array element
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:85 (0x8f26b9)
+	GQuery.func1: PE(json.Unmarshal(jsonBytes, &jsonMap))
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1445 (0x8e5852)
+	(*Executor).resolveFieldOnObject: result, err = resolveFn(resolveParams)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1139 (0x8e31b9)
+	(*Executor).getFieldEntry: resolvedObject, err := executor.resolveFieldOnObject(reqCtx, objectType, object, fieldType, firstField)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1117 (0x8e2fa6)
+	(*Executor).resolveGroupedFields: key, value, err := executor.getFieldEntry(reqCtx, objectType, source, groupForResponseKey.ResponseKey, groupForResponseKey.Fields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:864 (0x8dfb2a)
+	(*Executor).selectionSet: return executor.resolveGroupedFields(reqCtx, isParallel, objectType, source, groupedFields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:817 (0x8df4be)
+	(*Executor).Execute: data, err = executor.selectionSet(reqCtx, false, executor.Schema.QueryRoot, map[string]interface{}{}, selectedOperation.SelectionSet)
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:175 (0x8f1ede)
+	GQuery: result := Must(executor.Execute(context, queryStr, variables, ""))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/rest/ctrls_host.go:107 (0x9b0240)
+	queryGQL: rst, qryPath = gql.GQuery(objID, fType, schemaQuery, queryTxt, mapPV, rmStructChildren) //     *** hard coded QueryRoot ***
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:488 (0x9a44fe)
+	(*Echo).Add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:117 (0x9ab4bf)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9aed5c)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:118 (0x9ae2b7)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:591 (0x99c9a8)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7c13ef)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7bcfd8)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 12:01:22 *json.UnmarshalTypeError json: cannot unmarshal array into Go value of type map[string]interface {}
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:85 (0x8f268d)
+	GQuery.func1: PE(json.Unmarshal(jsonBytes, &jsonMap))
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1445 (0x8e5852)
+	(*Executor).resolveFieldOnObject: result, err = resolveFn(resolveParams)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1139 (0x8e31b9)
+	(*Executor).getFieldEntry: resolvedObject, err := executor.resolveFieldOnObject(reqCtx, objectType, object, fieldType, firstField)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1117 (0x8e2fa6)
+	(*Executor).resolveGroupedFields: key, value, err := executor.getFieldEntry(reqCtx, objectType, source, groupForResponseKey.ResponseKey, groupForResponseKey.Fields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:864 (0x8dfb2a)
+	(*Executor).selectionSet: return executor.resolveGroupedFields(reqCtx, isParallel, objectType, source, groupedFields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:817 (0x8df4be)
+	(*Executor).Execute: data, err = executor.selectionSet(reqCtx, false, executor.Schema.QueryRoot, map[string]interface{}{}, selectedOperation.SelectionSet)
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:175 (0x8f1ede)
+	GQuery: result := Must(executor.Execute(context, queryStr, variables, ""))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/rest/ctrls_host.go:107 (0x9b0210)
+	queryGQL: rst, qryPath = gql.GQuery(objID, fType, schemaQuery, queryTxt, mapPV, rmStructChildren) //     *** hard coded QueryRoot ***
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:488 (0x9a44ce)
+	(*Echo).Add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:117 (0x9ab48f)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9aed2c)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:118 (0x9ae287)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:591 (0x99c978)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7c13ef)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7bcfd8)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 13:54:18 *errors.errorString Error: Invalid JSON string
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-util/json.go:559 (0x5a00e8)
+	Str.JSONObjectMerge: PC(!s.IsJSON() || !jsonStr.IsJSON(), fEf("Error: Invalid JSON string"))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:65 (0x8f1e81)
+	rsvResource: jsonAll = u.Str(jsonAll).JSONObjectMerge(jsonstr)
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:84 (0x8f2c12)
+	GQuery.func1: jsonBytes := rsvResource(objIDs, fType, rmStructChildren)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1445 (0x8e5fd2)
+	(*Executor).resolveFieldOnObject: result, err = resolveFn(resolveParams)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1139 (0x8e3939)
+	(*Executor).getFieldEntry: resolvedObject, err := executor.resolveFieldOnObject(reqCtx, objectType, object, fieldType, firstField)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:1117 (0x8e3726)
+	(*Executor).resolveGroupedFields: key, value, err := executor.getFieldEntry(reqCtx, objectType, source, groupForResponseKey.ResponseKey, groupForResponseKey.Fields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:864 (0x8e02aa)
+	(*Executor).selectionSet: return executor.resolveGroupedFields(reqCtx, isParallel, objectType, source, groupedFields)
+C:/Users/qmiao/go/src/github.com/playlyfe/go-graphql/executor.go:817 (0x8dfc3e)
+	(*Executor).Execute: data, err = executor.selectionSet(reqCtx, false, executor.Schema.QueryRoot, map[string]interface{}{}, selectedOperation.SelectionSet)
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:166 (0x8f2709)
+	GQuery: result := Must(executor.Execute(context, queryStr, variables, ""))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/rest/ctrls_host.go:102 (0x9b0700)
+	queryGQL: rst := gql.GQuery(IDs, fType, schemaQuery, queryTxt, mapPV, rmStructChildren) //*** rst is already JSON string, so use String to return ***
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:488 (0x9a4a4e)
+	(*Echo).Add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:117 (0x9aba0f)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9af2ac)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:118 (0x9ae807)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:591 (0x99cef8)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7c1b6f)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7bd758)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 15:59:22 *errors.errorString Invalid parameters
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-util/oper.go:24 (0x5a2976)
+	CaseAssign: PC(true, fEf("Invalid parameters"))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/dbquery.go:29 (0x8ef2bf)
+	queryObject: fn := u.CaseAssign(from, "sif", "xapi", q.Sif, q.Xapi).(func(sp ...string) (s, p, o []string, v []int64))
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:25 (0x8f1a8f)
+	GetSchemaFromID: queryObject(objID, fType) //                                 *** GET root, mapStruct, mapArray, mapValue ***
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/gql/query.go:70 (0x8f2005)
+	GQuery: schemaRuntime := GetSchemaFromID(objIDs[0], fType, rmStructs...)
+C:/Users/qmiao/Desktop/WeekEnd Work 17 Mar/n3-client/rest/ctrls_host.go:102 (0x9b09b2)
+	queryGQL: rst := gql.GQuery(IDs, fType, schemaQuery, queryTxt, mapPV, rmStructs) //*** rst is already JSON string, so use String to return ***
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:488 (0x9a4d1e)
+	(*Echo).Add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:117 (0x9abcdf)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9af57c)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:118 (0x9aead7)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:591 (0x99d1c8)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7c1bcf)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7bd7b8)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP

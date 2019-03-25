@@ -16,9 +16,11 @@ type filewatcher struct {
 }
 
 type rest struct {
-	Port     int
-	SifPath  string
-	XapiPath string
+	Port        int
+	SifPathS    string
+	XapiPathS   string
+	PathGQL     string
+	PathGQLDemo string
 }
 
 type rpc struct {
@@ -40,8 +42,8 @@ type Config struct {
 	RPC         rpc
 }
 
-// GetConfig :
-func GetConfig(cfgfiles ...string) *Config {
+// FromFile :
+func FromFile(cfgfiles ...string) *Config {
 	for _, f := range cfgfiles {
 		if _, e := os.Stat(f); e == nil {
 			cfg := &Config{Path: f}

@@ -81,9 +81,9 @@
         "inquiry_questions": [
             "Where are places located in Australia?",
             "How are people connected to places?",
-            "What factors affect people’s connections to places?"
+            "What factors affect people's connections to places?"
         ],
-        "focus": "Students explore places across a range of scales within Australia and Australia’s location in the world. They describe connections people, including Aboriginal and Torres Strait Islander Peoples, have with places, both locally and globally. Students identify factors affecting people’s accessibility to places.",
+        "focus": "Students explore places across a range of scales within Australia and Australia's location in the world. They describe connections people, including Aboriginal and Torres Strait Islander Peoples, have with places, both locally and globally. Students identify factors affecting people's accessibility to places.",
         "content_areas": [
         {
             "name": "Australian places",
@@ -100,10 +100,10 @@
             "name": "Australia's Location",
             "investigations": [
             {
-                "description": "investigate Australia’s location in the world",
+                "description": "investigate Australia's location in the world",
                 "ac": ["ACHGK009"],
                 "examples": [
-                    "description of Australia’s location in relation to the world eg continents, oceans"
+                    "description of Australia's location in relation to the world eg continents, oceans"
                 ]
             }]
         },
@@ -111,12 +111,12 @@
             "name": "People's connection to places",
             "investigations": [
             {
-                "description": "investigate people’s connections and access to places",
+                "description": "investigate people's connections and access to places",
                 "ac": ["ACHGK013"],
                 "examples": [
                     "discussion of why people visit other places",
-                    "identification of factors influencing people’s accessibility to places eg distance",
-                    "examination of how technology has improved people’s access to places"
+                    "identification of factors influencing people's accessibility to places eg distance",
+                    "examination of how technology has improved people's access to places"
                 ]
             }]
         },
@@ -127,7 +127,7 @@
                 "description": "investigate connections that people, including Aboriginal and Torres Strait Islander Peoples, have to local and global places",
                 "ac": ["ACHGK010","ACHGK011","ACHGK012"],
                 "examples": [
-                    "discussion of Aboriginal and Torres Strait Islander Peoples’ connections with land, sea and animals of their place",
+                    "discussion of Aboriginal and Torres Strait Islander Peoples' connections with land, sea and animals of their place",
                     "description of reasons people are connected to places in Australia and/or countries across the world eg birthplace"
                 ]
             }]

@@ -5,29 +5,57 @@ import (
 	"testing"
 
 	c "../config"
+	u "github.com/cdutwhu/go-util"
 )
 
 func TestXMLScanObjects(t *testing.T) {
-	cfg := c.GetConfig("./config.toml", "../config/config.toml")
+	cfg := c.FromFile("./config.toml", "../config/config.toml")
 	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 
-	xmlbytes := Must(ioutil.ReadFile("./files/staffpersonal.xml")).([]byte)
-	// xmlbytes := Must(ioutil.ReadFile("./files/nswdig.xml")).([]byte)
+	sifbytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte)
+	sif := u.Str(sifbytes)
+	sif.SetEnC()
 
-	idx := 1
-	XMLModelInfo(string(xmlbytes), "RefId", pathDel, childDel,
-		func(p, v string) {
-			fPf("S ---> %-5d: %-90s:: %s\n", idx, p, v)
-			idx++
-		},
-		func(p, v string, n int) {
-			fPf("A ---> %-5d: %-90s:: %s  -- [%d]\n", idx, p, v, n)
-			idx++
-		},
-	)
-	fPf("finish:\n")
+	mapStructRecord := map[string]string{}
+	n := sif.XMLSegsCount()
+	prevEnd := 0
+	for iObj := 1; iObj <= n; iObj++ {
+		nextStart := u.TerOp(iObj == 1, 0, prevEnd+1).(int)
+		_, xml, _, end := sif.S(nextStart, u.ALL).XMLSegPos(1, 1)
+		prevEnd = end + nextStart
 
-	// ids, objtags, psarr := XMLScanObjects(string(xmlbytes), "RefId")
+		// fPf("%d SIF *****************************************\n", iObj)
+
+		procIdx := 1
+		XMLModelInfo(xml, "RefId", pathDel, childDel,
+			func(p, v string) {
+				if prevV, ok := mapStructRecord[p]; !ok || (ok && v != prevV && u.Str(v).FieldsSeqContain(prevV, childDel)) {
+					mapStructRecord[p] = v
+					fPf("S%4d ---> %-70s:: %s\n", procIdx, p, v)
+					procIdx++
+				}
+			},
+			func(p, v string, n int) {
+				fPf("A%4d ---> %-70s[] %s  -- [%d]\n", procIdx, p, v, n)
+				procIdx++
+			},
+		)
+	}
+
+	// idx := 1
+	// XMLModelInfo(string(sifbytes), "RefId", pathDel, childDel,
+	// 	func(p, v string) {
+	// 		fPf("S ---> %-5d: %-90s:: %s\n", idx, p, v)
+	// 		idx++
+	// 	},
+	// 	func(p, v string, n int) {
+	// 		fPf("A ---> %-5d: %-90s[] %s  -- [%d]\n", idx, p, v, n)
+	// 		idx++
+	// 	},
+	// )
+	// fPf("finish:\n")
+
+	// ids, objtags, psarr := XMLScanObjects(string(sifbytes), "RefId")
 	// fPln(len(objtags))
 	// for _, objtag := range objtags {
 	// 	fPln(objtag)

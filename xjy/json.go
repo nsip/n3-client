@@ -9,7 +9,7 @@ func JSONGetObjID(jsonstr, idmark, defaultRoot, pathDel string) (id string) {
 	jsonStr := u.Str(jsonstr)
 	root, ext, newJSON := jsonStr.JSONRootEx(defaultRoot)
 	jsonStr = u.TerOp(ext, u.Str(newJSON), jsonStr).(u.Str)
-	id, _, _ = jsonStr.JSONXPathValue(root+pathDel+idmark, pathDel)
+	id, _, _, _ = jsonStr.JSONXPathValue(root+pathDel+idmark, pathDel, []int{1, 1}...)
 	return
 }
 
@@ -22,9 +22,9 @@ func JSONModelInfo(jsonstr, ObjIDMark, defaultRoot, pathDel, childDel string,
 	jsonStr = u.TerOp(ext, u.Str(newJSON), jsonStr).(u.Str)
 
 	id := JSONGetObjID(jsonstr, ObjIDMark, pathDel, defaultRoot) // *** find ID Value by ObjIDMark ***
-	id = u.Str(id).RmQuotes()
+	id = u.Str(id).RmQuotes().V()
 
-	mapFT, mapArrInfo := jsonStr.JSONArrInfo(root, pathDel, id)
+	mapFT, mapArrInfo := jsonStr.JSONArrInfo(root, pathDel, id, nil)
 	for k, v := range *mapFT {
 		OnStruFetch(k, sJ(v, childDel))
 	}

@@ -19,13 +19,9 @@ var (
 	Must = u.Must
 
 	fPln = fmt.Println
-	FPln = fPln
 	fPf  = fmt.Printf
-	FPf  = fPf
 	fEf  = fmt.Errorf
-	FEf  = fEf
 	fSf  = fmt.Sprintf
-	FSf  = fSf
 
 	lPln = log.Println
 	LPln = lPln
@@ -34,15 +30,14 @@ var (
 	SC = sC
 
 	e   error
-	Cfg *c.Config
+	CFG *c.Config
 	ver int64 = 1
 )
 
 const (
-	TERMMARK    = "ENDENDEND"
-	HEADTRIM    = "sif."
-	DELAY       = 300
-	pathDel     = " ~ "
-	childDel    = " + "
-	defaultRoot = "fakeRoot"
+	TERMMARK = "ENDENDEND"
+	HEADTRIM = "sif."
+	DELAY    = 2000
+	pathDel  = " ~ "
+	childDel = " + "
 )

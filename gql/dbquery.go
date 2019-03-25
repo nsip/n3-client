@@ -11,14 +11,20 @@ import (
 // Init :
 func Init(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
-	Cfg = config
-	g.N3clt = u.TerOp(g.N3clt == nil, n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
+	CFG = config
+	g.N3clt = u.TerOp(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+}
+
+func clrQueryBuf() {
+	mapStruct = map[string]string{}
+	mapValue = map[string][]*valver{}
+	mapArray = map[string]int{}
 }
 
 // filling root, mapStruct, mapValue, mapArray
 func queryObject(id, from string) {
-	defer func() { PH(recover(), Cfg.Global.ErrLog) }()
-	Init(c.GetConfig("./config.toml", "../config/config.toml"))
+	defer func() { PH(recover(), CFG.Global.ErrLog) }()
+	Init(c.FromFile("./config.toml", "../config/config.toml"))
 
 	fn := u.CaseAssign(from, "sif", "xapi", q.Sif, q.Xapi).(func(sp ...string) (s, p, o []string, v []int64))
 
@@ -31,22 +37,26 @@ func queryObject(id, from string) {
 
 	fPln("<id> :", id, "<root> :", root)
 
-	s, _, o, _ := fn(root, "::") //           *** Object's Struct ***
+	s, _, o, _ := fn(root, "::") //            *** Struct ***
 	for i := range s {
-		mapStruct[s[i]] = o[i]
-		fPln("S -------> ", s[i], "   ", o[i])
+		if stru, ok := mapStruct[s[i]]; !ok || (ok && stru != o[i] && u.Str(o[i]).FieldsSeqContain(stru, childDel)) {
+			mapStruct[s[i]] = o[i]
+			// fPln("S -------> ", s[i], "   ", o[i])
+		}
+		// mapStruct[s[i]] = o[i]
+		// fPln("S -------> ", s[i], "   ", o[i])
 	}
 
-	s, p, o, _ := fn(id, "[]") //              *** Object's array count ***
+	s, p, o, _ := fn(id, "[]") //              *** Array count ***
 	for i := range s {
 		mapArray[p[i]] = u.Str(o[i]).ToInt()
-		fPln("A -------> ", p[i], "   ", o[i])
+		// fPln("A -------> ", p[i], "   ", o[i])
 	}
 
-	s, p, o, v := fn(id, root) //             *** Object's Values ***
+	s, p, o, v := fn(id, root) //              *** Values ***
 	for i := range s {
 		mapValue[p[i]] = append(mapValue[p[i]], &valver{value: o[i], ver: v[i]})
-		fPln("V -------> ", p[i], "   ", o[i], "   ", v[i])
+		// fPln("V -------> ", p[i], "   ", o[i], "   ", v[i])
 	}
 
 	return
