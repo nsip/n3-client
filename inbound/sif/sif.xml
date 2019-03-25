@@ -14,44 +14,44 @@
     <SchoolSector>Gov</SchoolSector>
 </SchoolInfo>
 
-    <SchoolCourseInfo RefId="A759FF45-4ABD-4A59-B31B-BB0D3CA66ADC">
+<SchoolCourseInfo RefId="A759FF45-4ABD-4A59-B31B-BB0D3CA66ADC">
     <SchoolInfoRefId>738F4DF5-949F-4380-8186-8252440A6F6F</SchoolInfoRefId>
     <SchoolYear>2018</SchoolYear>
     <CourseCode>Mathematics 701</CourseCode>
     <SubjectAreaList>
-    <SubjectArea>
-    <Code>Mathematics</Code>
-    </SubjectArea>
+        <SubjectArea>
+            <Code>Mathematics</Code>
+        </SubjectArea>
     </SubjectAreaList>
     <CourseTitle>Mathematics 7</CourseTitle>
     <CourseCredits>2</CourseCredits>
-    </SchoolCourseInfo>
+</SchoolCourseInfo>
     
-    <SchoolCourseInfo RefId="46F3503C-C6D5-4BE8-ABB8-D3B5FE853948">
+<SchoolCourseInfo RefId="46F3503C-C6D5-4BE8-ABB8-D3B5FE853948">
     <SchoolInfoRefId>738F4DF5-949F-4380-8186-8252440A6F6F</SchoolInfoRefId>
     <SchoolYear>2018</SchoolYear>
     <CourseCode>Mathematics 801</CourseCode>
     <SubjectAreaList>
-    <SubjectArea>
-    <Code>Mathematics</Code>
-    </SubjectArea>
+        <SubjectArea>
+            <Code>Mathematics</Code>
+        </SubjectArea>
     </SubjectAreaList>
     <CourseTitle>Mathematics 8</CourseTitle>
     <CourseCredits>2</CourseCredits>
-    </SchoolCourseInfo>
+</SchoolCourseInfo>
     
-    <SchoolCourseInfo RefId="2041B8B8-B238-4AAD-9013-8E166E9ABBB4">
+<SchoolCourseInfo RefId="2041B8B8-B238-4AAD-9013-8E166E9ABBB4">
     <SchoolInfoRefId>738F4DF5-949F-4380-8186-8252440A6F6F</SchoolInfoRefId>
     <SchoolYear>2018</SchoolYear>
     <CourseCode>Geography 701</CourseCode>
     <SubjectAreaList>
-    <SubjectArea>
-    <Code>Geography</Code>
-    </SubjectArea>
+        <SubjectArea>
+            <Code>Geography</Code>
+        </SubjectArea>
     </SubjectAreaList>
     <CourseTitle>Geography 7</CourseTitle>
     <CourseCredits>2</CourseCredits>
-    </SchoolCourseInfo>
+</SchoolCourseInfo>
     
     <SchoolCourseInfo RefId="FE2F9EFC-5B0D-4465-9C95-2656C05273E6">
     <SchoolInfoRefId>738F4DF5-949F-4380-8186-8252440A6F6F</SchoolInfoRefId>
@@ -16027,26 +16027,26 @@
       <DetailedDescriptionURL>http://example.com/assignments/Mathematics-7-2-B:3</DetailedDescriptionURL>
       </GradingAssignment>
       
-      <GradingAssignment RefId="DE5549FD-3D01-4621-B3C6-87AB35AC1ACE">
-      <TeachingGroupRefId>1D4633A1-207F-4292-ADB6-D121AC9A78B1</TeachingGroupRefId>
-      <Description>Assignment No. 4 for this subject</Description>
-      <PointsPossible>100</PointsPossible>
-      <DetailedDescriptionURL>http://example.com/assignments/Mathematics-7-2-B:4</DetailedDescriptionURL>
-      </GradingAssignment>
+<GradingAssignment RefId="DE5549FD-3D01-4621-B3C6-87AB35AC1ACE">
+    <TeachingGroupRefId>1D4633A1-207F-4292-ADB6-D121AC9A78B1</TeachingGroupRefId>
+    <Description>Assignment No. 4 for this subject</Description>
+    <PointsPossible>100</PointsPossible>
+    <DetailedDescriptionURL>http://example.com/assignments/Mathematics-7-2-B:4</DetailedDescriptionURL>
+</GradingAssignment>
       
-      <GradingAssignment RefId="ED9178F3-5046-45B8-9EDF-168053CCBFAA">
-      <TeachingGroupRefId>1D4633A1-207F-4292-ADB6-D121AC9A78B1</TeachingGroupRefId>
-      <Description>Assignment No. 5 for this subject</Description>
-      <PointsPossible>100</PointsPossible>
-      <DetailedDescriptionURL>http://example.com/assignments/Mathematics-7-2-B:5</DetailedDescriptionURL>
-      </GradingAssignment>
+<GradingAssignment RefId="ED9178F3-5046-45B8-9EDF-168053CCBFAA">
+    <TeachingGroupRefId>1D4633A1-207F-4292-ADB6-D121AC9A78B1</TeachingGroupRefId>
+    <Description>Assignment No. 5 for this subject</Description>
+    <PointsPossible>100</PointsPossible>
+    <DetailedDescriptionURL>http://example.com/assignments/Mathematics-7-2-B:5</DetailedDescriptionURL>
+</GradingAssignment>
       
-      <GradingAssignment RefId="F027A9F2-209C-4512-AC88-65120333B0F8">
-      <TeachingGroupRefId>6718F449-16FE-4B8E-9B21-E0319CA65C1B</TeachingGroupRefId>
-      <Description>Assignment No. 1 for this subject</Description>
-      <PointsPossible>100</PointsPossible>
-      <DetailedDescriptionURL>http://example.com/assignments/History-8-1-A:1</DetailedDescriptionURL>
-      </GradingAssignment>
+<GradingAssignment RefId="F027A9F2-209C-4512-AC88-65120333B0F8">
+    <TeachingGroupRefId>6718F449-16FE-4B8E-9B21-E0319CA65C1B</TeachingGroupRefId>
+    <Description>Assignment No. 1 for this subject</Description>
+    <PointsPossible>100</PointsPossible>
+    <DetailedDescriptionURL>http://example.com/assignments/History-8-1-A:1</DetailedDescriptionURL>
+</GradingAssignment>
       
       <GradingAssignment RefId="8E7280F6-375E-4E5F-A3F0-435EA6F45C8A">
       <TeachingGroupRefId>6718F449-16FE-4B8E-9B21-E0319CA65C1B</TeachingGroupRefId>
@@ -16069,19 +16069,19 @@
       <DetailedDescriptionURL>http://example.com/assignments/History-8-1-A:4</DetailedDescriptionURL>
       </GradingAssignment>
       
-      <GradingAssignment RefId="0E3F65C6-2BD0-475F-BCA2-292E16BFAEBA">
-      <TeachingGroupRefId>6718F449-16FE-4B8E-9B21-E0319CA65C1B</TeachingGroupRefId>
-      <Description>Assignment No. 5 for this subject</Description>
-      <PointsPossible>100</PointsPossible>
-      <DetailedDescriptionURL>http://example.com/assignments/History-8-1-A:5</DetailedDescriptionURL>
-      </GradingAssignment>
+<GradingAssignment RefId="0E3F65C6-2BD0-475F-BCA2-292E16BFAEBA">
+    <TeachingGroupRefId>6718F449-16FE-4B8E-9B21-E0319CA65C1B</TeachingGroupRefId>
+    <Description>Assignment No. 5 for this subject</Description>
+    <PointsPossible>100</PointsPossible>
+    <DetailedDescriptionURL>http://example.com/assignments/History-8-1-A:5</DetailedDescriptionURL>
+</GradingAssignment>
       
-      <GradingAssignment RefId="0353D0D8-DB43-4C4B-80EE-A6A36E864D46">
-      <TeachingGroupRefId>91DA3698-54A8-4CA8-975D-2CD64B3DFB36</TeachingGroupRefId>
-      <Description>Assignment No. 1 for this subject</Description>
-      <PointsPossible>100</PointsPossible>
-      <DetailedDescriptionURL>http://example.com/assignments/History-8-1-B:1</DetailedDescriptionURL>
-      </GradingAssignment>
+<GradingAssignment RefId="0353D0D8-DB43-4C4B-80EE-A6A36E864D46">
+    <TeachingGroupRefId>91DA3698-54A8-4CA8-975D-2CD64B3DFB36</TeachingGroupRefId>
+    <Description>Assignment No. 1 for this subject</Description>
+    <PointsPossible>100</PointsPossible>
+    <DetailedDescriptionURL>http://example.com/assignments/History-8-1-B:1</DetailedDescriptionURL>
+</GradingAssignment>
       
       <GradingAssignment RefId="7F993AD2-767A-4CD4-8CF3-E6D60A6E02EE">
       <TeachingGroupRefId>91DA3698-54A8-4CA8-975D-2CD64B3DFB36</TeachingGroupRefId>

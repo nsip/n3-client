@@ -239,3 +239,108 @@ C:/Go/src/net/http/server.go:1878 (0x7bd7b8)
 	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
 C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
 	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 21:48:19 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.245.128:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/QMiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x8c5c1c)
+	(*Client).Query: PE(err)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:33 (0x8c6ce7)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x9732cb)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x97329f)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/send/filewatcher/fw.go:50 (0x9b9532)
+	StartFileWatcherAsync: s.Sif(str.V())
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 21:52:33 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.245.128:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/QMiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x8c5c1c)
+	(*Client).Query: PE(err)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:33 (0x8c6ce7)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x9732cb)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x97329f)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/send/filewatcher/fw.go:50 (0x9b9532)
+	StartFileWatcherAsync: s.Sif(str.V())
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 21:56:51 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.245.128:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/QMiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x8c5c1c)
+	(*Client).Query: PE(err)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:33 (0x8c6ce7)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x9732cb)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x97329f)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/send/filewatcher/fw.go:50 (0x9b9532)
+	StartFileWatcherAsync: s.Sif(str.V())
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 22:02:30 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.245.128:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/QMiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x8c5c1c)
+	(*Client).Query: PE(err)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:33 (0x8c6ce7)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x9732cb)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x97329f)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/send/filewatcher/fw.go:50 (0x9b9532)
+	StartFileWatcherAsync: s.Sif(str.V())
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 22:05:30 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.245.128:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/QMiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x8c5c1c)
+	(*Client).Query: PE(err)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:33 (0x8c6ce7)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x9732cb)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x97329f)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/send/filewatcher/fw.go:50 (0x9b9532)
+	StartFileWatcherAsync: s.Sif(str.V())
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 22:23:30 *status.statusError rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.245.128:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/QMiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:58 (0x8c5c6c)
+	(*Client).Query: PE(err)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:33 (0x8c6d34)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x9732fb)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/query/query.go:41 (0x9732cf)
+	Sif: return query(g.SIF, spo)
+C:/Users/QMiao/Desktop/New folder/n3-client/send/filewatcher/fw.go:50 (0x9b9562)
+	StartFileWatcherAsync: s.Sif(str.V())
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/03/25 22:52:28 *errors.errorString EOF
+C:/Users/QMiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:91 (0x8c60a9)
+	(*Client).Publish: PE(clt.stream.Send(n3msg))
+C:/Users/QMiao/Desktop/New folder/n3-client/send/send.go:88 (0x9740d2)
+	Sif.func1: PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.CtxSif))
+C:/Users/QMiao/Desktop/New folder/n3-client/xjy/xml.go:246 (0x970082)
+	XMLModelInfo: OnStruFetch(k, v)
+C:/Users/QMiao/Desktop/New folder/n3-client/send/send.go:82 (0x9730e2)
+	Sif: xjy.XMLModelInfo(xml, "RefId", pathDel, childDel,
+C:/Users/QMiao/Desktop/New folder/n3-client/send/filewatcher/fw.go:50 (0x9b9562)
+	StartFileWatcherAsync: s.Sif(str.V())
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4583d1)
+	goexit: BYTE	$0x90	// NOP

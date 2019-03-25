@@ -16,11 +16,10 @@ type filewatcher struct {
 }
 
 type rest struct {
-	Port        int
-	SifPathS    string
-	XapiPathS   string
-	PathGQL     string
-	PathGQLDemo string
+	Port      int
+	SifPathS  string
+	XapiPathS string
+	PathGQL   string
 }
 
 type rpc struct {

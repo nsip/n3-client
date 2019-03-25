@@ -12,13 +12,12 @@ Path = "./config.toml"
   SifPathS = "/sif"
   XapiPathS = "/xapi"  
   PathGQL = "/gql"
-  PathGQLDemo = "/gql/demo"
 
 [RPC]
-  Namespace = "Aa5fKf2UmyfCufY6JFmQpX12j1jjDFSUfbFUEE92t2nx"
+  Namespace = "GEqULGowEbxxea7meueSzz42jfFE9N1NJTXHCZWmsHt5"
   CtxSif = "demo-sif"
   CtxXapi = "demo-xapi"
   CtxMetaSif = "demo-sif-meta"
   CtxMetaXapi = "demo-xapi-meta"
-  Server = "192.168.76.32"
+  Server = "192.168.245.128"
   Port = 5777

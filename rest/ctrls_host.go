@@ -80,22 +80,19 @@ func queryGQL(c echo.Context) error {
 	}
 
 	schemaQuery := string(Must(ioutil.ReadFile("./gql/query.gql")).([]byte))
-	IDs, fType := IDsByPOFromSIF(mapPP, mapPV), ""
-	rmStructs := []string{}
+	IDs, fType, rmStructs := []string{}, "", []string{}
 
 	switch {
 	case sCtn(queryTxt, "TeachingGroupByName(") || sCtn(queryTxt, "TeachingGroupByStaffID("):
-		fType, rmStructs = "sif", []string{"StudentList"}
+		IDs, fType, rmStructs = IDsByPOFromSIF(mapPP, mapPV), "sif", []string{"StudentList"}
 	case sCtn(queryTxt, "TeachingGroup("):
-		fType = "sif"
+		IDs, fType = IDsByPOFromSIF(mapPP, mapPV), "sif"
 	case sCtn(queryTxt, "GradingAssignment("):
-		fType = "sif"
+		IDs, fType = IDsByPOFromSIF(mapPP, mapPV), "sif"
 	case sCtn(queryTxt, "StudentAttendance("):
-		fType = "sif"
+		IDs, fType = IDsByPOFromSIF(mapPP, mapPV), "sif"
 	case sCtn(queryTxt, "QueryXAPI("):
-		fType = "xapi"
-		// case sCtn(queryTxt, "GetStudentProgress("):
-		// 	fType = "sif"
+		IDs, fType = IDsByPOFromXAPI(mapPP, mapPV), "xapi"
 	}
 
 	if len(IDs) >= 1 {
