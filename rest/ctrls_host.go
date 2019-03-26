@@ -39,8 +39,8 @@ func sendXAPI(c echo.Context) error {
 	}()
 
 	body := Must(ioutil.ReadAll(c.Request().Body)).([]byte)
-	cntV, cntS, cntA, termID := send.Xapi(string(body))
-	return c.JSON(http.StatusAccepted, fSf("%d tuples has been sent, @ %s", cntV+cntS+cntA, termID))
+	nV, nS, nA, termID := send.Xapi(string(body))
+	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent, @ %s", nV, nS, nA, termID))
 }
 
 // GQLRequest : wrapper type to capture GQL input

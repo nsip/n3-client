@@ -14,10 +14,10 @@ Path = "./config.toml"
   PathGQL = "/gql"
 
 [RPC]
-  Namespace = "GEqULGowEbxxea7meueSzz42jfFE9N1NJTXHCZWmsHt5"
+  Namespace = "75ZzVte8eYQpi71GZHBb8Z8idetADRCkkBW8YVRfryyw"
   CtxSif = "demo-sif"
   CtxXapi = "demo-xapi"
   CtxMetaSif = "demo-sif-meta"
   CtxMetaXapi = "demo-xapi-meta"
-  Server = "192.168.245.128"
+  Server = "192.168.76.32"
   Port = 5777

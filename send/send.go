@@ -116,13 +116,13 @@ func Sif(str string) (cntV, cntS, cntA int, termID string) {
 		Terminate(sqType, prevID, prevTermID) // *** object terminator ***
 	}
 
-CHECK:
+CHECKOVER:
 	if _, _, _, v := q.Sif(prevTermID, TERMMARK); v == nil || len(v) == 0 {
 		time.Sleep(DELAY * time.Millisecond)
-		goto CHECK
+		goto CHECKOVER
 	}
 
-	lPln(fSf("<%06d> data tuples sent, <%06d> struct tuples sent, <%06d> array tuples sent\n", cntV, cntS, cntA))
+	lPln(fSf("<%06d> data tuples sent, <%06d> struct tuples sent, <%06d> array tuples sent\n", cntV, cntS, cntA))	
 
 	/********************************************************************/
 
@@ -187,8 +187,13 @@ func Xapi(str string) (cntV, cntS, cntA int, termID string) {
 	PC(xapi.L() == 0 || !xapi.IsJSON(), fEf("Incoming string is invalid json\n"))
 
 	defaultRoot, addedRoot, prevID, prevTermID := "XAPI", false, "", ""
-
 	mapStructRecord := map[string]string{}
+
+	if xapi.T(u.BLANK).C(0) != '[' {
+		xapi = u.Str("[ " + xapi.V() + " ]") //                                   *** wrap single json object into array ***
+		PC(!xapi.IsJSON(), fEf("wrapped xapi array string is invalid json\n"))
+	}
+
 	if ok, jsonType, n := xapi.IsJSONRootArray(); ok {
 		if jsonType == "Object" {
 			prevEnd := 0
@@ -237,10 +242,10 @@ func Xapi(str string) (cntV, cntS, cntA int, termID string) {
 				Terminate(sqType, prevID, prevTermID) //            *** object terminator ***
 			}
 
-		CHECK:
+		CHECKOVER:
 			if _, _, _, v := q.Xapi(prevTermID, TERMMARK); v == nil || len(v) == 0 {
 				time.Sleep(DELAY * time.Millisecond)
-				goto CHECK
+				goto CHECKOVER
 			}
 
 			lPln(fSf("<%06d> data tuples sent, <%06d> struct tuples sent, <%06d> array tuples sent\n", cntV, cntS, cntA))
