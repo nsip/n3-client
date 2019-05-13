@@ -1,1 +1,22 @@
-{"data":{"root":null}}
+{
+    "data": {
+        "xapi": {
+            "courses": [
+                {
+                    "name": "Features Of Places"
+                },
+                {
+                    "name": "People and Places"
+                }
+            ],
+            "learning_area": "HSIE",
+            "stage": "1",
+            "subject": "Geography",
+            "yrLvls": [
+                "1",
+                "2",
+                "3"
+            ]
+        }
+    }
+}

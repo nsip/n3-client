@@ -4,19 +4,17 @@ import (
 	"testing"
 
 	c "../config"
-	g "../global"
-	u "github.com/cdutwhu/go-util"
 )
 
 func TestN3LoadConfig(t *testing.T) {
 	InitFrom(c.FromFile("./config.toml", "../config/config.toml"))
 }
 
-func TestQueryMetaSif(t *testing.T) {
+func TestQueryMeta(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	s, p, o, v := Meta(g.SIF, "D3E34F41-9D75-101A-8C3D-00AA001A1652", "V")
+	s, p, o, v := Meta("D3E34F41-9D75-101A-8C3D-00AA001A1652", "V") //         *** n3node thinks it is claiming ticket ***
 	for i := range s {
 		fPln("----------------------------------------------------")
 		fPf("%d # %d: Reply: %s\n%s\n%s \n", i, v[i], s[i], p[i], o[i])
@@ -24,15 +22,13 @@ func TestQueryMetaSif(t *testing.T) {
 	fPln()
 }
 
-func TestQuerySif(t *testing.T) {
+func TestQuery1(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	Fn := Sif
-
-	ObjectID := "1BC3EAB7-3E48-4371-8C14-6D1E67BEBD6D"
+	ObjectID := "738F4DF5-949F-4380-8186-8252440A6F6F"
 	Object := ""
-	s, p, o, _ := Fn(ObjectID, "") //      ** root **
+	s, p, o, _ := Data(ObjectID, "") //      ** root **
 	fPln("Object:")
 	for i := range s {
 		Object = o[i]
@@ -40,74 +36,77 @@ func TestQuerySif(t *testing.T) {
 	}
 
 	fPln("\nArray Info:")
-	s, p, o, _ = Fn(ObjectID, "[]") //     ** array **
+	s, p, o, _ = Data(ObjectID, "[]") //     ** array **
 	for i := range s {
 		fPf("%-40s%-65s%10s\n", s[i], p[i], o[i])
 	}
 
 	fPln("\nStructure:")
-	s, p, o, _ = Fn(Object, "::") //       ** struct **
+	s, p, o, _ = Data(Object, "::") //       ** struct **
 	for i := range s {
 		fPf("%-65s%-10s%s\n", s[i], p[i], o[i])
 	}
 
 	fPln("\nValues:")
-	s, p, o, _ = Fn(ObjectID, Object) //   ** values **
+	s, p, o, _ = Data(ObjectID, Object) //   ** values **
 	for i := range s {
 		fPf("%-40s%-85s%s\n", s[i], p[i], o[i])
 	}
 }
 
-func TestQueryXapi(t *testing.T) {
+func TestQuery2(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	Fn := Xapi
-
-	ids1, ids2 := []string{}, []string{}
-	s, p, o, _ := Fn("", "XAPI ~ actor ~ name", "Brittany Baxter")
-	for i := range s {
-		ids1 = append(ids1, s[i])
+	s1, _, _, _ := Data("", "xapi ~ actor ~ name", "Samuel Busse")
+	if len(s1) == 0 {
+		fPln("nothing found 1")
+		return
 	}
-	s, p, o, _ = Fn("", "XAPI ~ object ~ id", "http://example.com/assignments/History-7-1-B:5")
-	for i := range s {
-		ids2 = append(ids2, s[i])
-	}
-	ids := u.Strs(ids1).ToG().InterSec(u.Strs(ids2).ToG()...)
-	for _, id := range ids {
-		fPln(id)
-	}
-
-	if len(ids) == 0 {
+	s2, _, _, _ := Data("", "xapi ~ object ~ id", "http://example.com/assignments/Geography-8-1-B:4")
+	if len(s2) == 0 {
+		fPln("nothing found 2")
 		return
 	}
 
-	fPln(" ----------------------------------------- ")
+	if rst := IArrIntersect(Strs(s1), Strs(s2)); rst != nil {
 
-	ObjectID := ids[0].(string) //"478CE5FA-0BCE-424C-9F11-E57A15E941CF"
-	Object := ""
-	s, p, o, _ = Fn(ObjectID, "") //     ** root **
-	fPln("Object:")
-	for i := range s {
-		Object = o[i]
-		fPf("%-50s%-10s%s\n", s[i], p[i], o[i])
-	}
+		ids := rst.([]string)
+		for _, id := range ids {
+			fPln(id)
+		}		
 
-	fPln("\nArray Info:")
-	s, p, o, _ = Fn(ObjectID, "[]") //    ** array ** /* context must end with '-xapi' */
-	for i := range s {
-		fPf("%-50s%-50s%s\n", s[i], p[i], o[i])
-	}
+		fPln(" ----------------------------------------- ")
 
-	fPln("\nStructure:")
-	s, p, o, _ = Fn(Object, "::") //      ** struct **
-	for i := range s {
-		fPf("%-50s%-10s%s\n", s[i], p[i], o[i])
-	}
+		ObjectID := ids[0] // "478CE5FA-0BCE-424C-9F11-E57A15E941CF"
+		Object := ""
+		s, p, o, _ := Data(ObjectID, "") //     ** root **
+		fPln("Object:")
+		for i := range s {
+			Object = o[i]
+			fPf("%-50s%-10s%s\n", s[i], p[i], o[i])
+		}
 
-	fPln("\nValues:")
-	s, p, o, _ = Fn(ObjectID, Object) //  ** values **
-	for i := range s {
-		fPf("%-50s%-50s%s\n", s[i], p[i], o[i])
+		fPln("\nArray Info:")
+		s, p, o, _ = Data(ObjectID, "[]") //    ** array ** /* context must end with '-xapi' */
+		for i := range s {
+			fPf("%-50s%-50s%s\n", s[i], p[i], o[i])
+		}
+
+		fPln("\nStructure:")
+		s, p, o, _ = Data(Object, "::") //      ** struct **
+		for i := range s {
+			fPf("%-50s%-10s%s\n", s[i], p[i], o[i])
+		}
+
+		fPln("\nValues:")
+		s, p, o, _ = Data(ObjectID, Object) //  ** values **
+		for i := range s {
+			fPf("%-50s%-50s%s\n", s[i], p[i], o[i])
+		}
+
+	} else {
+		fPln("nothing found 1 & 2")
+		return
 	}
 }

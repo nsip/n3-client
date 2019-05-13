@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	c "../config"
+	g "../global"
 	"../gql"
 	"../send"
 	"github.com/labstack/echo"
@@ -27,8 +28,8 @@ func sendSIF(c echo.Context) error {
 	}()
 
 	body := Must(ioutil.ReadAll(c.Request().Body)).([]byte)
-	nV, nS, nA, termID := send.Sif(string(body))
-	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent, @ %s", nV, nS, nA, termID))
+	nV, nS, nA := send.ToNode(string(body), g.SIF)
+	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
 func sendXAPI(c echo.Context) error {
@@ -39,8 +40,8 @@ func sendXAPI(c echo.Context) error {
 	}()
 
 	body := Must(ioutil.ReadAll(c.Request().Body)).([]byte)
-	nV, nS, nA, termID := send.Xapi(string(body))
-	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent, @ %s", nV, nS, nA, termID))
+	nV, nS, nA := send.ToNode(string(body), g.XAPI)
+	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
 // GQLRequest : wrapper type to capture GQL input
@@ -63,7 +64,7 @@ func queryGQL(c echo.Context) error {
 		"teachinggroupid": "TeachingGroup ~ -RefId",
 		"tgid":            "GradingAssignment ~ TeachingGroupRefId",
 		"studentid":       "StudentAttendanceTimeList ~ StudentPersonalRefId",
-		"objid":           "XAPI ~ object ~ id",
+		"objid":           "xapi ~ object ~ id",
 	}
 	mapPV := map[string]interface{}{}
 
@@ -84,15 +85,15 @@ func queryGQL(c echo.Context) error {
 
 	switch {
 	case sCtn(queryTxt, "TeachingGroupByName(") || sCtn(queryTxt, "TeachingGroupByStaffID("):
-		IDs, fType, rmStructs = IDsByPOFromSIF(mapPP, mapPV), "sif", []string{"StudentList"}
+		IDs, fType, rmStructs = IDsByPO(mapPP, mapPV), "sif", []string{"StudentList"}
 	case sCtn(queryTxt, "TeachingGroup("):
-		IDs, fType = IDsByPOFromSIF(mapPP, mapPV), "sif"
+		IDs, fType = IDsByPO(mapPP, mapPV), "sif"
 	case sCtn(queryTxt, "GradingAssignment("):
-		IDs, fType = IDsByPOFromSIF(mapPP, mapPV), "sif"
+		IDs, fType = IDsByPO(mapPP, mapPV), "sif"
 	case sCtn(queryTxt, "StudentAttendance("):
-		IDs, fType = IDsByPOFromSIF(mapPP, mapPV), "sif"
+		IDs, fType = IDsByPO(mapPP, mapPV), "sif"
 	case sCtn(queryTxt, "QueryXAPI("):
-		IDs, fType = IDsByPOFromXAPI(mapPP, mapPV), "xapi"
+		IDs, fType = IDsByPO(mapPP, mapPV), "xapi"
 	}
 
 	if len(IDs) >= 1 {

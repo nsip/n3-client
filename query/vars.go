@@ -6,16 +6,26 @@ import (
 
 	c "../config"
 	u "github.com/cdutwhu/go-util"
+	w "github.com/cdutwhu/go-wrappers"
+)
+
+type (
+	Str  = w.Str
+	Strs = w.Strs
 )
 
 var (
-	PE   = u.PanicOnError
-	PE1  = u.PanicOnError1
-	PC   = u.PanicOnCondition
-	PH   = u.PanicHandle
-	PHE  = u.PanicHandleEx
-	LE   = u.LogOnError
-	Must = u.Must
+	PE         = u.PanicOnError
+	PE1        = u.PanicOnError1
+	PC         = u.PanicOnCondition
+	PH         = u.PanicHandle
+	PHE        = u.PanicHandleEx
+	LE         = u.LogOnError
+	Must       = u.Must
+	IF         = u.IF
+	CaseAssign = u.CaseAssign
+
+	IArrIntersect = w.IArrIntersect
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf

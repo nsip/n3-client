@@ -7,6 +7,12 @@ import (
 
 	c "../config"
 	u "github.com/cdutwhu/go-util"
+	w "github.com/cdutwhu/go-wrappers"
+)
+
+type (
+	Str  = w.Str
+	Strs = w.Strs
 )
 
 var (
@@ -29,15 +35,16 @@ var (
 	sRepAll = strings.ReplaceAll
 	sJ      = strings.Join
 
+	IArrIntersect = w.IArrIntersect
+
 	e   error
 	CFG *c.Config
 	ver int64 = 1
 )
 
 const (
-	TERMMARK = "ENDENDEND"
-	HEADTRIM = "sif."
-	DELAY    = 2000
-	pathDel  = " ~ "
-	childDel = " + "
+	TERMMARK  = "ENDENDEND"
+	DELAY     = 2000
+	PATH_DEL  = " ~ "
+	CHILD_DEL = " + "
 )

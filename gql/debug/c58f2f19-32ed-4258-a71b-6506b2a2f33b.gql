@@ -1,8 +1,7 @@
-
 type QueryRoot {
 	xapi: xapi
 }
- 
+
 type xapi {
 	learning_area: String
 	subject: String

@@ -23,13 +23,15 @@ type rest struct {
 }
 
 type rpc struct {
-	Namespace   string
-	CtxSif      string
-	CtxXapi     string
-	CtxMetaSif  string
-	CtxMetaXapi string
-	Server      string
-	Port        int
+	Namespace string
+	Server    string
+	Port      int
+	Ctx       string
+	CtxMeta   string
+	// CtxSif      string
+	// CtxXapi     string
+	// CtxMetaSif  string
+	// CtxMetaXapi string
 }
 
 // Config is toml

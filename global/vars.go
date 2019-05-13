@@ -12,8 +12,8 @@ type (
 )
 
 const (
-	SIF       SQDType = 0
-	XAPI      SQDType = 1
-	META_SIF  SQDType = 2
-	META_XAPI SQDType = 3
+	SIF SQDType = iota
+	XAPI
+	META_SIF
+	META_XAPI
 )

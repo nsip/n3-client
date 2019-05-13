@@ -6,17 +6,41 @@ import (
 	"strings"
 
 	c "../config"
+	gjxy "github.com/cdutwhu/go-gjxy"
 	u "github.com/cdutwhu/go-util"
+	w "github.com/cdutwhu/go-wrappers"
+)
+
+type (
+	Str  = w.Str
+	Strs = w.Strs
+	I32  = w.I32
+	I32s = w.I32s
 )
 
 var (
-	PE   = u.PanicOnError
-	PE1  = u.PanicOnError1
-	PC   = u.PanicOnCondition
-	PH   = u.PanicHandle
-	PHE  = u.PanicHandleEx
-	LE   = u.LogOnError
-	Must = u.Must
+	PE         = u.PanicOnError
+	PE1        = u.PanicOnError1
+	PC         = u.PanicOnCondition
+	PH         = u.PanicHandle
+	PHE        = u.PanicHandleEx
+	LE         = u.LogOnError
+	Must       = u.Must
+	IF         = u.IF
+	CaseAssign = u.CaseAssign
+
+	Max           = w.Max
+	Min           = w.Min
+	GetMapKeys    = w.GetMapKeys
+	IArrSeqCtns   = w.IArrSeqCtns
+	IArrStrJoinEx = w.IArrStrJoinEx
+	SortIntArr2D  = w.SortIntArr2D
+
+	JSONWrapRoot    = gjxy.JSONWrapRoot
+	JSONMake        = gjxy.JSONMakeIPath
+	JSONMakeRep     = gjxy.JSONMakeIPathRep
+	JSONObjectMerge = gjxy.JSONObjectMerge
+	SchemaMake      = gjxy.SchemaMake
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf
@@ -30,12 +54,14 @@ var (
 	sJ      = strings.Join
 	sCnt    = strings.Count
 
-	e         error
-	CFG       *c.Config
-	root      = ""
-	mapStruct = map[string]string{}
-	mapValue  = map[string][]*valver{}
-	mapArray  = map[string]int{}
+	e               error
+	CFG             *c.Config
+	root            = ""
+	mStruct         = map[string]string{}
+	mValue          = map[string][]*valver{}
+	mArray          = map[string]int{}
+	mIPathObj       = map[string]string{}   //   *** FOR JSONBuilld ***
+	mIPathSubIPaths = map[string][]string{} //   *** FOR JSONBuilld ***
 )
 
 type valver struct {
@@ -44,6 +70,7 @@ type valver struct {
 }
 
 const (
-	pathDel  = " ~ "
-	childDel = " + "
+	PATH_DEL  = " ~ "
+	CHILD_DEL = " + "
+	BLANK     = w.BLANK
 )

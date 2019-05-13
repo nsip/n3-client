@@ -5,17 +5,17 @@ import "testing"
 func TestQueryIDs(t *testing.T) {
 
 	mapPP := map[string]string{
-		"fname": "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName",
-		"gname": "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName",
-		"rmNo":  "TeachingGroup ~ TeachingGroupPeriodList ~ TeachingGroupPeriod ~ RoomNumber",
+		"ccode":    "SchoolCourseInfo ~ CourseCode",
+		"ccredits": "SchoolCourseInfo ~ CourseCredits",
+		"ctitle":  "SchoolCourseInfo ~ CourseTitle",
 	}
-	mapPV := map[string]string{
-		"fname": "Knoll",
-		"gname": "Ina",
-		"rmNo":  "141",
+	mapPV := map[string]interface{}{
+		"ccode":    "Mathematics 701",
+		"ccredits": "2",
+		"ctitle":  "Mathematics 7",
 	}
 
-	ids := IDsByPOFromSIF(mapPP, mapPV)
+	ids := IDsByPO(mapPP, mapPV)
 	for _, id := range ids {
 		fPln(id)
 	}

@@ -1,288 +1,95 @@
 package xjy
 
-import (
-	u "github.com/cdutwhu/go-util"
-	"github.com/google/uuid"
-)
+// YAMLScan :
+func YAMLScan(data, idmark string, IDs []string, dt DataType, OnValueFetch func(path, value, id string)) {
+	switch dt {
+	case DT_XML:
+		YAMLScanFromXMLBat(data, idmark, IDs, OnValueFetch)
+	case DT_JSON:
+		YAMLScanFromJSONBat(data, idmark, IDs, OnValueFetch)
+	}
+}
 
-// YAMLRmHangStr is
-func YAMLRmHangStr(yaml string) string {
-	pos, strs, pPrev := []int{}, []string{}, 0
-	for p, c := range yaml {
-		if c == '\n' {
-			if pe := sI(yaml[p+1:], "\n"); pe >= 0 {
-				l := yaml[p+1 : p+1+pe]
-				if IsYAMLHangString(l) {
-					pos = append(pos, p)
+// YAMLScanFromXMLBat :
+func YAMLScanFromXMLBat(xml, idmark string, IDs []string, OnValueFetch func(path, value, id string)) {
+	n, prevEnd := XMLSegsCount(xml), 0
+	for i := 1; i <= n; i++ {
+		nextStart := IF(i == 1, 0, prevEnd+1).(int)
+		_, thisxml, _, end := XMLSegPos(Str(xml).S(nextStart, ALL).V(), 1, 1)
+		prevEnd = end + nextStart
+
+		// if i == n {
+		// 	fPln(tag)
+		// 	fPln(thisxml)
+		// }
+		fPf("%d SIF *****************************************************\n", i)
+
+		yamlstr := Xstr2Y(thisxml)
+		yamlstr = YAMLJoinSplittedLines(yamlstr)
+		info := YAMLInfo(yamlstr, idmark, PATH_DEL, true)
+		for _, item := range *info {
+			ID := item.ID
+			if IDs != nil && len(IDs) > 0 {
+				ID = IDs[i-1]
+			}
+			OnValueFetch(item.Path, item.Value, ID)
+		}
+	}
+}
+
+// YAMLScanFromJSONBat :
+func YAMLScanFromJSONBat(json, idmark string, IDs []string, OnValueFetch func(path, value, id string)) {
+	if ok, _ := IsJSONSingle(json); ok {
+		yamlstr := Jstr2Y(json)
+		yamlstr = YAMLJoinSplittedLines(yamlstr)
+		info := YAMLInfo(yamlstr, idmark, PATH_DEL, true)
+		for _, item := range *info {
+			ID := item.ID
+			if IDs != nil && len(IDs) > 0 {
+				ID = IDs[0]
+			}
+			OnValueFetch(item.Path, item.Value, ID)
+		}
+		return
+	}
+
+	if ok, jsonType, n, eles := IsJSONArray(json); ok {
+		if jsonType == JT_OBJ {
+			for i := 1; i <= n; i++ {
+				thisjson := eles[i-1]
+				_, _, extjson := JSONWrapRoot(thisjson, "xapi")
+
+				// if i == n {
+				// 	fPln(thisjson)
+				// }
+				fPf("%d xapi *****************************************************\n", i)
+
+				yamlstr := Jstr2Y(extjson)
+				yamlstr = YAMLJoinSplittedLines(yamlstr)
+				info := YAMLInfo(yamlstr, idmark, PATH_DEL, true)
+				for _, item := range *info {
+					ID := item.ID
+					if IDs != nil && len(IDs) > 0 {
+						ID = IDs[i-1]
+					}
+					OnValueFetch(item.Path, item.Value, ID)
 				}
 			}
 		}
-	}
-	if len(pos) == 0 {
-		return yaml
-	}
-	for _, p := range pos {
-		strs = append(strs, yaml[pPrev:p])
-		pPrev = p + 1
-	}
-	if pe := pos[len(pos)-1]; pe < len(yaml) {
-		strs = append(strs, yaml[pe+1:])
-	}
-	// return sJ(strs, "")
+	} else {
+		_, _, extjson := JSONWrapRoot(json, "xapi")
+		yamlstr := Jstr2Y(extjson)
+		yamlstr = YAMLJoinSplittedLines(yamlstr)
+		
+		// ioutil.WriteFile("tempyaml.yaml", []byte(yamlstr), 0666 )
 
-	/* remove surplus blank in value string */
-	str := u.Str(sJ(strs, ""))
-	return str.TrimInternalEachLine(' ', 1).V()
-}
-
-/*******************************************************/
-
-// var mapidll = make(map[string][]int)
-
-// InitLineLevelBuf is (deprecated)
-// func InitLineLevelBuf(rid string, nline int) {
-// 	if _, ok := mapidll[rid]; !ok {
-// 		mapidll[rid] = make([]int, nline)
-// 	}
-// }
-
-// IsYAMLPath is
-func IsYAMLPath(line string) bool {
-	return line[len(line)-1] == ':' && !sC(line, ": ")
-}
-
-// IsYAMLValueLine is
-func IsYAMLValueLine(line string) bool {
-	/* Not a Path line */
-	return !IsYAMLPath(line)
-}
-
-// IsYAMLHangString is
-func IsYAMLHangString(line string) bool {
-	l := sT(line, " \t")
-	if !sHP(l, "- ") && !sC(l, ": ") && l[len(l)-1] != ':' {
-		return true
-	}
-	return false
-}
-
-// YAMLTag is
-func YAMLTag(line string) string {
-	// if IsYAMLValueLine(line) {
-	// 	if p := sI(line, ": "); p >= 0 { /* Normal 'Tag: Value' line */
-	// 		if pos1 := sI(line, "- "); pos1 >= 0 {
-	// 			return u.Str(sTL(line[pos1+2:p], " ")).RmQuotes()
-	// 		}
-	// 		return u.Str(sTL(line[:p], " ")).RmQuotes()
-	// 	}
-	// 	if p := sI(line, "- "); p >= 0 { /* Array Element '- Value' line */
-	// 		return "" /* array element obj */
-	// 	}
-	// }
-	// return u.Str(sTL(line[:len(line)-1], " ")).RmQuotes() /* Pure One Path Section */
-
-	if IsYAMLValueLine(line) {
-		k, _ := u.Str(line).KeyValuePair(": ", "~", "~", true, true)
-		//if sHP(k, "- ") {
-		if k.HP("- ") {
-			k = u.Str(k[2:]).RmQuotes()
-		}
-		return k.V()
-	}
-	return u.Str(sTL(line[:len(line)-1], " ")).RmQuotes().V()
-}
-
-// YAMLValue is
-func YAMLValue(line string) (value string, arrEleValue bool) {
-
-	if IsYAMLValueLine(line) {
-		if p := sI(line, ": "); p >= 0 { /* Normal 'Sub: Obj' line */
-			value := line[p+2 : len(line)]
-			value = u.TerOp(value != `""`, sT(value, `"`), value).(string)
-			return value, false
-		}
-		if p := sI(line, "- "); p >= 0 { /* Pure Array Element '- Obj' line */
-			value := line[p+2 : len(line)]
-			value = u.TerOp(value != `""`, sT(value, `"`), value).(string)
-			return value, true
-		}
-	}
-	return "", false /* Pure One Path Section */
-
-	// _, v := u.Str(line).KeyValuePair(": ", '~', '~', true, true)
-	// if v == line {
-	// 	v = sT(v, " \t")
-	// 	if sHP(v, "- ") { /* array's pure element item `- item` */
-	// 		return u.Str(v[2:]).RemoveQuotes(), true
-	// 	}
-	// }
-	// return v, false
-}
-
-// YAMLLevel is
-func YAMLLevel(line string) int {
-	nLine := len(line)
-	if nLine == 3 && sHP(line, "- ") {
-		return 1
-	}
-	for i, c := range line {
-		if i < nLine-1 && c != ' ' && line[i+1] != ' ' {
-			// PC(i%2 == 1, epf("error yaml format %s: in YAMLLevel", line))
-			return i / 2
-		}
-	}
-	return -1
-}
-
-// UpperLevelLine is (deprecated) (using line index is to avoid identical lines in yaml file)
-// func UpperLevelLine(idx int, lines []string) (int, string) {
-// 	thislevel := YAMLLevel(lines[idx])
-// 	// mapidll["rid"][idx] = thislevel
-// 	if thislevel == 0 {
-// 		return -1, ""
-// 	}
-// 	for i := idx - 1; i >= 0; i-- {
-// 		//level := mapidll["rid"][i] /* much faster than YAMLLevel again */
-// 		level := YAMLLevel(lines[i]) /* much slower than map */
-// 		if thislevel-level == 1 {
-// 			return i, lines[i]
-// 		}
-// 	}
-// 	return -1, ""
-// }
-
-// UpperLevelLines is (deprecated) (Too slow even use map, avoid using this function)
-// func UpperLevelLines(idx int, lines []string, self, up2low bool) (idxes []int, strs []string) {
-// 	if self {
-// 		idxes, strs = append(idxes, idx), append(strs, lines[idx])
-// 	}
-// 	idx, uline := UpperLevelLine(idx, lines)
-// 	if idx >= 0 {
-// 		//for mapidll["rid"][idx] > 0 {
-// 		for YAMLLevel(lines[idx]) > 0 {
-// 			idxes, strs = append(idxes, idx), append(strs, uline)
-// 			idx, uline = UpperLevelLine(idx, lines)
-// 		}
-// 		idxes, strs = append(idxes, idx), append(strs, uline)
-// 	}
-// 	if up2low {
-// 		for l, r := 0, len(idxes)-1; l < r; l, r = l+1, r-1 {
-// 			idxes[l], idxes[r] = idxes[r], idxes[l]
-// 			strs[l], strs[r] = strs[r], strs[l]
-// 		}
-// 	}
-// 	return
-// }
-
-/*******************************************************************/
-
-// YAMLLines2Nodes is ,
-func YAMLLines2Nodes(lines []string, idmark, pathDel string, dt DataType) *[]Node {
-	fromSIF, fromXAPI := (dt == XML), (dt == JSON)
-
-	if fromSIF && !sHP(idmark, "-") {
-		idmark = "-" + idmark
-	}
-	hasXapiID := false
-	nodes := make([]Node, len(lines))
-	objID := u.TerOp(fromXAPI, uuid.New().String(), "").(string) // create a new GUID, if inbound data's id is not blank, overwrite this one, otherwise use this one
-	pn0 := &nodes[0]
-	pn0.tag, pn0.value, pn0.path, pn0.aevalue, pn0.level, pn0.levelXPath, pn0.id = YAMLTag(lines[0]), "", YAMLTag(lines[0]), false, 0, []int{0}, objID
-
-	for i, l := range lines[1:] {
-		i++
-
-		// if i == 71 || i == 46 {
-		// 	fPln(i, l)
-		// }
-
-		pn, pnPrev := &nodes[i], &nodes[i-1]
-		pn.tag = YAMLTag(l)
-		pn.value, pn.aevalue = YAMLValue(l) /* pn.path will be filled below from levelXPath */
-		pn.level = YAMLLevel(l)
-		pn.levelXPath = make([]int, pn.level+1)
-		copy(pn.levelXPath, pnPrev.levelXPath)
-
-		/* only get 'top' ID */
-		if (fromSIF || (fromXAPI && YAMLLevel(l) == 0)) && sI(l, idmark) >= 0 {
-			PC(!u.Str(pn.value).IsUUID(), fEf("%s is not a valid UUID", pn.value))
-			objID = pn.value
-			hasXapiID = true
-		}
-		pn.id = objID
-		if (pnPrev.level == pn.level || pnPrev.level == pn.level-1) && pnPrev.id == "" {
-			pnPrev.id = pn.id
-		}
-
-		switch {
-		case pn.level == pnPrev.level+1: /*jump into*/
-			pn.levelXPath[pn.level-1] = i - 1
-		case pn.level == pnPrev.level: /*next sibling*/
-			//copy(pn.levelFootPath, pnPrev.levelFootPath)
-		case pn.level == pnPrev.level-1: /*jump 1 out */
-		case pn.level == pnPrev.level-2: /*jump 2 out */
-		case pn.level == pnPrev.level-3: /*jump 3 out */
-		default:
-			/* incorrect file */
-		}
-		pn.levelXPath[pn.level] = i
-
-		for _, p := range pn.levelXPath {
-			tag := YAMLTag(lines[p])
-			if sHP(tag, "- ") { /* remove YAML array symbol '- ' */
-				tag = tag[2:]
+		info := YAMLInfo(yamlstr, idmark, PATH_DEL, true)
+		for _, item := range *info {
+			ID := item.ID
+			if IDs != nil && len(IDs) > 0 {
+				ID = IDs[0]
 			}
-			if len(tag) == 0 {
-				continue
-			}
-			pn.path += (tag + pathDel)
-		}
-		pn.path = pn.path[:len(pn.path)-len(pathDel)] /* remove last ' ~ ' */
-	}
-
-	/* clean up 'ID' nodes */
-	nodesNoID := []Node{}
-	for _, n := range nodes {
-		// fPf("%s : %d\n", n.tag, n.level)
-		if (fromXAPI && n.id == "") || (fromXAPI && hasXapiID) { /* xapi :  */
-			n.id = objID
-		}
-
-		// if n.tag != idmark || (n.level > 0 && fromXAPI) || (n.level > 1 && fromSIF) { /* remove 'ID' nodes */
-		// 	nodesNoID = append(nodesNoID, n)
-		// }
-
-		nodesNoID = append(nodesNoID, n)
-	}
-
-	return &nodesNoID
-}
-
-// YAMLScanAsync is
-func YAMLScanAsync(yamlstr, objIDMark, pathDel string, dt DataType, skipDir bool, OnOneValueFetch func(path, value, id string), done chan<- int) {
-	lines := sFF(yamlstr, func(c rune) bool { return c == '\n' })
-	for _, n := range *YAMLLines2Nodes(lines, objIDMark, pathDel, dt) {
-		if skipDir {
-			if len(sT(n.value, " ")) != 0 {
-				OnOneValueFetch(n.path, n.value, n.id)
-			}
-		} else {
-			OnOneValueFetch(n.path, n.value, n.id)
-		}
-	}
-	done <- 1
-}
-
-// YAMLScan is
-func YAMLScan(yamlstr, objIDMark, pathDel string, dt DataType, skipDir bool, OnOneValueFetch func(path, value, id string)) {
-	lines := sFF(yamlstr, func(c rune) bool { return c == '\n' })
-	for _, n := range *YAMLLines2Nodes(lines, objIDMark, pathDel, dt) {
-		if skipDir {
-			if len(sT(n.value, " ")) != 0 {
-				OnOneValueFetch(n.path, n.value, n.id)
-			}
-		} else {
-			OnOneValueFetch(n.path, n.value, n.id)
+			OnValueFetch(item.Path, item.Value, ID)
 		}
 	}
 }

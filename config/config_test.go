@@ -5,18 +5,19 @@ import (
 )
 
 func TestLoad(t *testing.T) {
-	cfg := GetConfig("./config.toml")
+	cfg := FromFile("./config.toml")
 	fPln(cfg.Rest.PathGQL)
-	// fPln(cfg.RPC)
-	// fPln(cfg.Filewatcher)
-	// fPln(cfg.Global.ErrLog)
+	fPln(cfg.RPC)
+	fPln(cfg.Filewatcher)
+	fPln(cfg.Global.ErrLog)
+	fPln(cfg.RPC.Ctx)
 }
 
 func TestSave(t *testing.T) {
-	cfg := GetConfig("./config.toml")
+	cfg := FromFile("./config.toml")
 	cfg.Save()
 
-	cfg1 := GetConfig("./config.toml")
+	cfg1 := FromFile("./config.toml")
 	fPln(cfg1.RPC)
 	fPln(cfg1.Filewatcher)
 }

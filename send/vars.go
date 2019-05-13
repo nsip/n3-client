@@ -6,7 +6,15 @@ import (
 	"strings"
 
 	c "../config"
+	xjy "../xjy"
+	gjxy "github.com/cdutwhu/go-gjxy"
 	u "github.com/cdutwhu/go-util"
+	w "github.com/cdutwhu/go-wrappers"
+)
+
+type (
+	Str  = w.Str
+	I32s = w.I32s
 )
 
 var (
@@ -17,6 +25,13 @@ var (
 	PHE  = u.PanicHandleEx
 	LE   = u.LogOnError
 	Must = u.Must
+	IF   = u.IF
+
+	XMLAttributes = gjxy.XMLAttributes
+	XMLSegPos     = gjxy.XMLSegPos
+	XMLSegsCount  = gjxy.XMLSegsCount
+	XMLFamilyTree = gjxy.XMLFamilyTree
+	XMLCntInfo    = gjxy.XMLCntInfo
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf
@@ -27,7 +42,7 @@ var (
 	LPln = lPln
 
 	sC = strings.Contains
-	SC = sC
+	sJ = strings.Join
 
 	e   error
 	CFG *c.Config
@@ -35,9 +50,12 @@ var (
 )
 
 const (
-	TERMMARK = "ENDENDEND"
-	HEADTRIM = "sif."
-	DELAY    = 2000
-	pathDel  = " ~ "
-	childDel = " + "
+	TERMMARK  = "ENDENDEND"
+	DELAY     = 2000
+	PATH_DEL  = " ~ "
+	CHILD_DEL = " + "
+	ALL       = w.ALL
+	LAST      = w.LAST
+	DT_XML    = xjy.DT_XML
+	DT_JSON   = xjy.DT_JSON
 )

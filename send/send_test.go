@@ -6,6 +6,7 @@ import (
 	"time"
 
 	c "../config"
+	g "../global"
 )
 
 func TestJunk(t *testing.T) {
@@ -18,23 +19,15 @@ func TestJunk(t *testing.T) {
 /************************************************************/
 
 func TestN3LoadConfig(t *testing.T) {
-	InitFrom(c.FromFile("./config.toml", "../config/config.toml"))
+	InitClientFrom(c.FromFile("./config.toml", "../config/config.toml"))
 }
 
-func TestSendSif(t *testing.T) {
+func TestToNode(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	xmlfile := "../inbound/sif/sif.xml"	
-	bytes := Must(ioutil.ReadFile(xmlfile)).([]byte)
-	Sif(string(bytes))
-}
-
-func TestSendXapi(t *testing.T) {
-	defer func() { PH(recover(), CFG.Global.ErrLog) }()
-	TestN3LoadConfig(t)
-
-	jsonfile := "../inbound/xapi/xapi.json"	
-	bytes := Must(ioutil.ReadFile(jsonfile)).([]byte)
-	Xapi(string(bytes))
+	datafile := "../inbound/xapi/xapiC.json" //              *** change file ***
+	bytes := Must(ioutil.ReadFile(datafile)).([]byte)
+	ToNode(string(bytes), g.XAPI) //                         *** change data type ***
+	time.Sleep(5 * time.Second)
 }
