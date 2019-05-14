@@ -16,9 +16,9 @@ type filewatcher struct {
 }
 
 type rest struct {
-	Port      int
-	PathSend string	
-	PathGQL   string
+	Port     int
+	PathSend string
+	PathGQL  string
 }
 
 type rpc struct {
@@ -26,7 +26,7 @@ type rpc struct {
 	Server    string
 	Port      int
 	Ctx       string
-	CtxMeta   string	
+	CtxMeta   string
 }
 
 // Config is toml

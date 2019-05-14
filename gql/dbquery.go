@@ -61,7 +61,7 @@ func queryObject(id string) {
 	s, p, o, v := q.Data(id, root) //              *** Values ***
 	for i := range s {
 		mValue[p[i]] = append(mValue[p[i]], &valver{value: o[i], ver: v[i]})
-		fPf("V mValue ---> %-70s%-90s%10d\n", p[i], o[i], v[i])
+		fPf("V mValue ---> %-70s%-70s%10d\n", p[i], o[i], v[i])
 	}
 
 	return

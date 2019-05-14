@@ -26,8 +26,7 @@ var (
 	PHE        = u.PanicHandleEx
 	LE         = u.LogOnError
 	Must       = u.Must
-	IF         = u.IF
-	CaseAssign = u.CaseAssign
+	IF         = u.IF	
 
 	Max           = w.Max
 	Min           = w.Min

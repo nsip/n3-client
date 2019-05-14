@@ -33,8 +33,7 @@ func JSONBuild(path string) {
 						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V()
 						for i := vidx; i < vidx+nArr; i++ {							
 							JSONMake(mIPathObj, ipath, tfield, valvers[i].value, true)
-						}
-						fPln()
+						}						
 					}
 				}
 
@@ -82,8 +81,7 @@ func JSONBuild(path string) {
 			}
 
 		}
-
-		fPln()
+		
 		JSONBuild(xpath)
 	}
 	return

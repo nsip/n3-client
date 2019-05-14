@@ -19,7 +19,7 @@ func modStructMap(rmStructs ...string) {
 	}
 }
 
-// GetSchemaFromID :
+// GetSchemaFromID : (FOR testing use)
 func GetSchemaFromID(objID string, rmStructs ...string) (schema string) {
 	defer clrQueryBuf()
 	if objID == "" {
@@ -27,13 +27,17 @@ func GetSchemaFromID(objID string, rmStructs ...string) (schema string) {
 	}
 	queryObject(objID) //                                 *** GET root, mapStruct, mapArray, mapValue ***
 	modStructMap(rmStructs...)
+	if len(mStruct) == 0 || len(mValue) == 0 {
+		return ""
+	}
+
 	schema = SchemaBuild("", root)
 	schema = sRepAll(schema, "\t-", "\t")
 	schema = sRepAll(schema, "\t#", "\t")
 	return
 }
 
-// GetJSONFromID :
+// GetJSONFromID : (FOR testing use)
 func GetJSONFromID(objID string, rmStructs ...string) (json string) {
 	defer clrQueryBuf()
 	if objID == "" {
@@ -41,30 +45,50 @@ func GetJSONFromID(objID string, rmStructs ...string) (json string) {
 	}
 	queryObject(objID) //                                 *** GET root, mapStruct, mapArray, mapValue ***
 	modStructMap(rmStructs...)
+	if len(mValue) == 0 {
+		return ""
+	}
+
 	JSONBuild(root)
 	json = JSONMakeRep(mIPathObj, PATH_DEL)
-	// ioutil.WriteFile("GetJSONFromID.json", []byte(json), 0666)
 	return
 }
 
-// GetJSONGQLFromID :
-// func GetJSONGQLFromID(objID string) (json, schema string) {
-// 	defer clrQueryBuf()
-// 	queryObject(objID) //                                 *** GET root, mapStruct, mapArray, mapValue ***
-// 	modStructMap() //                               *** eliminate some unnecessary properties ***
-// 	json = JSONMake("", root, pathDel, childDel)
-// 	json = sRepAll(json, `"-`, `"`)
-// 	json = sRepAll(json, `"#`, `"`)
-// 	schema = SchemaMake("", root, pathDel, childDel)
-// 	schema = sRepAll(schema, "\t-", "\t")
-// 	schema = sRepAll(schema, "\t#", "\t")
-// 	return
-// }
+// GetResourceFromID :
+func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map[string]string) {
+	mSchema, mJSON = make(map[string]string), make(map[string]string)
+	for _, objID := range objIDs {
+		clrQueryBuf()
+		
+		if objID == "" {
+			mSchema[objID], mJSON[objID] = "", ""
+			continue
+		}
 
-func rsvResource(objIDs []string, rmStructs []string) []byte {	
+		queryObject(objID)         //                     *** GET root, mapStruct, mapArray, mapValue ***
+		modStructMap(rmStructs...) //                     *** eliminate some unnecessary properties ***
+		
+		if len(mStruct) == 0 || len(mValue) == 0 {
+			mSchema[objID], mJSON[objID] = "", ""
+			continue
+		}
+
+		schema := SchemaBuild("", root)
+		schema = sRepAll(schema, "\t-", "\t")
+		schema = sRepAll(schema, "\t#", "\t")
+		mSchema[objID] = schema
+
+		JSONBuild(root)
+		json := JSONMakeRep(mIPathObj, PATH_DEL)
+		mJSON[objID] = json
+	}
+	return
+}
+
+func rsvResource(objIDs []string, mJSON map[string]string) []byte {
 	jsonAll := ""
 	for _, objID := range objIDs {
-		jsonstr := GetJSONFromID(objID, rmStructs...)
+		jsonstr := mJSON[objID]
 		_, _, jsonstr = JSONWrapRoot(jsonstr, "xapi")
 		ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666)
 		jsonAll = JSONObjectMerge(jsonAll, jsonstr)
@@ -75,19 +99,21 @@ func rsvResource(objIDs []string, rmStructs []string) []byte {
 // Query : if id is known, use Query
 func Query(objIDs []string, querySchema, queryStr string, variables map[string]interface{}, rmStructs []string) (rstJSON string) {
 
-	autoSchema := GetSchemaFromID(objIDs[0], rmStructs...)
+	mSchema, mJSON := GetResourceFromID(objIDs, rmStructs...)
+
+	autoSchema := mSchema[objIDs[0]] // GetSchemaFromID(objIDs[0], rmStructs...)
 	if autoSchema == "" {
 		return ""
 	}
 
-	schema := querySchema + autoSchema //                                    *** querySchema has mannually coded ***
-	// schema = sRepAll(schema, "en-US", "enUS")	
+	schema := querySchema + autoSchema //                                    *** querySchema is mannually coded ***
+	// schema = sRepAll(schema, "en-US", "enUS")
 	ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) //   *** DEBUG ***
 
 	resolvers := map[string]interface{}{}
 	// *** PATH : related to <querySchema> ***
 	resolvers["QueryRoot/xapi"] = func(params *graphql.ResolveParams) (interface{}, error) {
-		jsonBytes := rsvResource(objIDs, rmStructs) //                       *** Get Reconstructed JSON ***
+		jsonBytes := rsvResource(objIDs, mJSON) //                           *** Get Reconstructed JSON ***
 		jsonMap := make(map[string]interface{})
 		PE(json.Unmarshal(jsonBytes, &jsonMap))
 		return jsonMap[root], nil
@@ -107,44 +133,6 @@ func Query(objIDs []string, querySchema, queryStr string, variables map[string]i
 	rstJSON = string(Must(json.Marshal(result)).([]byte))
 	// ioutil.WriteFile("temp.json", []byte(rstJSON), 0666)
 	return
-
-	// resolvers := map[string]interface{}{}
-	// resolvers["DemoQuery/TeachingGroupByName"] = func(params *graphql.ResolveParams) (interface{}, error) {
-	// 	jsonBytes := rsvResource(objIDs, rmStructs)
-	// 	jsonMap := make(map[string]interface{})
-	// 	PE(json.Unmarshal(jsonBytes, &jsonMap))
-	// 	return jsonMap[root], nil
-	// }
-	// resolvers["DemoQuery/TeachingGroupByStaffID"] = func(params *graphql.ResolveParams) (interface{}, error) {
-	// 	jsonBytes := rsvResource(objIDs, rmStructs)
-	// 	jsonMap := make(map[string]interface{})
-	// 	PE(json.Unmarshal(jsonBytes, &jsonMap))
-	// 	return jsonMap[root], nil
-	// }
-	// resolvers["DemoQuery/TeachingGroup"] = func(params *graphql.ResolveParams) (interface{}, error) {
-	// 	jsonBytes := rsvResource(objIDs, rmStructs)
-	// 	jsonMap := make(map[string]interface{})
-	// 	PE(json.Unmarshal(jsonBytes, &jsonMap))
-	// 	return jsonMap[root], nil
-	// }
-	// resolvers["DemoQuery/GradingAssignment"] = func(params *graphql.ResolveParams) (interface{}, error) {
-	// 	jsonBytes := rsvResource(objIDs, rmStructs)
-	// 	jsonMap := make(map[string]interface{})
-	// 	PE(json.Unmarshal(jsonBytes, &jsonMap))
-	// 	return jsonMap[root], nil
-	// }
-	// resolvers["DemoQuery/StudentAttendance"] = func(params *graphql.ResolveParams) (interface{}, error) {
-	// 	jsonBytes := rsvResource(objIDs, rmStructs)
-	// 	jsonMap := make(map[string]interface{})
-	// 	PE(json.Unmarshal(jsonBytes, &jsonMap))
-	// 	return jsonMap[root], nil
-	// }
-	// resolvers["DemoQuery/QueryXAPI"] = func(params *graphql.ResolveParams) (interface{}, error) {
-	// 	jsonBytes := rsvResource(objIDs, rmStructs)
-	// 	jsonMap := make(map[string]interface{})
-	// 	PE(json.Unmarshal(jsonBytes, &jsonMap))
-	// 	return jsonMap[root], nil
-	// }
 
 	// ********* DEMO ************
 	// resolvers["DemoQuery/GetStudentProgress"] = func(params *graphql.ResolveParams) (interface{}, error) {
