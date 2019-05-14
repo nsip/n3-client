@@ -7,7 +7,7 @@ import (
 )
 
 func TestN3LoadConfig(t *testing.T) {
-	InitFrom(c.FromFile("./config.toml", "../config/config.toml"))
+	InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 }
 
 func TestQueryMeta(t *testing.T) {

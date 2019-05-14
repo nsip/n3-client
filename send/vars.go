@@ -32,6 +32,7 @@ var (
 	XMLSegsCount  = gjxy.XMLSegsCount
 	XMLFamilyTree = gjxy.XMLFamilyTree
 	XMLCntInfo    = gjxy.XMLCntInfo
+	IsJSON = gjxy.IsJSON
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf

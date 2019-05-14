@@ -9,9 +9,8 @@ Path = "./config.toml"
 
 [Rest]
   Port = 1323
-  SifPathS = "/sif"
-  XapiPathS = "/xapi"  
-  PathGQL = "/gql"
+  PathSend = "/tonode"
+  PathGQL = "/gql"   
 
 [RPC]
   Namespace = "BQZjUdgi1NCtMLmjSu8d6VFp8Rh1NHmguu8YsGRv1pMv"

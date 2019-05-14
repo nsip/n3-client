@@ -6,7 +6,6 @@ import (
 	"time"
 
 	c "../config"
-	g "../global"
 )
 
 func TestJunk(t *testing.T) {
@@ -19,15 +18,15 @@ func TestJunk(t *testing.T) {
 /************************************************************/
 
 func TestN3LoadConfig(t *testing.T) {
-	InitClientFrom(c.FromFile("./config.toml", "../config/config.toml"))
+	InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 }
 
 func TestToNode(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	datafile := "../inbound/xapi/xapiC.json" //              *** change file ***
+	datafile := "../inbound/xapi/xapiC.json" //         *** change file ***
 	bytes := Must(ioutil.ReadFile(datafile)).([]byte)
-	ToNode(string(bytes), g.XAPI) //                         *** change data type ***
+	ToNode(string(bytes)) //                            *** change data type ***
 	time.Sleep(5 * time.Second)
 }

@@ -6,8 +6,9 @@ import (
 )
 
 func TestGQL(t *testing.T) {
-	objID := "c58f2f19-32ed-4258-a71b-6506b2a2f33b"
+	objID := "1f5076bf-2a64-40b6-8fbc-838ccf941b2e"
 	queryBytes, _ := ioutil.ReadFile("./query.txt")
-	result := GQuery([]string{objID}, fSf("type QueryRoot {\n\txapi: %s\n}", "xapi"), string(queryBytes), map[string]interface{}{}, []string{})
+	querySchema := fSf("type QueryRoot {\n\txapi: %s\n}", "xapi") //           *** content should be related to resolver path ***
+	result := Query([]string{objID}, querySchema, string(queryBytes), map[string]interface{}{}, []string{})
 	ioutil.WriteFile("./yield/result.json", []byte(result), 0666)
 }

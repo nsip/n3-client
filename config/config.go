@@ -17,8 +17,7 @@ type filewatcher struct {
 
 type rest struct {
 	Port      int
-	SifPathS  string
-	XapiPathS string
+	PathSend string	
 	PathGQL   string
 }
 
@@ -27,11 +26,7 @@ type rpc struct {
 	Server    string
 	Port      int
 	Ctx       string
-	CtxMeta   string
-	// CtxSif      string
-	// CtxXapi     string
-	// CtxMetaSif  string
-	// CtxMetaXapi string
+	CtxMeta   string	
 }
 
 // Config is toml

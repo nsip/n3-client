@@ -1,0 +1,120 @@
+{
+    TeachingGroup {
+        RefId
+        SchoolYear
+        ShortName
+        LongName
+        TimeTableSubjectRefId
+        StudentList {
+            TeachingGroupStudent {
+                StudentPersonalRefId
+                StudentLocalId
+                Name {
+                    Type
+                    FamilyName
+                    GivenName
+                }
+            }
+        }
+        TeacherList {
+            TeachingGroupTeacher {
+                StaffPersonalRefId
+                StaffLocalId
+                Name {
+                    Type
+                    FamilyName
+                    GivenName
+                }
+                Association
+            }
+        }
+        TeachingGroupPeriodList {
+            TeachingGroupPeriod {
+                RoomNumber
+                DayId
+                PeriodId
+            }
+        }
+    }
+} 
+
+{
+    GradingAssignment {
+        RefId
+        TeachingGroupRefId
+        Description
+        PointsPossible
+        DetailedDescriptionURL
+    }
+}
+
+{
+    StudentAttendanceTimeList {
+        StudentPersonalRefId
+        SchoolInfoRefId
+        Date
+        SchoolYear
+        AttendanceTimes {
+            AttendanceTime {
+                AttendanceCode {
+                    Code
+                }
+                AttendanceStatus
+                StartTime
+                EndTime
+                DurationValue
+            }
+        }
+    }
+}
+
+{
+    XAPI {
+        id
+        actor {
+            name
+            mbox
+        }
+        verb {
+            id            
+        }
+        object {
+            id
+            definition {
+                type
+                name
+            }
+        }
+        result {
+            completion
+            success
+            score {
+                scaled
+                min
+                max
+            }
+            duration
+        }
+    }
+}
+
+{
+    ProgressReport {
+        GivenName
+        FamilyName
+        DaysAbsent
+        ProgressResult {
+            AssignmentDescription
+            Result {
+                completion
+                success
+                score {
+                    scaled
+                    min
+                    max
+                }
+                duration
+            }
+        }
+    }
+}

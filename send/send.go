@@ -24,7 +24,7 @@ func Junk(n int) {
 func Terminate(objID, termID string) {
 	defer func() { ver++ }()
 	if CFG == nil || g.N3clt == nil {
-		InitClientFrom(c.FromFile("./config.toml", "../config/config.toml"))
+		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
 	tuple := Must(messages.NewTuple(termID, TERMMARK, objID)).(*pb.SPOTuple)
 	tuple.Version = ver
@@ -34,7 +34,7 @@ func Terminate(objID, termID string) {
 // RequireVer :
 func RequireVer(objID string) (ver int64, termID string) {
 	if CFG == nil || g.N3clt == nil {
-		InitClientFrom(c.FromFile("./config.toml", "../config/config.toml"))
+		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
 	_, p, o, _ := q.Meta(objID, "V")
 	PC(len(p) == 0, fEf("Got Version Error, Dead ObjectID is used"))
@@ -45,19 +45,20 @@ func RequireVer(objID string) (ver int64, termID string) {
 
 /************************************************************/
 
-// InitClientFrom :
-func InitClientFrom(config *c.Config) {
+// InitClient :
+func InitClient(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
 	CFG = config
 	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
 // ToNode :
-func ToNode(str string, dt g.SQDType) (cntV, cntS, cntA int) {
+func ToNode(str string) (cntV, cntS, cntA int) {
 	PC(CFG == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
 	data := Str(str)
 	data.SetEnC()
 
+	dt := IF(IsJSON(str), g.XAPI, g.SIF ).(g.SQDType)
 	switch dt {
 	case g.SIF:
 		{

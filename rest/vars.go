@@ -8,6 +8,7 @@ import (
 	c "../config"
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
+	gjxy "github.com/cdutwhu/go-gjxy"
 )
 
 type (
@@ -23,6 +24,7 @@ var (
 	PHE  = u.PanicHandleEx
 	LE   = u.LogOnError
 	Must = u.Must
+	IF = u.IF
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf
@@ -36,6 +38,7 @@ var (
 	sJ      = strings.Join
 
 	IArrIntersect = w.IArrIntersect
+	IsJSON = gjxy.IsJSON
 
 	e   error
 	CFG *c.Config

@@ -22,6 +22,9 @@ func modStructMap(rmStructs ...string) {
 // GetSchemaFromID :
 func GetSchemaFromID(objID string, rmStructs ...string) (schema string) {
 	defer clrQueryBuf()
+	if objID == "" {
+		return ""
+	}
 	queryObject(objID) //                                 *** GET root, mapStruct, mapArray, mapValue ***
 	modStructMap(rmStructs...)
 	schema = SchemaBuild("", root)
@@ -33,11 +36,14 @@ func GetSchemaFromID(objID string, rmStructs ...string) (schema string) {
 // GetJSONFromID :
 func GetJSONFromID(objID string, rmStructs ...string) (json string) {
 	defer clrQueryBuf()
+	if objID == "" {
+		return ""
+	}
 	queryObject(objID) //                                 *** GET root, mapStruct, mapArray, mapValue ***
 	modStructMap(rmStructs...)
 	JSONBuild(root)
 	json = JSONMakeRep(mIPathObj, PATH_DEL)
-	ioutil.WriteFile("temp1.json", []byte(json), 0666)
+	// ioutil.WriteFile("GetJSONFromID.json", []byte(json), 0666)
 	return
 }
 
@@ -66,18 +72,22 @@ func rsvResource(objIDs []string, rmStructs []string) []byte {
 	return []byte(jsonAll)
 }
 
-// GQuery : if we know id, use GQuery
-func GQuery(objIDs []string, schemaQuery, queryStr string, variables map[string]interface{}, rmStructs []string) (rstJSON string) {
+// Query : if id is known, use Query
+func Query(objIDs []string, querySchema, queryStr string, variables map[string]interface{}, rmStructs []string) (rstJSON string) {
 
-	schema := schemaQuery + GetSchemaFromID(objIDs[0], rmStructs...) //      *** schemaQuery has mannually coded schemas ***
-	// schema = sRepAll(schema, "en-US", "enUS")
-	// ioutil.WriteFile("./yield/"+objID+".json", []byte(jsonstr), 0666) //  *** DEBUG ***
+	autoSchema := GetSchemaFromID(objIDs[0], rmStructs...)
+	if autoSchema == "" {
+		return ""
+	}
+
+	schema := querySchema + autoSchema //                                    *** querySchema has mannually coded ***
+	// schema = sRepAll(schema, "en-US", "enUS")	
 	ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) //   *** DEBUG ***
 
 	resolvers := map[string]interface{}{}
+	// *** PATH : related to <querySchema> ***
 	resolvers["QueryRoot/xapi"] = func(params *graphql.ResolveParams) (interface{}, error) {
 		jsonBytes := rsvResource(objIDs, rmStructs) //                       *** Get Reconstructed JSON ***
-
 		jsonMap := make(map[string]interface{})
 		PE(json.Unmarshal(jsonBytes, &jsonMap))
 		return jsonMap[root], nil

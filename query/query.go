@@ -8,8 +8,8 @@ import (
 	"github.com/nsip/n3-messages/n3grpc"
 )
 
-// InitFrom :
-func InitFrom(config *c.Config) {
+// InitClient :
+func InitClient(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
 	CFG = config
 	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
@@ -17,7 +17,7 @@ func InitFrom(config *c.Config) {
 
 func query(DataOrMeta int, spo []string) (s, p, o []string, v []int64) {
 	if CFG == nil || g.N3clt == nil {
-		InitFrom(c.FromFile("./config.toml", "../config/config.toml"))
+		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
 
 	qTuple := &pb.SPOTuple{}

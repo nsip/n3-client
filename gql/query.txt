@@ -6,6 +6,11 @@
         yrLvls
         courses {
             name
+            outcomes {
+                description
+                id
+            }
+            inquiry_questions
         }
     }
 }

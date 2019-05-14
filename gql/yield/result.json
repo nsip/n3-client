@@ -3,10 +3,44 @@
         "xapi": {
             "courses": [
                 {
-                    "name": "Features Of Places"
+                    "inquiry_questions": [
+                        "What are the features of, and activities in, places?",
+                        "How can we care for places?",
+                        "How can spaces within a place be used for different purposes?"
+                    ],
+                    "name": "Features Of Places",
+                    "outcomes": [
+                        {
+                            "description": "describes features of places and the connections people have with places",
+                            "id": "GE1-1"
+                        },
+                        {
+                            "description": "identifies ways in which people interact with and care for places",
+                            "id": "GE1-2"
+                        },
+                        {
+                            "description": "communicates geographical information and uses geographical tools for inquiry",
+                            "id": "GE1-3"
+                        }
+                    ]
                 },
                 {
-                    "name": "People and Places"
+                    "inquiry_questions": [
+                        "Where are places located in Australia?",
+                        "How are people connected to places?",
+                        "What factors affect people's connections to places?"
+                    ],
+                    "name": "People and Places",
+                    "outcomes": [
+                        {
+                            "description": "describes features of places and the connections people have with places",
+                            "id": "GE1-1"
+                        },
+                        {
+                            "description": "communicates geographical information and uses geographical tools for inquiry",
+                            "id": "GE1-3"
+                        }
+                    ]
                 }
             ],
             "learning_area": "HSIE",
