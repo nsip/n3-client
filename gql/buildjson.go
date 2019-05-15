@@ -3,18 +3,18 @@ package gql
 // JSONBuild : Need global vars
 func JSONBuild(path string) {
 
-	for _, field := range sSpl(mStruct[sRepAll(path, "[]", "")], CHILD_DEL) {
-		if field == "" {
-			return
-		}
+	childList, ok := "", false
+	if childList, ok = mStruct[sRepAll(path, "[]", "")]; !ok {
+		return
+	}
+
+	for _, field := range sSpl(childList, CHILD_DEL) {
 
 		tfield := sRepAll(field, "[]", "")
 		xpath := path + PATH_DEL + field
 		xpath = sRepAll(xpath, "[]", "")
 
 		if ok, valvers := isLeafValue(xpath); ok { //                                        *** PLAIN VALUE(S) ***
-
-			// fPln("<LeafValue>               --->", xpath)
 
 			// *** reverse the values ***
 			LV := len(valvers)
@@ -30,28 +30,30 @@ func JSONBuild(path string) {
 					if okArr, nArr, plain := isArray(ixpath); okArr && plain {
 						vidx := getVIdxForIPath(ixpaths, ixpath)
 						// fPln("<LeafValue PLAIN ARRAY>:  --->", ixpath, "[", nArr, vidx, "]")
-						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V()
-						for i := vidx; i < vidx+nArr; i++ {							
+						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V() //      * already has '#' *
+						for i := vidx; i < vidx+nArr; i++ {
 							JSONMake(mIPathObj, ipath, tfield, valvers[i].value, true)
-						}						
+						}
 					}
 				}
 
 			} else { //                                                                      *** PLAIN SINGLE VALUE ***
 
-				ipath := IF(!Str(path).Contains(PATH_DEL), path+"#1", path).(string)
-
-				// if tfield == "description" {
-				// 	fPln("debug")
-				// }
-
 				if len(mIPathSubIPaths) > 0 {
 					if subIPathList := SubIPathListByPath(path); len(subIPathList) > 0 {
 						for i := 0; i < len(subIPathList); i++ {
-							JSONMake(mIPathObj, subIPathList[i], tfield, valvers[i].value, false)
+							ipath := subIPathList[i]
+							JSONMake(mIPathObj, ipath, tfield, valvers[i].value, false)
 						}
 					}
 				} else {
+
+					fs := sSpl(path, PATH_DEL)
+					is := make([]string, len(fs))
+					for i := 0; i < len(fs); i++ {
+						is[i] = "1"
+					}
+					ipath := IArrStrJoinEx(Strs(fs), Strs(is), "#", PATH_DEL)
 					JSONMake(mIPathObj, ipath, tfield, valvers[0].value, false)
 				}
 			}
@@ -59,13 +61,15 @@ func JSONBuild(path string) {
 		} else { //                                                                          *** OBJECT ***
 
 			xpath = sRepAll(xpath, "[]", "")
-			// fPln("<SubObject>               --->", xpath)
+			// fPln("<OBJECT>               --->", xpath)
+
 			if ixpaths := IPathListBymArr(xpath); len(ixpaths) > 0 { //                      *** OBJECT [ARRAY] ***
-				// fPln("<SubObject ARRAY>:        --->", xpath)
+				// fPln("<OBJECT ARRAY>:        --->", xpath)
+
 				for _, ixpath := range ixpaths {
 					if okArr, nArr, plain := isArray(ixpath); okArr && !plain {
-						// fPln("<SubObject ARRAY>:        --->", ixpath, "[", nArr, "]")
-						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V()
+						// fPln("<OBJECT ARRAY>:        --->", ixpath, "[", nArr, "]")
+						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V() //   * already has '#' *
 						for i := 1; i <= nArr; i++ {
 							sub := fSf("%s#%d", ixpath, i)
 							mIPathSubIPaths[ixpath] = append(mIPathSubIPaths[ixpath], sub)
@@ -73,15 +77,22 @@ func JSONBuild(path string) {
 						}
 					}
 				}
+
 			} else { //                                                                      *** OBJECT SINGLE ***
 
-				fPln("<SubObject SINGLE> --->", xpath)
-				panic("<SubObject SINGLE> ---> unimplemented")
+				// fPf("<OBJECT SINGLE> ---> %-30s%-30s%-30s%-30s\n", path, xpath, tfield, ipath)
 
+				fs := sSpl(path, PATH_DEL)
+				is := make([]string, len(fs))
+				for i := 0; i < len(fs); i++ {
+					is[i] = "1"
+				}
+				ipath := IArrStrJoinEx(Strs(fs), Strs(is), "#", PATH_DEL)
+				sub := ipath + PATH_DEL + tfield + "#1"
+				JSONMake(mIPathObj, ipath, tfield, sub, false)
 			}
-
 		}
-		
+
 		JSONBuild(xpath)
 	}
 	return

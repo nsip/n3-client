@@ -25,8 +25,8 @@ func TestToNode(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	datafile := "../inbound/xapi/xapiC.json" //         *** change file ***
+	datafile := "../inbound/xapi/xapiA.json" //         *** change file ***
 	bytes := Must(ioutil.ReadFile(datafile)).([]byte)
-	ToNode(string(bytes)) //                            *** change data type ***
-	time.Sleep(5 * time.Second)
+	ToNode(string(bytes))
+	time.Sleep(1 * time.Second)
 }
