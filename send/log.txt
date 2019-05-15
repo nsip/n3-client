@@ -1,0 +1,23 @@
+
+*** Panic Error *** Fatal : false ***
+2019/05/15 21:22:17 *strconv.NumError strconv.ParseInt: parsing "THIS OBJECT OUTSTANDING": invalid syntax
+C:/Users/QMiao/go/src/github.com/cdutwhu/go-util/lazypanic.go:87 (0x572b60)
+	Must: PanicOnError(err)
+C:/Users/QMiao/go/src/github.com/cdutwhu/go-wrappers/str.go:145 (0x899a17)
+	Str.ToInt64: return Must(sc2Int(s.V(), 10, 64)).(int64)
+c:/Users/QMiao/Desktop/github/n3-client/send/send.go:42 (0x92c3f7)
+	RequireVer: ver, termID = Str(o[0]).ToInt64()+1, p[0]
+c:/Users/QMiao/Desktop/github/n3-client/send/send.go:138 (0x92eb11)
+	ToNode.func6: ver, termID = RequireVer(id)
+c:/Users/QMiao/Desktop/github/n3-client/xjy/yaml.go:92 (0x92bcbe)
+	YAMLScanFromJSONBat: OnValueFetch(item.Path, item.Value, ID)
+c:/Users/QMiao/Desktop/github/n3-client/xjy/yaml.go:9 (0x92af9f)
+	YAMLScan: YAMLScanFromJSONBat(data, idmark, IDs, OnValueFetch)
+c:/Users/QMiao/Desktop/github/n3-client/send/send.go:131 (0x92c9d0)
+	ToNode: xjy.YAMLScan(data.V(), "id", IDs, DT_JSON, func(p, v, id string) {
+c:/Users/QMiao/Desktop/github/n3-client/send/send_test.go:30 (0x92cedf)
+	TestToNode: ToNode(string(bytes))
+C:/Go/src/testing/testing.go:865 (0x5046d7)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x45dee1)
+	goexit: BYTE	$0x90	// NOP

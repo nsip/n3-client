@@ -4,8 +4,7 @@ Path = "./config.toml"
   ErrLog = "./log.txt"
 
 [Filewatcher]
-  DirSif = "./inbound/sif"
-  DirXapi = "./inbound/xapi"
+  Dir = "./inbound/"
 
 [Rest]
   Port = 1323
@@ -13,8 +12,8 @@ Path = "./config.toml"
   PathGQL = "/gql"
 
 [RPC]
-  Namespace = "BQZjUdgi1NCtMLmjSu8d6VFp8Rh1NHmguu8YsGRv1pMv"
-  Server = "192.168.76.49"
+  Namespace = "AFMVVCoii2B7aQrzb8a1hbSJVHLLxy39bvLMWjT4nbXP"
+  Server = "192.168.245.132"
   Port = 5777
   Ctx = "demo"
   CtxMeta = "demo-meta"

@@ -1,0 +1,16 @@
+{
+    xapi {
+        learning_area
+        subject
+        stage
+        yrLvls
+        courses {
+            name
+            outcomes {
+                description
+                id
+            }
+            inquiry_questions
+        }
+    }
+}

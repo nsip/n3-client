@@ -1,0 +1,8 @@
+{
+    xapi {
+        id
+        actor {
+            name
+        }               
+    }
+}

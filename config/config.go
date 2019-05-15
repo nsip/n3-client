@@ -11,8 +11,7 @@ type global struct {
 }
 
 type filewatcher struct {
-	DirSif  string
-	DirXapi string
+	Dir string
 }
 
 type rest struct {

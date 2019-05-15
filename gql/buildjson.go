@@ -49,11 +49,8 @@ func JSONBuild(path string) {
 				} else {
 
 					fs := sSpl(path, PATH_DEL)
-					is := make([]string, len(fs))
-					for i := 0; i < len(fs); i++ {
-						is[i] = "1"
-					}
-					ipath := IArrStrJoinEx(Strs(fs), Strs(is), "#", PATH_DEL)
+					is := IArrMake("Strs", len(fs), "1")
+					ipath := IArrStrJoinEx(Strs(fs), is.(Strs), "#", PATH_DEL)
 					JSONMake(mIPathObj, ipath, tfield, valvers[0].value, false)
 				}
 			}
@@ -83,11 +80,8 @@ func JSONBuild(path string) {
 				// fPf("<OBJECT SINGLE> ---> %-30s%-30s%-30s%-30s\n", path, xpath, tfield, ipath)
 
 				fs := sSpl(path, PATH_DEL)
-				is := make([]string, len(fs))
-				for i := 0; i < len(fs); i++ {
-					is[i] = "1"
-				}
-				ipath := IArrStrJoinEx(Strs(fs), Strs(is), "#", PATH_DEL)
+				is := IArrMake("Strs", len(fs), "1")
+				ipath := IArrStrJoinEx(Strs(fs), is.(Strs), "#", PATH_DEL)
 				sub := ipath + PATH_DEL + tfield + "#1"
 				JSONMake(mIPathObj, ipath, tfield, sub, false)
 			}

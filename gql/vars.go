@@ -19,14 +19,14 @@ type (
 )
 
 var (
-	PE         = u.PanicOnError
-	PE1        = u.PanicOnError1
-	PC         = u.PanicOnCondition
-	PH         = u.PanicHandle
-	PHE        = u.PanicHandleEx
-	LE         = u.LogOnError
-	Must       = u.Must
-	IF         = u.IF	
+	PE   = u.PanicOnError
+	PE1  = u.PanicOnError1
+	PC   = u.PanicOnCondition
+	PH   = u.PanicHandle
+	PHE  = u.PanicHandleEx
+	LE   = u.LogOnError
+	Must = u.Must
+	IF   = u.IF
 
 	Max           = w.Max
 	Min           = w.Min
@@ -34,6 +34,7 @@ var (
 	IArrSeqCtns   = w.IArrSeqCtns
 	IArrStrJoinEx = w.IArrStrJoinEx
 	SortIntArr2D  = w.SortIntArr2D
+	IArrMake      = w.IArrMake
 
 	JSONWrapRoot    = gjxy.JSONWrapRoot
 	JSONMake        = gjxy.JSONMakeIPath
