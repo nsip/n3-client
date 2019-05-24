@@ -19,39 +19,35 @@ func modStructMap(rmStructs ...string) {
 	}
 }
 
-// GetSchemaFromID : (FOR testing use)
-func GetSchemaFromID(objID string, rmStructs ...string) (schema string) {
+// GetInfoFromID : (FOR testing use)
+func GetInfoFromID(infoType, objID string, rmStructs ...string) string {
 	defer clrQueryBuf()
 	if objID == "" {
 		return ""
 	}
-	queryObject(objID) //                                 *** GET root, mapStruct, mapArray, mapValue ***
-	modStructMap(rmStructs...)
-	if len(mStruct) == 0 || len(mValue) == 0 {
-		return ""
-	}
-
-	schema = SchemaBuild("", root)
-	schema = sRepAll(schema, "\t-", "\t")
-	schema = sRepAll(schema, "\t#", "\t")
-	return
-}
-
-// GetJSONFromID : (FOR testing use)
-func GetJSONFromID(objID string, rmStructs ...string) (json string) {
-	defer clrQueryBuf()
-	if objID == "" {
-		return ""
-	}
-	queryObject(objID) //                                 *** GET root, mapStruct, mapArray, mapValue ***
+	queryObject(objID) //         *** GET root, mStruct, mArray, mValue ***
 	modStructMap(rmStructs...)
 	if len(mValue) == 0 {
 		return ""
 	}
 
-	JSONBuild(root)
-	json = JSONMakeRep(mIPathObj, PATH_DEL)
-	return
+	switch infoType {
+	case "SCHEMA":
+		{
+			schema := SchemaBuild("", root)
+			schema = sRepAll(schema, "\t-", "\t")
+			schema = sRepAll(schema, "\t#", "\t")
+			return schema
+		}
+	case "JSON":
+		{
+			JSONBuild(root)
+			_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
+			return json
+		}
+	default:
+		panic("Need SCHEMA or JSON for infoType")
+	}
 }
 
 // GetResourceFromID :
@@ -59,15 +55,15 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 	mSchema, mJSON = make(map[string]string), make(map[string]string)
 	for _, objID := range objIDs {
 		clrQueryBuf()
-		
+
 		if objID == "" {
 			mSchema[objID], mJSON[objID] = "", ""
 			continue
 		}
 
-		queryObject(objID)         //                     *** GET root, mapStruct, mapArray, mapValue ***
-		modStructMap(rmStructs...) //                     *** eliminate some unnecessary properties ***
-		
+		queryObject(objID)         //    *** GET root, mapStruct, mapArray, mapValue ***
+		modStructMap(rmStructs...) //    *** eliminate some unnecessary properties ***
+
 		if len(mStruct) == 0 || len(mValue) == 0 {
 			mSchema[objID], mJSON[objID] = "", ""
 			continue
@@ -79,7 +75,7 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 		mSchema[objID] = schema
 
 		JSONBuild(root)
-		json := JSONMakeRep(mIPathObj, PATH_DEL)
+		_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
 		mJSON[objID] = json
 	}
 	return
@@ -88,8 +84,7 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 func rsvResource(objIDs []string, mJSON map[string]string) []byte {
 	jsonAll := ""
 	for _, objID := range objIDs {
-		jsonstr := mJSON[objID]
-		_, _, jsonstr = JSONWrapRoot(jsonstr, "xapi")
+		jsonstr := mJSON[objID]		
 		ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666)
 		jsonAll = JSONObjectMerge(jsonAll, jsonstr)
 	}

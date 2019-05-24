@@ -60,8 +60,9 @@ var (
 	mStruct         = map[string]string{}
 	mValue          = map[string][]*valver{}
 	mArray          = map[string]int{}
-	mIPathObj       = map[string]string{}   //   *** FOR JSONBuilld ***
-	mIPathSubIPaths = map[string][]string{} //   *** FOR JSONBuilld ***
+	mIndicesList    = map[string][][]int{}  // *** FOR JSONBuilld ***
+	mIPathObj       = map[string]string{}   // *** FOR JSONBuilld ***
+	mIPathSubIPaths = map[string][]string{} // *** FOR JSONBuilld ***
 )
 
 type valver struct {

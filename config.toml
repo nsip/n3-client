@@ -12,8 +12,8 @@ Path = "./config.toml"
   PathGQL = "/gql"
 
 [RPC]
-  Namespace = "AFMVVCoii2B7aQrzb8a1hbSJVHLLxy39bvLMWjT4nbXP"
-  Server = "192.168.245.132"
+  Namespace = "F7AoxkA2RTtrmjCg6nEuCtvSp5C6sp6R5RCjUKaXYkpp"
+  Server = "192.168.76.15"
   Port = 5777
   Ctx = "demo"
   CtxMeta = "demo-meta"

@@ -47,11 +47,11 @@ var (
 
 	e   error
 	CFG *c.Config
-	ver int64 = 1
+	// ver int64 = 1
 )
 
 const (
-	TERMMARK  = "ENDENDEND"
+	TERMMARK  = "--------------------------------------"
 	DELAY     = 2000
 	PATH_DEL  = " ~ "
 	CHILD_DEL = " + "

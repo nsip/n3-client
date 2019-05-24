@@ -1,7 +1,7 @@
 {
-    xapi {
+    curriculum: xapi {
         learning_area
-        subject
+        area: subject
         stage
         yrLvls
         courses {

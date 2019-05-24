@@ -15,7 +15,7 @@ func TestYAMLScan(t *testing.T) {
 	datastr := Str(databytes)
 	datastr.SetEnC()
 
-	YAMLScan(datastr.V(), "RefId", nil, DT_XML, func(path, value, id string) { //   *** change idmark & DataType ***
+	YAMLScan(datastr.V(), "RefId", "ROOT", nil, DT_XML, func(path, value, id string) { //   *** change idmark & DataType ***
 		fPf("%s : %-70s : %s\n", id, path, value)
 	})
 }

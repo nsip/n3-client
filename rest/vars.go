@@ -46,7 +46,7 @@ var (
 )
 
 const (
-	TERMMARK  = "ENDENDEND"
+	TERMMARK  = "--------------------------------------"
 	DELAY     = 2000
 	PATH_DEL  = " ~ "
 	CHILD_DEL = " + "

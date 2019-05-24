@@ -42,7 +42,7 @@ func StartFileWatcherAsync() {
 					goto READ_AGAIN
 				}
 
-				s.ToNode(string(bytes))
+				s.ToNode(string(bytes), "id", "xapi")
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {

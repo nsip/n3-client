@@ -22,9 +22,18 @@
                 {
                     "description": "communicates geographical information and uses geographical tools for inquiry",
                     "id": "GE1-3"
+                },
+                {
+                    "description": "communicates geographical information and uses geographical tools for inquiry TEST 1",
+                    "id": "GE1-4"
+                },
+                {
+                    "description": "communicates geographical information and uses geographical tools for inquiry TEST 2",
+                    "id": "GE1-5"
                 }
             ],
             "inquiry_questions": [
+                "What are the features of, and activities in, places hello ?",
                 "What are the features of, and activities in, places?",
                 "How can we care for places?",
                 "How can spaces within a place be used for different purposes?"

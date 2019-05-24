@@ -5,15 +5,14 @@ import (
 	"testing"
 )
 
-// var ID = "2c16f595-c0e7-4779-bed1-fb6df9e495b5"
-var ID = "4947ED1F-1E94-4850-8B8F-35C653F51E9C"
+// var ID = "738F4DF5-949F-4380-8186-8252440A6F6F"
+var ID = "b81c448b-df65-4c9b-a661-d0385553a06f"
 
-func TestBuildJSON(t *testing.T) {
-	json := GetJSONFromID(ID)
-	ioutil.WriteFile(fSf("./debug/%s.json", ID), []byte(json), 0666)
-}
-
-func TestBuildSchema(t *testing.T) {
-	schema := GetSchemaFromID(ID)
-	ioutil.WriteFile(fSf("./debug/%s.gql", ID), []byte(schema), 0666)
+func TestBuildInfoFromID(t *testing.T) {
+	if data := GetInfoFromID("JSON", ID); data != "" {
+		ioutil.WriteFile(fSf("./debug/%s.json", ID), []byte(data), 0666)
+	}
+	if data := GetInfoFromID("SCHEMA", ID); data != "" {
+		ioutil.WriteFile(fSf("./debug/%s.gql", ID), []byte(data), 0666)
+	}
 }

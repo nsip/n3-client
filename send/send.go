@@ -21,8 +21,7 @@ func Junk(n int) {
 }
 
 // Terminate :
-func Terminate(objID, termID string) {
-	defer func() { ver++ }()
+func Terminate(objID, termID string, ver int64) {
 	if CFG == nil || g.N3clt == nil {
 		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
@@ -31,14 +30,13 @@ func Terminate(objID, termID string) {
 	PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
 }
 
-// RequireVer :
-func RequireVer(objID string) (ver int64, termID string) {
+// RequireVer : verType ( "V" / "A" / "S" )
+func RequireVer(objID, verType string) (ver int64, termID string) {
 	if CFG == nil || g.N3clt == nil {
 		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
-	_, p, o, _ := q.Meta(objID, "V")
-	PC(len(p) == 0, fEf("Got Version Error, Dead ObjectID is used"))
-	// fPln(p, o)
+	_, p, o, _ := q.Meta(objID, verType)
+	PC(len(o) == 0, fEf("Got Version Error, Dead ObjectID: %s", objID))
 	ver, termID = Str(o[0]).ToInt64()+1, p[0]
 	return
 }
@@ -53,96 +51,120 @@ func InitClient(config *c.Config) {
 }
 
 // ToNode :
-func ToNode(str string) (cntV, cntS, cntA int) {
+func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
+
 	PC(CFG == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
 	data := Str(str)
 	data.SetEnC()
 
-	dt := IF(IsJSON(str), g.XAPI, g.SIF ).(g.SQDType)
-	switch dt {
+	prevIDs, termIDs := "", ""
+	prevIDa, termIDa := "", ""
+	prevIDv, termIDv, prevTermIDv := "", "", ""
+	verS, verA, verV := int64(1), int64(1), int64(1)
+
+	switch IF(IsJSON(str), g.XAPI, g.SIF).(g.SQDType) {
 	case g.SIF:
 		{
-			mStructRecord := map[string][]string{}
-			IDs := xjy.XMLInfoScan(data.V(), "RefId", PATH_DEL,
-				func(p string, v []string) {
-					if _, ok := mStructRecord[p]; !ok {
-						defer func() { ver, cntS, mStructRecord[p] = ver+1, cntS+1, v }()
-						vstr := sJ(v, CHILD_DEL)
-						fPln("S ---> ", p, " : ", vstr)
-						tuple := Must(messages.NewTuple(p, "::", vstr)).(*pb.SPOTuple)
-						tuple.Version = ver
-						PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+			IDs = xjy.XMLInfoScan(data.V(), idmark, PATH_DEL,
+				func(p, id string, v []string, lastObjTuple bool) {
+					// fPln("S ---> ", p, "::", v)
+					id = "::" + id
+					defer func() { verS, cntS, prevIDs = verS+1, cntS+1, id }()
+					if id != prevIDs {
+						verS, termIDs = RequireVer(id, "S")
+						fPln("Got Ver S:", verS, termIDs)
+					}
+					tuple := Must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
+					tuple.Version = verS
+					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+					if lastObjTuple {
+						Terminate(id, termIDs, verS+1) //                              *** object struct terminator ***
 					}
 				},
-				func(p, v string, n int) {
-					// fPln("A ---> ", p, v, n)
-					if n > 1 {
-						defer func() { ver, cntA = ver+1, cntA+1 }()
-						fPln("A ---> ", p, v, n)
-						tuple := Must(messages.NewTuple(p, v, fSf("%d", n))).(*pb.SPOTuple)
-						tuple.Version = ver
-						PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+				func(p, id string, n int, lastObjTuple bool) {
+					// fPln("A ---> ", p, id, n)
+					id = "[]" + id
+					defer func() { verA, cntA, prevIDa = verA+1, cntA+1, id }()
+					if id != prevIDa {
+						verA, termIDa = RequireVer(id, "A")
+						fPln("Got Ver A:", verA, termIDa)
+					}
+					tuple := Must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
+					tuple.Version = verA
+					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+					if lastObjTuple {
+						Terminate(id, termIDa, verA+1) //                          *** object array terminator ***
 					}
 				},
 			)
 
-			prevID, termID, prevTermID := "", "", ""
-			xjy.YAMLScan(data.V(), "RefId", IDs, DT_XML, func(p, v, id string) {
-				defer func() { ver, cntV, prevID, prevTermID = ver+1, cntV+1, id, termID }()
-				fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
-				if id != prevID {
-					if prevID != "" {
-						Terminate(prevID, prevTermID)
+			xjy.YAMLScan(data.V(), idmark, dfltRoot, IDs, DT_XML,
+				func(p, v, id string) {
+					defer func() { verV, cntV, prevIDv, prevTermIDv = verV+1, cntV+1, id, termIDv }()
+					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
+					if id != prevIDv {
+						if prevIDv != "" {
+							Terminate(prevIDv, prevTermIDv, verV)
+						}
+						verV, termIDv = RequireVer(id, "V")
+						fPln("Got Ver V:", verV, termIDv)
 					}
-					ver, termID = RequireVer(id)
-					fPln("Got:", ver, termID)
-				}
-				tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
-				tuple.Version = ver
-				PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
-			})
-			Terminate(prevID, prevTermID) //                              *** object terminator ***
+					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
+					tuple.Version = verV
+					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+				})
+			Terminate(prevIDv, prevTermIDv, verV) //                              *** object values terminator ***
 		}
 
 	case g.XAPI:
 		{
-			mStructRecord := map[string][]string{}
-			IDs := xjy.JSONObjScan(data.V(), "id", "xapi",
-				func(p string, v []string) {
-					if _, ok := mStructRecord[p]; !ok {
-						defer func() { ver, cntS, mStructRecord[p] = ver+1, cntS+1, v }()
-						vstr := sJ(v, CHILD_DEL)
-						fPf("S ---> %-70s:: %s\n", p, vstr)
-						tuple := Must(messages.NewTuple(p, "::", vstr)).(*pb.SPOTuple)
-						tuple.Version = ver
-						PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+			IDs = xjy.JSONObjScan(data.V(), idmark, dfltRoot,
+				func(p, id string, v []string, lastObjTuple bool) {
+					id = "::" + id
+					defer func() { verS, cntS, prevIDs = verS+1, cntS+1, id }()
+					if id != prevIDs {
+						verS, termIDs = RequireVer(id, "S")
+						fPln("Got Ver S:", verS, termIDs)
+					}
+					tuple := Must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
+					tuple.Version = verS
+					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+					if lastObjTuple {
+						Terminate(id, termIDs, verS+1)
 					}
 				},
-				func(p, v string, n int) {
-					fPf("A ---> %-70s[]%s -- [%d]\n", p, v, n)
-					defer func() { ver, cntA = ver+1, cntA+1 }()
-					tuple := Must(messages.NewTuple(p, v, fSf("%d", n))).(*pb.SPOTuple)
-					tuple.Version = ver
+				func(p, id string, n int, lastObjTuple bool) {
+					id = "[]" + id
+					defer func() { verA, cntA, prevIDa = verA+1, cntA+1, id }()
+					if id != prevIDa {
+						verA, termIDa = RequireVer(id, "A")
+						fPln("Got Ver A:", verA, termIDa)
+					}
+					tuple := Must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
+					tuple.Version = verA
 					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+					if lastObjTuple {
+						Terminate(id, termIDa, verA+1)
+					}
 				},
 			)
 
-			prevID, termID, prevTermID := "", "", ""
-			xjy.YAMLScan(data.V(), "id", IDs, DT_JSON, func(p, v, id string) {
-				defer func() { ver, cntV, prevID, prevTermID = ver+1, cntV+1, id, termID }()
-				fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
-				if id != prevID {
-					if prevID != "" {
-						Terminate(prevID, prevTermID)
+			xjy.YAMLScan(data.V(), idmark, dfltRoot, IDs, DT_JSON,
+				func(p, v, id string) {
+					defer func() { verV, cntV, prevIDv, prevTermIDv = verV+1, cntV+1, id, termIDv }()
+					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
+					if id != prevIDv {
+						if prevIDv != "" {
+							Terminate(prevIDv, prevTermIDv, verV)
+						}
+						verV, termIDv = RequireVer(id, "V")
+						fPln("Got Ver V:", verV, termIDv)
 					}
-					ver, termID = RequireVer(id)
-					fPln("Got:", ver, termID)
-				}
-				tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
-				tuple.Version = ver
-				PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
-			})
-			Terminate(prevID, prevTermID) //                              *** object terminator ***
+					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
+					tuple.Version = verV
+					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+				})
+			Terminate(prevIDv, prevTermIDv, verV) //                              *** object terminator ***
 		}
 	}
 

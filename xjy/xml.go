@@ -58,21 +58,34 @@ func XMLObjStrByID(xml, idmark, rid string) string {
 
 // XMLInfoScan :
 func XMLInfoScan(xmlstr, objIDMark, PATHDEL string,
-	OnStructFetch func(string, []string),
-	OnArrFetch func(string, string, int)) (IDs []string) {
+	OnStructFetch func(string, string, []string, bool),
+	OnArrFetch func(string, string, int, bool)) (IDs []string) {
 
 	ids, objs, starts, ends := XMLScanObjects(xmlstr, objIDMark)
 	nObj := len(ids)
+
 	for i := 0; i < nObj; i++ {
+
 		id, _, xml := ids[i], objs[i], Str(xmlstr).S(starts[i], ends[i]+1).V()
 		mFT, mArr := XMLCntInfo(xml, "", PATHDEL, id, nil)
+
+		for k, v := range *mArr { //                      *** only need >= 2 to be xml array ***
+			if v.Count <= 1 {
+				delete(*mArr, k)
+			}
+		}
+
+		j, lFT, lArr := 0, len(*mFT), len(*mArr)
 		for k, v := range *mFT {
-			OnStructFetch(k, v)
+			j++
+			OnStructFetch(k, id, v, (j == lFT)) //        *** last tuple flag ***
 		}
+
+		j = 0
 		for k, v := range *mArr {
-			OnArrFetch(k, v.ID, v.Count)
+			j++
+			OnArrFetch(k, v.ID, v.Count, (j == lArr)) //  *** last tuple flag ***
 		}
-		// fPln()
 	}
 	return ids
 }

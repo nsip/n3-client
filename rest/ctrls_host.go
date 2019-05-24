@@ -29,7 +29,7 @@ func SendToNode(c echo.Context) error {
 
 	body := Must(ioutil.ReadAll(c.Request().Body)).([]byte)
 	data := string(body)		
-	nV, nS, nA := send.ToNode(data)
+	_, nV, nS, nA := send.ToNode(data, "id", "xapi")
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 

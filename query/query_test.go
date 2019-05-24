@@ -14,7 +14,7 @@ func TestQueryMeta(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	s, p, o, v := Meta("D3E34F41-9D75-101A-8C3D-00AA001A1652", "V") //         *** n3node thinks it is claiming ticket ***
+	s, p, o, v := Meta("738F4DF5-949F-4380-8186-8252440A6F6F", "V") //         *** n3node thinks it is claiming ticket ***
 	for i := range s {
 		fPln("----------------------------------------------------")
 		fPf("%d # %d: Reply: %s\n%s\n%s \n", i, v[i], s[i], p[i], o[i])
@@ -26,25 +26,26 @@ func TestQuery1(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	ObjectID := "738F4DF5-949F-4380-8186-8252440A6F6F"
+	// ObjectID := "40efdee5-df52-4cd7-b70c-d457629ae32d"
+	ObjectID := "5758757f-b34b-4385-9d14-0290bc9afd07"
 	Object := ""
 	s, p, o, _ := Data(ObjectID, "") //      ** root **
 	fPln("Object:")
 	for i := range s {
 		Object = o[i]
-		fPf("%-50s%-10s%s\n", s[i], p[i], o[i])
+		fPf("%-40s%-10s%s\n", s[i], p[i], o[i])
 	}
 
-	fPln("\nArray Info:")
+	fPln("\nArray:")
 	s, p, o, _ = Data(ObjectID, "[]") //     ** array **
 	for i := range s {
-		fPf("%-40s%-65s%10s\n", s[i], p[i], o[i])
+		fPf("%-40s%-70s%-10s\n", s[i], p[i], o[i])
 	}
 
 	fPln("\nStructure:")
-	s, p, o, _ = Data(Object, "::") //       ** struct **
+	s, p, o, _ = Data(ObjectID, "::") //     ** struct **
 	for i := range s {
-		fPf("%-65s%-10s%s\n", s[i], p[i], o[i])
+		fPf("%-40s%-60s%s\n", s[i], p[i], o[i])
 	}
 
 	fPln("\nValues:")

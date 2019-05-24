@@ -22,3 +22,10 @@ func Del(subject string) {
 	dTuple := &pb.SPOTuple{Subject: subject, Predicate: DEADMARK}
 	PE(g.N3clt.Publish(dTuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
 }
+
+// DelBat :
+func DelBat(subjects ...string) {
+	for _, s := range subjects {
+		Del(s)
+	}
+}

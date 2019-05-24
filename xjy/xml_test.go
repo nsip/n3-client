@@ -41,12 +41,12 @@ func TestXMLInfoScan(t *testing.T) {
 	sif.SetEnC()
 
 	XMLInfoScan(sif.V(), "RefId", PATH_DEL,
-		func(p string, v []string) {
+		func(p, id string, v []string, lastOne bool) {
 			fPln("S --->>> ", p, " : ", v)
 		},
-		func(p, v string, n int) {
+		func(p, id string, n int, lastOne bool) {
 			if n > 1 {
-				fPf("A --->>> %-100s : %s : %d\n", p, v, n)
+				fPf("A --->>> %-100s : %s : %d\n", p, id, n)
 			}
 		},
 	)

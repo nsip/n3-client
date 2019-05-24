@@ -7,7 +7,7 @@
     "verb": {
         "id": "http://adlnet.gov/expapi/verbs/completed",
         "display": {
-            "en_US": "completed"
+            "en-US": "completed"
         }
     },
     "object": {
@@ -25,6 +25,8 @@
             "scaled": 55,
             "min": 0,
             "max": 100
+            
         }        
     }
+
 }
