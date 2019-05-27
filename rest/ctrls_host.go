@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	c "../config"	
+	c "../config"
 	"../gql"
 	"../send"
 	"github.com/labstack/echo"
@@ -28,7 +28,7 @@ func SendToNode(c echo.Context) error {
 	}()
 
 	body := Must(ioutil.ReadAll(c.Request().Body)).([]byte)
-	data := string(body)		
+	data := string(body)
 	_, nV, nS, nA := send.ToNode(data, "id", "xapi")
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
@@ -46,47 +46,52 @@ func queryGQL(c echo.Context) error {
 		})
 	}()
 
-	mapPP := map[string]string{
-		"fname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName",
-		"gname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName",
-		"staffid":         "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ StaffPersonalRefId",
-		"teachinggroupid": "TeachingGroup ~ -RefId",
-		"tgid":            "GradingAssignment ~ TeachingGroupRefId",
-		"studentid":       "StudentAttendanceTimeList ~ StudentPersonalRefId",
-		"objid":           "xapi ~ object ~ id",
-	}
-	mapPV := map[string]interface{}{}
+	// mPP := map[string]string{
+	// 	"fname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName",
+	// 	"gname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName",
+	// 	"staffid":         "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ StaffPersonalRefId",
+	// 	"teachinggroupid": "TeachingGroup ~ -RefId",
+	// 	"tgid":            "GradingAssignment ~ TeachingGroupRefId",
+	// 	"studentid":       "StudentAttendanceTimeList ~ StudentPersonalRefId",
+	// 	"objid":           "xapi ~ object ~ id",
+	// }
+	mPV := map[string]interface{}{}
 
-	// *** postman client ***
+	// ********************* POSTMAN client *********************
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
 	// queryTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
 
-	// *** graphiql client ***
+	// ********************* GRAPHIQL client *********************
 	gqlreq := new(GQLRequest) //
 	PE(c.Bind(gqlreq))        //                            *** ONLY <POST> echo can Bind OK ***
 	queryTxt := gqlreq.Query
 	for k, v := range gqlreq.Variables {
-		mapPV[k] = v.(string)
+		mPV[k] = v.(string)
 	}
 
-	querySchema := string(Must(ioutil.ReadFile("./gql/query.gql")).([]byte))
+	fPln("PP:", mPV)
+
+	querySchema := fSf("type QueryRoot {\n\txapi: %s\n}", "xapi") //  *** content should be related to resolver path ***
+	// querySchema := string(Must(ioutil.ReadFile("./gql/query.gql")).([]byte))
+	
 	IDs, rmStructs := []string{}, []string{}
+	IDs = append(IDs, mPV["objid"].(string))
 
-	switch {
-	case sCtn(queryTxt, "TeachingGroupByName(") || sCtn(queryTxt, "TeachingGroupByStaffID("):
-		IDs, rmStructs = IDsByPO(mapPP, mapPV), []string{"StudentList"}
-	case sCtn(queryTxt, "TeachingGroup("):
-		IDs = IDsByPO(mapPP, mapPV)
-	case sCtn(queryTxt, "GradingAssignment("):
-		IDs = IDsByPO(mapPP, mapPV)
-	case sCtn(queryTxt, "StudentAttendance("):
-		IDs = IDsByPO(mapPP, mapPV)
-	case sCtn(queryTxt, "QueryXAPI("):
-		IDs = IDsByPO(mapPP, mapPV)
-	}
+	// switch {
+	// case sCtn(queryTxt, "TeachingGroupByName(") || sCtn(queryTxt, "TeachingGroupByStaffID("):
+	// 	IDs, rmStructs = IDsByPO(mPP, mPV), []string{"StudentList"}
+	// case sCtn(queryTxt, "TeachingGroup("):
+	// 	IDs = IDsByPO(mPP, mPV)
+	// case sCtn(queryTxt, "GradingAssignment("):
+	// 	IDs = IDsByPO(mPP, mPV)
+	// case sCtn(queryTxt, "StudentAttendance("):
+	// 	IDs = IDsByPO(mPP, mPV)
+	// case sCtn(queryTxt, "QueryXAPI("):
+	// 	IDs = IDsByPO(mPP, mPV)
+	// }
 
 	if len(IDs) >= 1 {
-		rst := gql.Query(IDs, querySchema, queryTxt, mapPV, rmStructs) //*** rst is already JSON string, so use String to return ***
+		rst := gql.Query(IDs, querySchema, queryTxt, mPV, rmStructs) //*** rst is already JSON string, so use String to return ***
 		return c.String(http.StatusAccepted, rst)
 	}
 
@@ -111,7 +116,7 @@ func HostHTTPAsync() {
 
 	// Route
 	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
-	e.POST(CFG.Rest.PathSend, SendToNode)	
+	e.POST(CFG.Rest.PathSend, SendToNode)
 	e.POST(CFG.Rest.PathGQL, queryGQL)
 
 	// Server

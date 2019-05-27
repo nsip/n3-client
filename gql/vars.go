@@ -9,6 +9,7 @@ import (
 	gjxy "github.com/cdutwhu/go-gjxy"
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
+	lru "github.com/hashicorp/golang-lru"
 )
 
 type (
@@ -63,6 +64,14 @@ var (
 	mIndicesList    = map[string][][]int{}  // *** FOR JSONBuilld ***
 	mIPathObj       = map[string]string{}   // *** FOR JSONBuilld ***
 	mIPathSubIPaths = map[string][]string{} // *** FOR JSONBuilld ***
+
+	lcSchema = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
+		fPln("Schema onEvicted:", k, v)
+	})).(*lru.Cache)
+
+	lcJSON = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
+		fPln("JSON onEvicted:", k, v)
+	})).(*lru.Cache)
 )
 
 type valver struct {
@@ -74,4 +83,5 @@ const (
 	PATH_DEL  = " ~ "
 	CHILD_DEL = " + "
 	BLANK     = w.BLANK
+	LRUCOUNT  = 1024
 )

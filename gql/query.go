@@ -52,8 +52,24 @@ func GetInfoFromID(infoType, objID string, rmStructs ...string) string {
 
 // GetResourceFromID :
 func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map[string]string) {
+
 	mSchema, mJSON = make(map[string]string), make(map[string]string)
+
 	for _, objID := range objIDs {
+
+		ok1, ok2 := false, false
+		if schema, ok := lcSchema.Get(objID); ok {
+			mSchema[objID], ok1 = schema.(string), ok
+		}
+		if json, ok := lcJSON.Get(objID); ok {
+			mJSON[objID], ok2 = json.(string), ok
+		}
+		if ok1 && ok2 {
+			continue
+		}
+
+		// ********************************************************************* //
+
 		clrQueryBuf()
 
 		if objID == "" {
@@ -73,18 +89,21 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 		schema = sRepAll(schema, "\t-", "\t")
 		schema = sRepAll(schema, "\t#", "\t")
 		mSchema[objID] = schema
+		lcSchema.Add(objID, schema) //      *** LRU ***
 
 		JSONBuild(root)
 		_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
 		mJSON[objID] = json
+		lcJSON.Add(objID, json) //          *** LRU ***
 	}
+
 	return
 }
 
 func rsvResource(objIDs []string, mJSON map[string]string) []byte {
 	jsonAll := ""
 	for _, objID := range objIDs {
-		jsonstr := mJSON[objID]		
+		jsonstr := mJSON[objID]
 		ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666)
 		jsonAll = JSONObjectMerge(jsonAll, jsonstr)
 	}
@@ -96,7 +115,7 @@ func Query(objIDs []string, querySchema, queryStr string, variables map[string]i
 
 	mSchema, mJSON := GetResourceFromID(objIDs, rmStructs...)
 
-	autoSchema := mSchema[objIDs[0]] // GetSchemaFromID(objIDs[0], rmStructs...)
+	autoSchema := mSchema[objIDs[0]]
 	if autoSchema == "" {
 		return ""
 	}
