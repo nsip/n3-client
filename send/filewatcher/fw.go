@@ -6,6 +6,7 @@ import (
 	"time"
 
 	s ".."
+	g "../../global"
 	w "github.com/cdutwhu/go-wrappers"
 	"github.com/fsnotify/fsnotify"
 )
@@ -42,7 +43,11 @@ func StartFileWatcherAsync() {
 					goto READ_AGAIN
 				}
 
-				s.ToNode(string(bytes), "id", "xapi")
+				IDs, _, _, _ := s.ToNode(string(bytes), "id", "xapi")
+				for _, id := range IDs {
+					g.LCSchema.Remove(id)
+					g.LCJSON.Remove(id)
+				}
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {

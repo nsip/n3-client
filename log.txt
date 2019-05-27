@@ -44,3 +44,9 @@ C:/Go/src/net/http/server.go:1878 (0x7a75c8)
 	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
 C:/Go/src/runtime/asm_amd64.s:1337 (0x4588b1)
 	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/05/27 13:14:37 interface conversion: interface {} is nil, not string
+
+*** Panic Error *** Fatal : false ***
+2019/05/27 13:15:05 interface conversion: interface {} is nil, not string

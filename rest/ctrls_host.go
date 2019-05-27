@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	c "../config"
+	g "../global"
 	"../gql"
 	"../send"
 	"github.com/labstack/echo"
@@ -29,7 +30,12 @@ func SendToNode(c echo.Context) error {
 
 	body := Must(ioutil.ReadAll(c.Request().Body)).([]byte)
 	data := string(body)
-	_, nV, nS, nA := send.ToNode(data, "id", "xapi")
+	IDs, nV, nS, nA := send.ToNode(data, "id", "xapi")
+	for _, id := range IDs {
+		g.LCSchema.Remove(id)
+		g.LCJSON.Remove(id)
+	}
+
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
@@ -73,9 +79,12 @@ func queryGQL(c echo.Context) error {
 
 	querySchema := fSf("type QueryRoot {\n\txapi: %s\n}", "xapi") //  *** content should be related to resolver path ***
 	// querySchema := string(Must(ioutil.ReadFile("./gql/query.gql")).([]byte))
-	
+
 	IDs, rmStructs := []string{}, []string{}
-	IDs = append(IDs, mPV["objid"].(string))
+	// IDs = append(IDs, "1a723f08-5cee-4ad7-8a48-68e7bda480fd") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
+	if id, ok := mPV["objid"]; ok { //                              *** if param is given runtime, GraphiQL cannot show Schema-Doc ***
+		IDs = append(IDs, id.(string))
+	}
 
 	// switch {
 	// case sCtn(queryTxt, "TeachingGroupByName(") || sCtn(queryTxt, "TeachingGroupByStaffID("):

@@ -1,10 +1,25 @@
 package global
 
-import "github.com/nsip/n3-messages/n3grpc"
+import (
+	"fmt"
+
+	u "github.com/cdutwhu/go-util"
+	lru "github.com/hashicorp/golang-lru"
+	"github.com/nsip/n3-messages/n3grpc"
+)
 
 var (
-	// N3clt :
 	N3clt *n3grpc.Client
+
+	fPln = fmt.Println
+	Must = u.Must
+
+	LCSchema = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
+		fPln("Schema onEvicted:", k, v)
+	})).(*lru.Cache)
+	LCJSON = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
+		fPln("JSON onEvicted:", k, v)
+	})).(*lru.Cache)
 )
 
 type (
@@ -16,4 +31,5 @@ const (
 	XAPI
 	META_SIF
 	META_XAPI
+	LRUCOUNT = 1024
 )

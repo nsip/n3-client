@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
+	g "../global"
+
 	"github.com/playlyfe/go-graphql"
 )
 
@@ -58,10 +60,10 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 	for _, objID := range objIDs {
 
 		ok1, ok2 := false, false
-		if schema, ok := lcSchema.Get(objID); ok {
+		if schema, ok := g.LCSchema.Get(objID); ok {
 			mSchema[objID], ok1 = schema.(string), ok
 		}
-		if json, ok := lcJSON.Get(objID); ok {
+		if json, ok := g.LCJSON.Get(objID); ok {
 			mJSON[objID], ok2 = json.(string), ok
 		}
 		if ok1 && ok2 {
@@ -89,12 +91,12 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 		schema = sRepAll(schema, "\t-", "\t")
 		schema = sRepAll(schema, "\t#", "\t")
 		mSchema[objID] = schema
-		lcSchema.Add(objID, schema) //      *** LRU ***
+		g.LCSchema.Add(objID, schema) //      *** LRU ***
 
 		JSONBuild(root)
 		_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
 		mJSON[objID] = json
-		lcJSON.Add(objID, json) //          *** LRU ***
+		g.LCJSON.Add(objID, json) //          *** LRU ***
 	}
 
 	return
