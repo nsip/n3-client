@@ -3,6 +3,30 @@
         id
         actor {
             name
-        }               
+            mbox
+        }       
+        verb {
+            id
+            display {
+                en_US
+            }
+        }
+        object {
+            id
+            definition {
+                type
+                name
+            }
+        }  
+        result {
+            completion
+            success
+            score {
+                scaled
+                min
+                max
+            }
+            duration
+        }     
     }
 }

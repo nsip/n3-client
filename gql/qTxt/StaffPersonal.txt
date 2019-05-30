@@ -1,0 +1,17 @@
+{
+    StaffPersonal {
+        RefId
+        LocalId
+        PersonInfo {
+            Name {
+                Type
+                FamilyName
+                GivenName
+            }
+            Demographics {
+                Sex
+            }
+        }
+        EmploymentStatus
+    }
+}

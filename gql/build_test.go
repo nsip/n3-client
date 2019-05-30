@@ -6,7 +6,7 @@ import (
 )
 
 // var ID = "738F4DF5-949F-4380-8186-8252440A6F6F"
-var ID = "BF89BE42-ADC9-4F43-9740-A45A737BDDF3"
+var ID = "89d00298-b56d-4567-8d63-7fd02a2ff528"
 
 func TestBuildInfoFromID(t *testing.T) {
 	if data := GetInfoFromID("JSON", ID); data != "" {

@@ -75,16 +75,11 @@ func queryGQL(c echo.Context) error {
 		mPV[k] = v.(string)
 	}
 
-	fPln("PP:", mPV)
-
-	querySchema := fSf("type QueryRoot {\n\txapi: %s\n}", "xapi") //  *** content should be related to resolver path ***
-	// querySchema := string(Must(ioutil.ReadFile("./gql/qSchema/query.gql")).([]byte))
-
 	IDs, rmStructs := []string{}, []string{}
-	// IDs = append(IDs, "1a723f08-5cee-4ad7-8a48-68e7bda480fd") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
-	if id, ok := mPV["objid"]; ok { //                              *** if param is given runtime, GraphiQL cannot show Schema-Doc ***
-		IDs = append(IDs, id.(string))
-	}
+	IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
+	// if id, ok := mPV["objid"]; ok { //                              *** if param is given runtime, GraphiQL cannot show Schema-Doc ***
+	// 	IDs = append(IDs, id.(string))
+	// }
 
 	// switch {
 	// case sCtn(queryTxt, "TeachingGroupByName(") || sCtn(queryTxt, "TeachingGroupByStaffID("):
@@ -99,8 +94,10 @@ func queryGQL(c echo.Context) error {
 	// 	IDs = IDsByPO(mPP, mPV)
 	// }
 
+	qSchema := string(Must(ioutil.ReadFile("./gql/qSchema/qRoot.gql")).([]byte)) //  *** content should be related to resolver path ***
+
 	if len(IDs) >= 1 {
-		rst := gql.Query(IDs, querySchema, queryTxt, mPV, rmStructs) //*** rst is already JSON string, so use String to return ***
+		rst := gql.Query(IDs, qSchema, queryTxt, mPV, rmStructs) //*** rst is already JSON string, so use String to return ***
 		return c.String(http.StatusAccepted, rst)
 	}
 

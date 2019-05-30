@@ -2,6 +2,14 @@
     SchoolCourseInfo {
         RefId
         SchoolInfoRefId
-        SchoolYear        
+        SchoolYear   
+        CourseCode    
+        SubjectAreaList {
+            SubjectArea {
+                Code
+            }
+        }
+        CourseTitle
+        CourseCredits
     }
 }

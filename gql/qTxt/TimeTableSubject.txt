@@ -1,0 +1,14 @@
+{
+    TimeTableSubject {
+        RefId
+        SubjectLocalId
+        AcademicYear {
+            Code
+        }
+        SchoolCourseInfoRefId
+        SubjectShortName
+        SubjectLongName
+        SubjectType
+        SchoolYear
+    }
+}

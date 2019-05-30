@@ -1,0 +1,23 @@
+{
+    lessonroot {
+        lesson {
+            courseid
+            editcontent
+            summary
+            isDisplay
+            url
+            start {
+                dateTime
+            }
+            end {
+                dateTime
+            }
+        }
+        userId
+        lessonId
+        thearea
+        thecourse
+        thesubject
+        thestage
+    }
+}

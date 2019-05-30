@@ -1,0 +1,23 @@
+
+*** Panic Error *** Fatal : false ***
+2019/05/30 15:19:50 *errors.errorString Invalid parameters <p>
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-wrappers/str.go:93 (0x89d916)
+	Str.C: PC(p < 0 || p >= L, fEf("Invalid parameters <p>"))
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-gjxy/json.go:222 (0x92500c)
+	JSONFamilyTree: if Str(s).T(BLANK).C(0) != '{' && Str(s).T(BLANK).C(LAST) != '}' {
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-gjxy/json.go:242 (0x92520a)
+	JSONFamilyTree: JSONFamilyTree(content, nextPath, del, mFT)
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-gjxy/json.go:337 (0x926c6e)
+	JSONArrInfo: JSONFamilyTree(s, xpath, del, mFT)
+c:/Users/qmiao/Desktop/LRU/n3-client/xjy/json.go:26 (0x92e545)
+	JSONModelInfo: mFT, mArr := JSONArrInfo(jsonstr, IF(addRoot, dfltRoot, "").(string), pDel, id, nil)
+c:/Users/qmiao/Desktop/LRU/n3-client/xjy/json.go:49 (0x92e96f)
+	JSONObjScan: IDs = append(IDs, JSONModelInfo(eles[i-1], idmark, dfltRoot, PATH_DEL, OnStruFetch, OnArrFetch))
+c:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:121 (0x931403)
+	ToNode: IDs = xjy.JSONObjScan(data.V(), idmark, dfltRoot,
+c:/Users/qmiao/Desktop/LRU/n3-client/send/send_test.go:30 (0x931ae4)
+	TestToNode: IDs, _, _, _ := ToNode(string(bytes), "id", "lesson") //        *** change idmark ***
+C:/Go/src/testing/testing.go:865 (0x5046d7)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x45dee1)
+	goexit: BYTE	$0x90	// NOP

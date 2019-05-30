@@ -72,7 +72,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 					defer func() { verS, cntS, prevIDs = verS+1, cntS+1, id }()
 					if id != prevIDs {
 						verS, termIDs = RequireVer(id, "S")
-						fPln("Got Ver S:", verS, termIDs)
+						// fPln("Got Ver S:", verS, termIDs)
 					}
 					tuple := Must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
 					tuple.Version = verS
@@ -87,7 +87,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 					defer func() { verA, cntA, prevIDa = verA+1, cntA+1, id }()
 					if id != prevIDa {
 						verA, termIDa = RequireVer(id, "A")
-						fPln("Got Ver A:", verA, termIDa)
+						// fPln("Got Ver A:", verA, termIDa)
 					}
 					tuple := Must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
 					tuple.Version = verA
@@ -107,7 +107,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 							Terminate(prevIDv, prevTermIDv, verV)
 						}
 						verV, termIDv = RequireVer(id, "V")
-						fPln("Got Ver V:", verV, termIDv)
+						// fPln("Got Ver V:", verV, termIDv)
 					}
 					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 					tuple.Version = verV
@@ -124,7 +124,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 					defer func() { verS, cntS, prevIDs = verS+1, cntS+1, id }()
 					if id != prevIDs {
 						verS, termIDs = RequireVer(id, "S")
-						fPln("Got Ver S:", verS, termIDs)
+						// fPln("Got Ver S:", verS, termIDs)
 					}
 					tuple := Must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
 					tuple.Version = verS
@@ -138,7 +138,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 					defer func() { verA, cntA, prevIDa = verA+1, cntA+1, id }()
 					if id != prevIDa {
 						verA, termIDa = RequireVer(id, "A")
-						fPln("Got Ver A:", verA, termIDa)
+						// fPln("Got Ver A:", verA, termIDa)
 					}
 					tuple := Must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
 					tuple.Version = verA
@@ -158,7 +158,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 							Terminate(prevIDv, prevTermIDv, verV)
 						}
 						verV, termIDv = RequireVer(id, "V")
-						fPln("Got Ver V:", verV, termIDv)
+						// fPln("Got Ver V:", verV, termIDv)
 					}
 					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 					tuple.Version = verV
