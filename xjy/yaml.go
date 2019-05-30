@@ -58,7 +58,7 @@ func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFet
 				thisjson := eles[i-1]
 				_, _, extjson := JSONWrapRoot(thisjson, dfltRoot)
 
-				fPf("%d xapi *****************************************************\n", i)
+				// fPf("%d json *****************************************************\n", i)
 
 				yamlstr := Jstr2Y(extjson)
 				yamlstr = YAMLJoinSplittedLines(yamlstr)

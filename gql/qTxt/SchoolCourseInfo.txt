@@ -1,0 +1,7 @@
+{
+    SchoolCourseInfo {
+        RefId
+        SchoolInfoRefId
+        SchoolYear        
+    }
+}

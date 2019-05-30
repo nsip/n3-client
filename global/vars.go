@@ -27,9 +27,7 @@ type (
 )
 
 const (
-	SIF SQDType = iota
-	XAPI
-	META_SIF
-	META_XAPI
+	XML SQDType = iota
+	JSON	
 	LRUCOUNT = 1024
 )

@@ -78,7 +78,7 @@ func queryGQL(c echo.Context) error {
 	fPln("PP:", mPV)
 
 	querySchema := fSf("type QueryRoot {\n\txapi: %s\n}", "xapi") //  *** content should be related to resolver path ***
-	// querySchema := string(Must(ioutil.ReadFile("./gql/query.gql")).([]byte))
+	// querySchema := string(Must(ioutil.ReadFile("./gql/qSchema/query.gql")).([]byte))
 
 	IDs, rmStructs := []string{}, []string{}
 	// IDs = append(IDs, "1a723f08-5cee-4ad7-8a48-68e7bda480fd") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***

@@ -1,0 +1,4 @@
+type QueryRoot {
+    SchoolInfo: SchoolInfo
+    SchoolCourseInfo: SchoolCourseInfo
+}

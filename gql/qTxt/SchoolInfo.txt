@@ -1,0 +1,16 @@
+{
+    SchoolInfo {
+        RefId
+        LocalId
+        StateProvinceId
+        CommonwealthId
+        SchoolName
+        SchoolDistrict
+        SchoolType
+        SchoolFocusList {
+            SchoolFocus
+        }
+        SchoolURL
+        SchoolSector
+    }
+}

@@ -2,7 +2,6 @@ package gql
 
 import (
 	"encoding/json"
-	"io/ioutil"
 
 	g "../global"
 
@@ -106,7 +105,7 @@ func rsvResource(objIDs []string, mJSON map[string]string) []byte {
 	jsonAll := ""
 	for _, objID := range objIDs {
 		jsonstr := mJSON[objID]
-		ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666)
+		// ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666) //   *** DEBUG ***
 		jsonAll = JSONObjectMerge(jsonAll, jsonstr)
 	}
 	return []byte(jsonAll)
@@ -122,18 +121,21 @@ func Query(objIDs []string, querySchema, queryStr string, variables map[string]i
 		return ""
 	}
 
-	schema := querySchema + autoSchema //                                    *** querySchema is mannually coded ***
-	// schema = sRepAll(schema, "en-US", "enUS")
-	ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) //   *** DEBUG ***
+	schema := querySchema + autoSchema //                                     *** querySchema is mannually coded ***
+	schema = sRepAll(schema, "en-US", "enUS")
+	// ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) // *** DEBUG ***
 
-	resolvers := map[string]interface{}{}
-	// *** PATH : related to <querySchema> ***
-	resolvers["QueryRoot/xapi"] = func(params *graphql.ResolveParams) (interface{}, error) {
-		jsonBytes := rsvResource(objIDs, mJSON) //                           *** Get Reconstructed JSON ***
+	fResolver := func(params *graphql.ResolveParams) (interface{}, error) {
+		jsonBytes := rsvResource(objIDs, mJSON) //                            *** Get Reconstructed JSON ***
 		jsonMap := make(map[string]interface{})
 		PE(json.Unmarshal(jsonBytes, &jsonMap))
 		return jsonMap[root], nil
 	}
+
+	resolvers := map[string]interface{}{}
+	resolvers["QueryRoot/xapi"] = fResolver //                                *** PATH : related to <querySchema> ***
+	resolvers["QueryRoot/SchoolInfo"] = fResolver
+	resolvers["QueryRoot/SchoolCourseInfo"] = fResolver
 
 	context := map[string]interface{}{}
 	// variables := map[string]interface{}{}

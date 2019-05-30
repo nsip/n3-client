@@ -62,8 +62,8 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 	prevIDv, termIDv, prevTermIDv := "", "", ""
 	verS, verA, verV := int64(1), int64(1), int64(1)
 
-	switch IF(IsJSON(str), g.XAPI, g.SIF).(g.SQDType) {
-	case g.SIF:
+	switch IF(IsJSON(str), g.JSON, g.XML).(g.SQDType) {
+	case g.XML:
 		{
 			IDs = xjy.XMLInfoScan(data.V(), idmark, PATH_DEL,
 				func(p, id string, v []string, lastObjTuple bool) {
@@ -116,7 +116,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 			Terminate(prevIDv, prevTermIDv, verV) //                              *** object values terminator ***
 		}
 
-	case g.XAPI:
+	case g.JSON:
 		{
 			IDs = xjy.JSONObjScan(data.V(), idmark, dfltRoot,
 				func(p, id string, v []string, lastObjTuple bool) {
