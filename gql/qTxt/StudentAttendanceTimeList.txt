@@ -1,0 +1,20 @@
+{
+    StudentAttendanceTimeList {
+        RefId
+        StudentPersonalRefId
+        SchoolInfoRefId
+        Date
+        SchoolYear
+        AttendanceTimes {
+            AttendanceTime {
+                AttendanceCode {
+                    Code
+                }
+                AttendanceStatus
+                StartTime
+                EndTime
+                DurationValue
+            }
+        }
+    }
+}

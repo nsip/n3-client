@@ -1,0 +1,14 @@
+{
+    GradingAssignment {
+        RefId
+        TeachingGroupRefId
+        Description
+        PointsPossible
+        DetailedDescriptionURL
+        LearningStandardList {
+            LearningStandard {
+                LearningStandardLocalId
+            }
+        }
+    }
+}

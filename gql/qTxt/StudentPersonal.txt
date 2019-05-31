@@ -1,0 +1,24 @@
+{
+    StudentPersonal {
+        RefId
+        LocalId
+        PersonInfo {
+            Name {
+                Type
+                FamilyName
+                GivenName
+            }
+            Demographics {
+                IndigenousStatus
+                Sex
+                BirthDate
+            }
+            EmailList {
+                Email {
+                    Type
+                    value
+                }
+            }
+        }
+    }
+}

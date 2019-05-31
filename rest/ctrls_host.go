@@ -83,7 +83,11 @@ func queryGQL(c echo.Context) error {
 		_, _, o, _ := q.Data(id.(string), "")
 		if len(o) > 0 {
 			root = o[0]
+		} else {
+			return c.JSON(http.StatusAccepted, "id provided is not in db")
 		}
+	} else {
+		return c.JSON(http.StatusAccepted, "<objid> is missing")
 	}
 
 	// switch {

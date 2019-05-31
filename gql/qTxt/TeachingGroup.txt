@@ -1,0 +1,40 @@
+{
+    TeachingGroup {
+        RefId
+        SchoolYear
+        LocalId
+        ShortName
+        LongName
+        TimeTableSubjectRefId
+        StudentList {
+            TeachingGroupStudent {
+                StudentPersonalRefId
+                StudentLocalId
+                Name {
+                    Type
+                    FamilyName
+                    GivenName
+                }
+            }
+        }
+        TeacherList {
+            TeachingGroupTeacher {
+                StaffPersonalRefId
+                StaffLocalId
+                Name {
+                    Type
+                    FamilyName
+                    GivenName
+                }
+                Association
+            }
+        }
+        TeachingGroupPeriodList {
+            TeachingGroupPeriod {
+                RoomNumber
+                DayId
+                PeriodId
+            }
+        }
+    }
+}
