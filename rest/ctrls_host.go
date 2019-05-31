@@ -7,6 +7,7 @@ import (
 	c "../config"
 	g "../global"
 	"../gql"
+	q "../query"
 	"../send"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -65,39 +66,44 @@ func queryGQL(c echo.Context) error {
 
 	// ********************* POSTMAN client *********************
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
-	// queryTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
+	// qTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
 
 	// ********************* GRAPHIQL client *********************
 	gqlreq := new(GQLRequest) //
 	PE(c.Bind(gqlreq))        //                            *** ONLY <POST> echo can Bind OK ***
-	queryTxt := gqlreq.Query
+	qTxt := gqlreq.Query
 	for k, v := range gqlreq.Variables {
 		mPV[k] = v.(string)
 	}
 
-	IDs, rmStructs := []string{}, []string{}
-	IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
-	// if id, ok := mPV["objid"]; ok { //                              *** if param is given runtime, GraphiQL cannot show Schema-Doc ***
-	// 	IDs = append(IDs, id.(string))
-	// }
+	IDs, rmStructs, root, mReplace := []string{}, []string{}, "", map[string]string{"en-US": "en_US"}
+	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
+	if id, ok := mPV["objid"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
+		IDs = append(IDs, id.(string))
+		_, _, o, _ := q.Data(id.(string), "")
+		if len(o) > 0 {
+			root = o[0]
+		}
+	}
 
 	// switch {
-	// case sCtn(queryTxt, "TeachingGroupByName(") || sCtn(queryTxt, "TeachingGroupByStaffID("):
+	// case sCtn(qTxt, "TeachingGroupByName(") || sCtn(qTxt, "TeachingGroupByStaffID("):
 	// 	IDs, rmStructs = IDsByPO(mPP, mPV), []string{"StudentList"}
-	// case sCtn(queryTxt, "TeachingGroup("):
+	// case sCtn(qTxt, "TeachingGroup("):
 	// 	IDs = IDsByPO(mPP, mPV)
-	// case sCtn(queryTxt, "GradingAssignment("):
+	// case sCtn(qTxt, "GradingAssignment("):
 	// 	IDs = IDsByPO(mPP, mPV)
-	// case sCtn(queryTxt, "StudentAttendance("):
+	// case sCtn(qTxt, "StudentAttendance("):
 	// 	IDs = IDsByPO(mPP, mPV)
-	// case sCtn(queryTxt, "QueryXAPI("):
+	// case sCtn(qTxt, "QueryXAPI("):
 	// 	IDs = IDsByPO(mPP, mPV)
 	// }
 
-	qSchema := string(Must(ioutil.ReadFile("./gql/qSchema/qRoot.gql")).([]byte)) //  *** content should be related to resolver path ***
+	qSchemaDir := "./gql/qSchema/"
+	qSchema := string(Must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) //  *** content should be related to resolver path ***
 
 	if len(IDs) >= 1 {
-		rst := gql.Query(IDs, qSchema, queryTxt, mPV, rmStructs) //*** rst is already JSON string, so use String to return ***
+		rst := gql.Query(IDs, qSchema, qSchemaDir, qTxt, mPV, rmStructs, mReplace) // *** rst is already JSON string, so use String to return ***
 		return c.String(http.StatusAccepted, rst)
 	}
 

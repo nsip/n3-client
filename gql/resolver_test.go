@@ -12,11 +12,27 @@ func TestGQL(t *testing.T) {
 	_, _, o, _ := q.Data(objID, "") //                 *** get root ***
 	if len(o) > 0 {
 		root := o[0]
-		querySchema, _ := ioutil.ReadFile(fSf("./qSchema/%s.gql", root)) // *** file content must be related to resolver path ***
-		queryBytes, _ := ioutil.ReadFile(fSf("./qTxt/%s.txt", root))     // *** change ***
-		result := Query([]string{objID}, string(querySchema), string(queryBytes), map[string]interface{}{}, []string{})
+		qSchemaDir, qTxtDir := "./qSchema/", "./qTxt/"
+		qSchema := string(Must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) // *** file content must be related to resolver path ***
+		qTxt := string(Must(ioutil.ReadFile(qTxtDir + root + ".txt")).([]byte))       // *** change ***
+		result := Query(
+			[]string{objID},
+			qSchema,
+			qSchemaDir,
+			qTxt,
+			map[string]interface{}{},
+			[]string{},
+			map[string]string{"en-US": "en_US"},
+		)
 		ioutil.WriteFile(fSf("./yield/%s.json", objID), []byte(result), 0666)
 		return
 	}
 	fPln("wrong objID")
+}
+
+func TestQSchemaList(t *testing.T) {
+	fnames := qSchemaList("./qSchema")
+	for _, f := range fnames {
+		fPln(f)
+	}
 }

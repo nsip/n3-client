@@ -2,11 +2,24 @@ package gql
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"os"
 
 	g "../global"
 
 	"github.com/playlyfe/go-graphql"
 )
+
+func qSchemaList(qSchemaDir string) (fnames []string) {
+	files := Must(ioutil.ReadDir(qSchemaDir)).([]os.FileInfo)
+	for _, file := range files {
+		fname := file.Name()
+		if !Str(fname).HP("_") {
+			fnames = append(fnames, Str(fname).RmTailFromLast(".").V())
+		}
+	}
+	return
+}
 
 func modStructMap(rmStructs ...string) {
 	if v, ok := mStruct[root]; ok {
@@ -101,19 +114,21 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 	return
 }
 
-func rsvResource(objIDs []string, mJSON map[string]string) []byte {
+func rsvResource(objIDs []string, mJSON, mReplace map[string]string) []byte {
 	jsonAll := ""
 	for _, objID := range objIDs {
 		jsonstr := mJSON[objID]
 		// ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666) //   *** DEBUG ***
 		jsonAll = JSONObjectMerge(jsonAll, jsonstr)
 	}
-	jsonAll = sRepAll(jsonAll, "en-US:", "en_US:")
+	for k, v := range mReplace {
+		jsonAll = sRepAll(jsonAll, k, v)
+	}
 	return []byte(jsonAll)
 }
 
 // Query : if id is known, use Query
-func Query(objIDs []string, querySchema, queryStr string, variables map[string]interface{}, rmStructs []string) (rstJSON string) {
+func Query(objIDs []string, qSchema, qSchemaDir, qTxt string, variables map[string]interface{}, rmStructs []string, mReplace map[string]string) (rstJSON string) {
 
 	mSchema, mJSON := GetResourceFromID(objIDs, rmStructs...)
 
@@ -122,25 +137,24 @@ func Query(objIDs []string, querySchema, queryStr string, variables map[string]i
 		return ""
 	}
 
-	schema := querySchema + autoSchema //                                     *** querySchema is mannually coded ***
-	schema = sRepAll(schema, "en-US", "en_US")
-	// ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) //    *** DEBUG ***
+	schema := qSchema + autoSchema //                                         *** qSchema is mannually coded ***
+	for k, v := range mReplace {
+		schema = sRepAll(schema, k, v)
+	}
+
+	// ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) // *** DEBUG ***
 
 	fResolver := func(params *graphql.ResolveParams) (interface{}, error) {
-		jsonBytes := rsvResource(objIDs, mJSON) //                            *** Get Reconstructed JSON ***
+		jsonBytes := rsvResource(objIDs, mJSON, mReplace) //                  *** Get Reconstructed JSON ***
 		jsonMap := make(map[string]interface{})
 		PE(json.Unmarshal(jsonBytes, &jsonMap))
 		return jsonMap[root], nil
 	}
 
 	resolvers := map[string]interface{}{}
-	resolvers["QueryRoot/xapi"] = fResolver //                                *** PATH : related to <querySchema> ***
-	resolvers["QueryRoot/curriculum"] = fResolver
-	resolvers["QueryRoot/lessonroot"] = fResolver
-	resolvers["QueryRoot/SchoolInfo"] = fResolver
-	resolvers["QueryRoot/SchoolCourseInfo"] = fResolver
-	resolvers["QueryRoot/TimeTableSubject"] = fResolver
-	resolvers["QueryRoot/StaffPersonal"] = fResolver
+	for _, fname := range qSchemaList(qSchemaDir) {
+		resolvers["QueryRoot/"+fname] = fResolver //             *** PATH : related to <querySchema> ***
+	}
 
 	context := map[string]interface{}{}
 	// variables := map[string]interface{}{}
@@ -152,7 +166,7 @@ func Query(objIDs []string, querySchema, queryStr string, variables map[string]i
 	// 	return ""
 	// }
 
-	result := Must(executor.Execute(context, queryStr, variables, ""))
+	result := Must(executor.Execute(context, qTxt, variables, ""))
 	rstJSON = string(Must(json.Marshal(result)).([]byte))
 	// ioutil.WriteFile("temp.json", []byte(rstJSON), 0666)
 	return
