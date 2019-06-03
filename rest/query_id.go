@@ -5,17 +5,25 @@ import (
 )
 
 // IDsByPO :
-func IDsByPO(mapParamPath map[string]string, mapParamValue map[string]interface{}) (IDs []string) {
+func IDsByPO(mParamPath map[string]string, mParamValue map[string]interface{}) (IDs []string) {
 
-	n := len(mapParamValue)
+	// *** remove "" empty string value items from <mParamValue>
+	for k, v := range mParamValue {
+		if sv, ok := v.(string); ok && sv == "" {
+			delete(mParamValue, k)
+		}
+	}
+	// ***
+
+	n := len(mParamValue)
 	idsList := make([][]string, n)
 	for i := 0; i < n; i++ {
 		idsList[i] = []string{}
 	}
 
 	idx := 0
-	for param, value := range mapParamValue {
-		s, _, _, _ := q.Data("", mapParamPath[param], value.(string))
+	for param, value := range mParamValue {
+		s, _, _, _ := q.Data("", mParamPath[param], value.(string))
 		for _, eachID := range s {
 			idsList[idx] = append(idsList[idx], eachID)
 		}

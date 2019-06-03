@@ -1,0 +1,72 @@
+[
+    {
+        "schduleId": "1b6a2b2c-4b06-4c3c-a3c6-97f4437d6ed5",
+        "userId": "Angie",
+        "thelessonId": "fd1513b6-ccd4-4f45-bfca-32a9a073964c",
+        "thecolor": "blue-grey",
+        "thecourse": "Places are similar and different",
+        "lessontimesheet": [
+            {
+                "course_number": 0,
+                "summary": "A",
+                "isDisplay": false,
+                "start": {
+                    "dateTime": "2019-06-12T13:00:00.000+10:00"
+                },
+                "end": {
+                    "dateTime": "2019-06-12T14:00:00.000+10:00"
+                },
+                "description": "Places are similar and different",
+                "color": "blue-grey"
+            },
+            {
+                "course_number": 1,
+                "summary": "B",
+                "isDisplay": true,
+                "start": {
+                    "dateTime": "2019-06-26T15:00:00.000+10:00"
+                },
+                "end": {
+                    "dateTime": "2019-06-26T16:00:00.000+10:00"
+                },
+                "description": "Places are similar and different",
+                "color": "blue-grey"
+            }
+        ]
+    },
+    {
+        "schduleId": "8128d952-80fa-4923-a267-a8514cbc1958",
+        "userId": "Angie",
+        "thelessonId": "f73878b1-8f52-42c8-bff0-8e12293ae462",
+        "thecolor": "blue-grey",
+        "thecourse": "Changing Places",
+        "lessontimesheet": [
+            {
+                "course_number": 0,
+                "summary": "Introduction",
+                "isDisplay": false,
+                "start": {
+                    "dateTime": "2019-06-22T15:00:00.000+10:00"
+                },
+                "end": {
+                    "dateTime": "2019-06-22T16:00:00.000+10:00"
+                },
+                "description": "Changing Places",
+                "color": "blue-grey"
+            },
+            {
+                "course_number": 1,
+                "summary": "Change issue",
+                "isDisplay": true,
+                "start": {
+                    "dateTime": "2019-06-23T14:00:00.000+10:00"
+                },
+                "end": {
+                    "dateTime": "2019-06-23T15:00:00.000+10:00"
+                },
+                "description": "Changing Places",
+                "color": "blue-grey"
+            }
+        ]
+    }
+]

@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	c "../config"
+	gjxy "github.com/cdutwhu/go-gjxy"
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
-	gjxy "github.com/cdutwhu/go-gjxy"
 )
 
 type (
@@ -24,7 +24,7 @@ var (
 	PHE  = u.PanicHandleEx
 	LE   = u.LogOnError
 	Must = u.Must
-	IF = u.IF
+	IF   = u.IF
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf
@@ -38,7 +38,7 @@ var (
 	sJ      = strings.Join
 
 	IArrIntersect = w.IArrIntersect
-	IsJSON = gjxy.IsJSON
+	IsJSON        = gjxy.IsJSON
 
 	e   error
 	CFG *c.Config
@@ -51,3 +51,15 @@ const (
 	PATH_DEL  = " ~ "
 	CHILD_DEL = " + "
 )
+
+// var (
+// 	mPP = map[string]string{
+// 		"fname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName",
+// 		"gname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName",
+// 		"staffid":         "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ StaffPersonalRefId",
+// 		"teachinggroupid": "TeachingGroup ~ -RefId",
+// 		"tgid":            "GradingAssignment ~ TeachingGroupRefId",
+// 		"studentid":       "StudentAttendanceTimeList ~ StudentPersonalRefId",
+// 		"objid":           "xapi ~ object ~ id",
+// 	}
+// )

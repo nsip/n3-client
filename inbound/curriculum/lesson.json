@@ -2,50 +2,75 @@
     {
         "lesson": [
             {
-                "courseid": 0,
+                "course_number": 0,
                 "summary": "A",
                 "editcontent": "Content 1",
                 "isDisplay": false,
-                "url": "GHI",
+                "url": "",
                 "start": {
-                    "dateTime": "test1s"
+                    "dateTime": ""
                 },
                 "end": {
-                    "dateTime": "test1e"
+                    "dateTime": ""
                 }
             },
             {
-                "courseid": 1,
+                "course_number": 1,
                 "editcontent": "",
                 "summary": "B",
-                "isDisplay": false,
-                "url": "DEF",
-                "start": {
-                    "dateTime": "test2s"
-                },
-                "end": {
-                    "dateTime": "test2e"
-                }
-            },
-            {
-                "courseid": 2,
-                "editcontent": "",
-                "summary": "C",
                 "isDisplay": true,
-                "url": "ABC",
+                "url": "",
                 "start": {
-                    "dateTime": "test3s"
+                    "dateTime": ""
                 },
                 "end": {
-                    "dateTime": "test3e"
+                    "dateTime": ""
                 }
             }
         ],
         "userId": "Angie",
-        "lessonId": 1,
+        "lessonId": "fd1513b6-ccd4-4f45-bfca-32a9a073964c",
         "thearea": "hsie",
-        "thecourse": "Sustainable Biomes",
+        "thecourse": "Places are similar and different",
         "thesubject": "geography",
-        "thestage": "5"
+        "thestage": "2",
+        "thedescription": "Places are similar and different"
+    },
+    {
+        "lesson": [
+            {
+                "course_number": 0,
+                "summary": "Introduction",
+                "editcontent": "Content 1",
+                "isDisplay": false,
+                "url": "",
+                "start": {
+                    "dateTime": ""
+                },
+                "end": {
+                    "dateTime": ""
+                }
+            },
+            {
+                "course_number": 1,
+                "editcontent": "",
+                "summary": "Change issue",
+                "isDisplay": true,
+                "url": "",
+                "start": {
+                    "dateTime": ""
+                },
+                "end": {
+                    "dateTime": ""
+                }
+            }
+        ],
+        "userId": "Angie",
+        "lessonId": "f73878b1-8f52-42c8-bff0-8e12293ae462",
+        "thearea": "hsie",
+        "thecourse": "Changing Places",
+        "thesubject": "geography",
+        "thestage": "5",
+        "thedescription": "Changing Places"
     }
 ]

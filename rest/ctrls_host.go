@@ -21,8 +21,45 @@ func InitClient(config *c.Config) {
 	CFG = config
 }
 
-// SendToNode : Send XAPI / SIF to N3-Transport
-func SendToNode(c echo.Context) error {
+// getIDList :
+func getIDList(c echo.Context) error {
+	defer func() {
+		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+			c.JSON(http.StatusBadRequest, msg)
+		})
+	}()
+
+	object := c.QueryParam("object")
+	if object == "" {
+		return c.JSON(http.StatusBadRequest, "<object> must be provided")
+	}
+
+	mPP := map[string]string{}
+	mPV := map[string]interface{}{}
+	switch object {
+	case "StaffPersonal":
+		{
+			mPP["fname"] = "StaffPersonal ~ PersonInfo ~ Name ~ FamilyName"
+			mPP["gname"] = "StaffPersonal ~ PersonInfo ~ Name ~ GivenName"
+			mPV["fname"] = c.QueryParam("fname")
+			mPV["gname"] = c.QueryParam("gname")
+		}
+	case "TeachingGroup":
+		{
+			mPP["fname"] = "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName"
+			mPP["gname"] = "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName"
+			mPV["fname"] = c.QueryParam("fname")
+			mPV["gname"] = c.QueryParam("gname")
+		}
+	default:
+		return c.JSON(http.StatusBadRequest, fSf("<%s>'s id query is not implemented", object))
+	}
+
+	return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV))
+}
+
+// sendToNode : Send Data to N3-Transport
+func sendToNode(c echo.Context) error {
 	defer func() {
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
@@ -40,7 +77,7 @@ func SendToNode(c echo.Context) error {
 
 	data := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
 	if data == "" {
-		return c.JSON(http.StatusNoContent, "Nothing to be sent")
+		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
 
 	IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
@@ -51,8 +88,8 @@ func SendToNode(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
-// GQLRequest : wrapper type to capture GQL input
-type GQLRequest struct {
+// Request : wrapper type to capture GQL input
+type Request struct {
 	Query     string                 `json:"query"`
 	Variables map[string]interface{} `json:"variables"`
 }
@@ -64,26 +101,16 @@ func queryGQL(c echo.Context) error {
 		})
 	}()
 
-	// mPP := map[string]string{
-	// 	"fname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName",
-	// 	"gname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName",
-	// 	"staffid":         "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ StaffPersonalRefId",
-	// 	"teachinggroupid": "TeachingGroup ~ -RefId",
-	// 	"tgid":            "GradingAssignment ~ TeachingGroupRefId",
-	// 	"studentid":       "StudentAttendanceTimeList ~ StudentPersonalRefId",
-	// 	"objid":           "xapi ~ object ~ id",
-	// }
-	mPV := map[string]interface{}{}
-
 	// ********************* POSTMAN client *********************
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
 	// qTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
 
 	// ********************* GRAPHIQL client *********************
-	gqlreq := new(GQLRequest) //
-	PE(c.Bind(gqlreq))        //                            *** ONLY <POST> echo can Bind OK ***
-	qTxt := gqlreq.Query
-	for k, v := range gqlreq.Variables {
+	req := new(Request) //
+	PE(c.Bind(req))     //                            *** ONLY <POST> echo can Bind OK ***
+	qTxt := req.Query
+	mPV := map[string]interface{}{}
+	for k, v := range req.Variables {
 		mPV[k] = v.(string)
 	}
 
@@ -143,8 +170,9 @@ func HostHTTPAsync() {
 
 	// Route
 	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
-	e.POST(CFG.Rest.PathSend, SendToNode)
+	e.POST(CFG.Rest.PathSend, sendToNode)
 	e.POST(CFG.Rest.PathGQL, queryGQL)
+	e.GET("/id/", getIDList)
 
 	// Server
 	e.Start(fSf(":%d", CFG.Rest.Port))
