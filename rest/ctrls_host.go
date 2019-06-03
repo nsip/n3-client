@@ -29,14 +29,25 @@ func SendToNode(c echo.Context) error {
 		})
 	}()
 
-	body := Must(ioutil.ReadAll(c.Request().Body)).([]byte)
-	data := string(body)
-	IDs, nV, nS, nA := send.ToNode(data, "id", "xapi")
+	idmark, dfltRoot := c.QueryParam("idmark"), c.QueryParam("dfltRoot")
+	// fPln(idmark, ":", dfltRoot)
+	if idmark == "" {
+		return c.JSON(http.StatusBadRequest, "<idmark> must be provided")
+	}
+	if dfltRoot == "" {
+		return c.JSON(http.StatusBadRequest, "<dfltRoot> must be provided")
+	}
+
+	data := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
+	if data == "" {
+		return c.JSON(http.StatusNoContent, "Nothing to be sent")
+	}
+
+	IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
 	for _, id := range IDs {
 		g.LCSchema.Remove(id)
 		g.LCJSON.Remove(id)
 	}
-
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 

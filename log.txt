@@ -1,0 +1,27 @@
+
+*** Panic Error *** Fatal : false ***
+2019/06/03 10:44:23 *errors.fundamental subject must be provided
+C:/Users/qmiao/go/src/github.com/cdutwhu/go-util/lazypanic.go:87 (0x51ae40)
+	Must: PanicOnError(err)
+C:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:28 (0x994f49)
+	Terminate: tuple := Must(messages.NewTuple(termID, TERMMARK, objID)).(*pb.SPOTuple)
+C:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:116 (0x995c52)
+	ToNode: Terminate(prevIDv, prevTermIDv, verV) //                              *** object values terminator ***
+C:/Users/qmiao/Desktop/LRU/n3-client/rest/ctrls_host.go:36 (0x9d6300)
+	SendToNode: IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:502 (0x9caa2e)
+	(*Echo).add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:121 (0x9d21cf)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9d5aec)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:119 (0x9d5047)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:613 (0x9c2b24)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7ad66f)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7a9258)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4588b1)
+	goexit: BYTE	$0x90	// NOP

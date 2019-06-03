@@ -8,7 +8,7 @@ Path = "./config.toml"
 
 [Rest]
   Port = 1323
-  PathSend = "/tonode"  
+  PathSend = "/pub"  
   PathGQL = "/gql"
 
 [RPC]
@@ -17,3 +17,4 @@ Path = "./config.toml"
   Port = 5777
   Ctx = "demo"
   CtxMeta = "demo-meta"
+

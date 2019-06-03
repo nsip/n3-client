@@ -8,7 +8,7 @@ Path = "./config.toml"
 
 [Rest]
   Port = 1323
-  PathSend = "/tonode"
+  PathSend = "/pub"
   PathGQL = "/gql"   
 
 [RPC]
