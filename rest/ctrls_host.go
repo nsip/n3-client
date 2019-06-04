@@ -29,7 +29,7 @@ func getIDList(c echo.Context) error {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
-	
+
 	params := c.QueryParams()
 	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
 	if object, ok := params["object"]; ok {
@@ -112,7 +112,7 @@ func queryGQL(c echo.Context) error {
 	if id, ok := mPV["objid"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
 		IDs = append(IDs, id.(string))
 		_, _, o, _ := q.Data(id.(string), "")
-		if len(o) > 0 {
+		if len(o) > 0 && o[0] != "" {
 			root = o[0]
 		} else {
 			return c.JSON(http.StatusAccepted, "id provided is not in db")
