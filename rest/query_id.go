@@ -43,5 +43,6 @@ func IDsByPO(mParamPath map[string]string, mParamValue map[string]interface{}) (
 		}
 	}
 
+	IDs = IArrRmRep(Strs(IDs)).([]string)
 	return
 }

@@ -11,6 +11,7 @@ func TestLoad(t *testing.T) {
 	fPln(cfg.Filewatcher)
 	fPln(cfg.Global.ErrLog)
 	fPln(cfg.RPC.Ctx)
+	fPln(cfg.Query.ParamPathDir)
 }
 
 func TestSave(t *testing.T) {

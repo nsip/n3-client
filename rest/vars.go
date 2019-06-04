@@ -39,6 +39,7 @@ var (
 	sSpl    = strings.Split
 
 	IArrIntersect = w.IArrIntersect
+	IArrRmRep     = w.IArrRmRep
 	IsJSON        = gjxy.IsJSON
 
 	e   error

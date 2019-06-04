@@ -1,6 +1,6 @@
 [
     {
-        "schduleId": "1b6a2b2c-4b06-4c3c-a3c6-97f4437d6ed5",
+        "scheduleId": "1b6a2b2c-4b06-4c3c-a3c6-97f4437d6ed5",
         "userId": "Angie",
         "thelessonId": "fd1513b6-ccd4-4f45-bfca-32a9a073964c",
         "thecolor": "blue-grey",
@@ -35,7 +35,7 @@
         ]
     },
     {
-        "schduleId": "8128d952-80fa-4923-a267-a8514cbc1958",
+        "scheduleId": "8128d952-80fa-4923-a267-a8514cbc1958",
         "userId": "Angie",
         "thelessonId": "f73878b1-8f52-42c8-bff0-8e12293ae462",
         "thecolor": "blue-grey",
