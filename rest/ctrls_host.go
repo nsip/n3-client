@@ -29,15 +29,14 @@ func getIDList(c echo.Context) error {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
-
-	parampathDir := "./rest/parampath/"
+	
 	params := c.QueryParams()
 	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
 	if object, ok := params["object"]; ok {
-		files := Must(ioutil.ReadDir(parampathDir)).([]os.FileInfo)
+		files := Must(ioutil.ReadDir(CFG.Query.ParamPathDir)).([]os.FileInfo)
 		for _, f := range files {
 			if Str(f.Name()).HP(object[0] + ".") {
-				data := string(Must(ioutil.ReadFile(parampathDir + f.Name())).([]byte))
+				data := string(Must(ioutil.ReadFile(CFG.Query.ParamPathDir + f.Name())).([]byte))
 				mKV = Str(data).KeyValueMap('\n', ':', '#')
 				break
 			}
@@ -122,24 +121,9 @@ func queryGQL(c echo.Context) error {
 		return c.JSON(http.StatusAccepted, "<objid> is missing")
 	}
 
-	// switch {
-	// case sCtn(qTxt, "TeachingGroupByName(") || sCtn(qTxt, "TeachingGroupByStaffID("):
-	// 	IDs, rmStructs = IDsByPO(mPP, mPV), []string{"StudentList"}
-	// case sCtn(qTxt, "TeachingGroup("):
-	// 	IDs = IDsByPO(mPP, mPV)
-	// case sCtn(qTxt, "GradingAssignment("):
-	// 	IDs = IDsByPO(mPP, mPV)
-	// case sCtn(qTxt, "StudentAttendance("):
-	// 	IDs = IDsByPO(mPP, mPV)
-	// case sCtn(qTxt, "QueryXAPI("):
-	// 	IDs = IDsByPO(mPP, mPV)
-	// }
-
-	qSchemaDir := "./gql/qSchema/"
-	qSchema := string(Must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
-
+	qSchema := string(Must(ioutil.ReadFile(CFG.Query.SchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
 	if len(IDs) >= 1 {
-		rst := gql.Query(IDs, qSchema, qSchemaDir, qTxt, mPV, rmStructs, mReplace) // *** rst is already JSON string, so use String to return ***
+		rst := gql.Query(IDs, qSchema, CFG.Query.SchemaDir, qTxt, mPV, rmStructs, mReplace) // *** rst is already JSON string, so use String to return ***
 		return c.String(http.StatusAccepted, rst)
 	}
 
@@ -163,8 +147,8 @@ func HostHTTPAsync() {
 	}))
 
 	// Route
-	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
-	e.GET("/id/", getIDList)
+	e.GET(CFG.Rest.PathTest, func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
+	e.GET(CFG.Rest.PathID, getIDList)
 	e.POST(CFG.Rest.PathSend, sendToNode)
 	e.POST(CFG.Rest.PathGQL, queryGQL)
 

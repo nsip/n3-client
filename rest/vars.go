@@ -52,15 +52,3 @@ const (
 	PATH_DEL  = " ~ "
 	CHILD_DEL = " + "
 )
-
-// var (
-// 	mPP = map[string]string{
-// 		"fname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName",
-// 		"gname":           "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName",
-// 		"staffid":         "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ StaffPersonalRefId",
-// 		"teachinggroupid": "TeachingGroup ~ -RefId",
-// 		"tgid":            "GradingAssignment ~ TeachingGroupRefId",
-// 		"studentid":       "StudentAttendanceTimeList ~ StudentPersonalRefId",
-// 		"objid":           "xapi ~ object ~ id",
-// 	}
-// )

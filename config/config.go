@@ -16,6 +16,8 @@ type filewatcher struct {
 
 type rest struct {
 	Port     int
+	PathTest string
+	PathID   string
 	PathSend string
 	PathGQL  string
 }
@@ -28,6 +30,11 @@ type rpc struct {
 	CtxMeta   string
 }
 
+type query struct {
+	SchemaDir    string
+	ParamPathDir string
+}
+
 // Config is toml
 type Config struct {
 	Path        string
@@ -35,6 +42,7 @@ type Config struct {
 	Filewatcher filewatcher
 	Rest        rest
 	RPC         rpc
+	Query       query
 }
 
 // FromFile :

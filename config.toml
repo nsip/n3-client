@@ -8,6 +8,8 @@ Path = "./config.toml"
 
 [Rest]
   Port = 1323
+  PathTest = "/"
+  PathID = "/id"
   PathSend = "/pub"  
   PathGQL = "/gql"
 
@@ -18,3 +20,7 @@ Path = "./config.toml"
   Ctx = "demo"
   CtxMeta = "demo-meta"
 
+[Query]
+  SchemaDir = "./gql/qSchema/"
+  ParamPathDir = "./rest/parampath/"
+  
