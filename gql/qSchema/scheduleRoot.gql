@@ -1,3 +1,0 @@
-type QueryRoot {    
-    scheduleRoot: scheduleRoot    
-}

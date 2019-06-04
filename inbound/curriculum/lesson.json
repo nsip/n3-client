@@ -1,6 +1,6 @@
 [
     {
-        "lesson": [
+        "lessonList": [
             {
                 "course_number": 0,
                 "summary": "A",
@@ -37,7 +37,7 @@
         "thedescription": "Places are similar and different"
     },
     {
-        "lesson": [
+        "lessonList": [
             {
                 "course_number": 0,
                 "summary": "Introduction",
