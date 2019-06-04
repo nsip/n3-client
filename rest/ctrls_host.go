@@ -3,6 +3,7 @@ package rest
 import (
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	c "../config"
 	g "../global"
@@ -29,33 +30,26 @@ func getIDList(c echo.Context) error {
 		})
 	}()
 
-	object := c.QueryParam("object")
-	if object == "" {
-		return c.JSON(http.StatusBadRequest, "<object> must be provided")
-	}
-
-	mPP := map[string]string{}
-	mPV := map[string]interface{}{}
-	switch object {
-	case "StaffPersonal":
-		{
-			mPP["fname"] = "StaffPersonal ~ PersonInfo ~ Name ~ FamilyName"
-			mPP["gname"] = "StaffPersonal ~ PersonInfo ~ Name ~ GivenName"
-			mPV["fname"] = c.QueryParam("fname")
-			mPV["gname"] = c.QueryParam("gname")
+	parampathDir := "./rest/parampath/"
+	params := c.QueryParams()
+	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
+	if object, ok := params["object"]; ok {
+		files := Must(ioutil.ReadDir(parampathDir)).([]os.FileInfo)
+		for _, f := range files {
+			if Str(f.Name()).HP(object[0] + ".") {
+				data := string(Must(ioutil.ReadFile(parampathDir + f.Name())).([]byte))
+				mKV = Str(data).KeyValueMap('\n', ':', '#')
+				break
+			}
 		}
-	case "TeachingGroup":
-		{
-			mPP["fname"] = "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName"
-			mPP["gname"] = "TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName"
-			mPV["fname"] = c.QueryParam("fname")
-			mPV["gname"] = c.QueryParam("gname")
+		for k, v := range params {
+			if _, ok := mKV[k]; ok {
+				mPP[k], mPV[k] = mKV[k], v[0]
+			}
 		}
-	default:
-		return c.JSON(http.StatusBadRequest, fSf("<%s>'s id query is not implemented", object))
+		return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV))
 	}
-
-	return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV))
+	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }
 
 // sendToNode : Send Data to N3-Transport
@@ -142,7 +136,7 @@ func queryGQL(c echo.Context) error {
 	// }
 
 	qSchemaDir := "./gql/qSchema/"
-	qSchema := string(Must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) //  *** content should be related to resolver path ***
+	qSchema := string(Must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
 
 	if len(IDs) >= 1 {
 		rst := gql.Query(IDs, qSchema, qSchemaDir, qTxt, mPV, rmStructs, mReplace) // *** rst is already JSON string, so use String to return ***
@@ -154,7 +148,7 @@ func queryGQL(c echo.Context) error {
 
 // ************************************************ HOST ************************************************ //
 
-// HostHTTPAsync : Host a HTTP Server for publishing SIF(xml) XAPI(json) string(request body) to <n3-transport> grpc Server
+// HostHTTPAsync : Host a HTTP Server for publishing xml json string(request body) to <n3-transport> grpc Server
 func HostHTTPAsync() {
 	e := echo.New()
 
@@ -170,9 +164,9 @@ func HostHTTPAsync() {
 
 	// Route
 	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
+	e.GET("/id/", getIDList)
 	e.POST(CFG.Rest.PathSend, sendToNode)
 	e.POST(CFG.Rest.PathGQL, queryGQL)
-	e.GET("/id/", getIDList)
 
 	// Server
 	e.Start(fSf(":%d", CFG.Rest.Port))

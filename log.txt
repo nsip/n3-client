@@ -1,0 +1,123 @@
+
+*** Panic Error *** Fatal : false ***
+2019/06/04 11:32:32 *status.statusError rpc error: code = Unavailable desc = transport is closing
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:65 (0x8c5e1c)
+	(*Client).Query: PE(err)
+C:/Users/qmiao/Desktop/LRU/n3-client/query/query.go:34 (0x8dd093)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/qmiao/Desktop/LRU/n3-client/query/query.go:42 (0x9d86bd)
+	IDsByPO: return query(1, spo)
+C:/Users/qmiao/Desktop/LRU/n3-client/query/query.go:42 (0x9d8691)
+	Data: return query(1, spo)
+C:/Users/qmiao/Desktop/LRU/n3-client/rest/ctrls_host.go:53 (0x9d681d)
+	getIDList: return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV))
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:502 (0x9cacbe)
+	(*Echo).add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:121 (0x9d245f)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9d5d7c)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:119 (0x9d52d7)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:613 (0x9c2db4)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7ad66f)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7a9258)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4588b1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/06/04 11:32:51 *errors.withStack unable to create stream connection to server: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.76.15:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:29 (0xac7515)
+	NewClient: PE1(err, "unable to create stream connection to server")
+c:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:50 (0xbeccef)
+	InitClient: g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+c:/Users/qmiao/Desktop/LRU/n3-client/main_test.go:16 (0xc5101b)
+	TestMain: send.InitClient(CFG)
+C:/Go/src/testing/testing.go:865 (0x559769)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x465141)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/06/04 11:33:21 *errors.withStack unable to create stream connection to server: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.76.15:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:29 (0xac7515)
+	NewClient: PE1(err, "unable to create stream connection to server")
+c:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:50 (0xbeccef)
+	InitClient: g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+c:/Users/qmiao/Desktop/LRU/n3-client/main_test.go:16 (0xc5101b)
+	TestMain: send.InitClient(CFG)
+C:/Go/src/testing/testing.go:865 (0x559769)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x465141)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/06/04 11:36:09 *errors.withStack unable to create stream connection to server: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.76.15:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:29 (0xac7515)
+	NewClient: PE1(err, "unable to create stream connection to server")
+c:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:50 (0xbeccef)
+	InitClient: g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+c:/Users/qmiao/Desktop/LRU/n3-client/main_test.go:16 (0xc5102b)
+	TestMain: send.InitClient(CFG)
+C:/Go/src/testing/testing.go:865 (0x559769)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x465141)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/06/04 11:36:27 *errors.withStack unable to create stream connection to server: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.76.15:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:29 (0xac7515)
+	NewClient: PE1(err, "unable to create stream connection to server")
+c:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:50 (0xbeccef)
+	InitClient: g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+c:/Users/qmiao/Desktop/LRU/n3-client/main_test.go:16 (0xc5102b)
+	TestMain: send.InitClient(CFG)
+C:/Go/src/testing/testing.go:865 (0x559769)
+	tRunner: fn(t)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x465141)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/06/04 11:36:47 *errors.withStack unable to create stream connection to server: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.76.15:5777: connectex: No connection could be made because the target machine actively refused it."
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:29 (0x8c5786)
+	NewClient: PE1(err, "unable to create stream connection to server")
+C:/Users/qmiao/Desktop/LRU/n3-client/send/send.go:50 (0x9956dd)
+	InitClient: g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+C:/Users/qmiao/Desktop/LRU/n3-client/main.go:14 (0x9dd79d)
+	main: send.InitClient(CFG)
+C:/Go/src/runtime/proc.go:200 (0x43084c)
+	main: fn()
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4588b1)
+	goexit: BYTE	$0x90	// NOP
+
+*** Panic Error *** Fatal : false ***
+2019/06/04 11:38:59 *status.statusError rpc error: code = Unavailable desc = transport is closing
+C:/Users/qmiao/go/src/github.com/nsip/n3-messages/n3grpc/client.go:65 (0x8c5e1c)
+	(*Client).Query: PE(err)
+C:/Users/qmiao/Desktop/LRU/n3-client/query/query.go:34 (0x8dd093)
+	query: for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, ctx) {
+C:/Users/qmiao/Desktop/LRU/n3-client/query/query.go:42 (0x9d86bd)
+	IDsByPO: return query(1, spo)
+C:/Users/qmiao/Desktop/LRU/n3-client/query/query.go:42 (0x9d8691)
+	Data: return query(1, spo)
+C:/Users/qmiao/Desktop/LRU/n3-client/rest/ctrls_host.go:52 (0x9d681d)
+	getIDList: return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV))
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:502 (0x9cacbe)
+	(*Echo).add.func1: return h(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/cors.go:121 (0x9d245f)
+	CORSWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/recover.go:78 (0x9d5d7c)
+	RecoverWithConfig.func1.1: return next(c)
+C:/Users/qmiao/go/src/github.com/labstack/echo/middleware/logger.go:119 (0x9d52d7)
+	LoggerWithConfig.func2.1: if err = next(c); err != nil {
+C:/Users/qmiao/go/src/github.com/labstack/echo/echo.go:613 (0x9c2db4)
+	(*Echo).ServeHTTP: if err := h(c); err != nil {
+C:/Go/src/net/http/server.go:2774 (0x7ad66f)
+	serverHandler.ServeHTTP: handler.ServeHTTP(rw, req)
+C:/Go/src/net/http/server.go:1878 (0x7a9258)
+	(*conn).serve: serverHandler{c.server}.ServeHTTP(w, w.req)
+C:/Go/src/runtime/asm_amd64.s:1337 (0x4588b1)
+	goexit: BYTE	$0x90	// NOP

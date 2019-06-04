@@ -36,6 +36,7 @@ var (
 	sCtn    = strings.Contains
 	sRepAll = strings.ReplaceAll
 	sJ      = strings.Join
+	sSpl    = strings.Split
 
 	IArrIntersect = w.IArrIntersect
 	IsJSON        = gjxy.IsJSON

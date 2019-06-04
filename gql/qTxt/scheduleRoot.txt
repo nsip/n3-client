@@ -1,0 +1,22 @@
+{
+    scheduleRoot {
+        schduleId
+        userId
+        thelessonId
+        thecolor
+        thecourse
+        lessontimesheet {
+            course_number
+            summary
+            isDisplay
+            start {
+                dateTime
+            }
+            end {
+                dateTime
+            }
+            description
+            color
+        }
+    }    
+}

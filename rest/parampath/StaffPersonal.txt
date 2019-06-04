@@ -1,0 +1,3 @@
+fname : StaffPersonal ~ PersonInfo ~ Name ~ FamilyName
+gname : StaffPersonal ~ PersonInfo ~ Name ~ GivenName
+    

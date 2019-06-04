@@ -1,0 +1,2 @@
+fname : TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ FamilyName
+gname : TeachingGroup ~ TeacherList ~ TeachingGroupTeacher ~ Name ~ GivenName
