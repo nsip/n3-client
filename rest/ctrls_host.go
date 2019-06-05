@@ -73,6 +73,8 @@ func sendToNode(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
 
+	ioutil.WriteFile("./debug.json", []byte(data), 0666)
+
 	IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
 	for _, id := range IDs {
 		g.LCSchema.Remove(id)

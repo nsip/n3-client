@@ -29,5 +29,5 @@ type (
 const (
 	XML SQDType = iota
 	JSON	
-	LRUCOUNT = 1024
+	LRUCOUNT = 4096
 )

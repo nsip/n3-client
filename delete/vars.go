@@ -9,14 +9,14 @@ import (
 )
 
 var (
-	PE         = u.PanicOnError
-	PE1        = u.PanicOnError1
-	PC         = u.PanicOnCondition
-	PH         = u.PanicHandle
-	PHE        = u.PanicHandleEx
-	LE         = u.LogOnError
-	Must       = u.Must
-	IF         = u.IF	
+	PE   = u.PanicOnError
+	PE1  = u.PanicOnError1
+	PC   = u.PanicOnCondition
+	PH   = u.PanicHandle
+	PHE  = u.PanicHandleEx
+	LE   = u.LogOnError
+	Must = u.Must
+	IF   = u.IF
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf

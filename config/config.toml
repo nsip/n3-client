@@ -15,7 +15,7 @@ Path = "./config.toml"
 
 [RPC]
   Namespace = "F7AoxkA2RTtrmjCg6nEuCtvSp5C6sp6R5RCjUKaXYkpp"
-  Server = "192.168.76.15"
+  Server = "192.168.76.37"
   Port = 5777
   Ctx = "demo"
   CtxMeta = "demo-meta"

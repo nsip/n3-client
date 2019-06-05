@@ -1,0 +1,36 @@
+{
+    "lessonId": "42ef79df-fd4f-40fd-a841-9a9bca4bd0e8",
+    "lessonList": [
+        {
+            "course_number": 0,
+            "summary": "Into",
+            "editcontent": "Content 1",
+            "isDisplay": false,
+            "url": "",
+            "start": {
+                "dateTime": ""
+            },
+            "end": {
+                "dateTime": ""
+            }
+        },
+        {
+            "course_number": 1,
+            "editcontent": "",
+            "summary": "Sustainable Biomes Concept",
+            "isDisplay": true,
+            "url": "",
+            "start": {
+                "dateTime": ""
+            },
+            "end": {
+                "dateTime": ""
+            }
+        }
+    ],
+    "thearea": "hsie",
+    "thecourse": "Sustainable Biomes",
+    "thesubject": "geography",
+    "thestage": "5",
+    "userId": "Angie"
+}
