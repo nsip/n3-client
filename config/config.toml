@@ -10,8 +10,9 @@ Path = "./config.toml"
   Port = 1323
   PathTest = "/"
   PathID = "/id"
-  PathSend = "/pub"
+  PathPub = "/pub"
   PathGQL = "/gql"   
+  PathDel = "/del"
 
 [RPC]
   Namespace = "F7AoxkA2RTtrmjCg6nEuCtvSp5C6sp6R5RCjUKaXYkpp"

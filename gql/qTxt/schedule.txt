@@ -1,5 +1,5 @@
 {
-    scheduleRoot {
+    schedule {
         schduleId
         userId
         thelessonId

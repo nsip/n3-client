@@ -6,6 +6,7 @@ import (
 	"os"
 
 	c "../config"
+	d "../delete"
 	g "../global"
 	"../gql"
 	q "../query"
@@ -46,13 +47,34 @@ func getIDList(c echo.Context) error {
 				mPP[k], mPV[k] = mKV[k], v[0]
 			}
 		}
-		return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV))
+
+		if all, ok := params["all"]; ok && all[0] == "true" {
+			return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV, true))
+		}
+		return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV, false))
 	}
 	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }
 
-// sendToNode : Send Data to N3-Transport
-func sendToNode(c echo.Context) error {
+// delToNode :
+func delToNode(c echo.Context) error {
+	defer func() {
+		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+			c.JSON(http.StatusBadRequest, msg)
+		})
+	}()
+
+	idList := c.QueryParams()["id"]
+	d.DelBat(idList...)
+	for _, id := range idList {
+		g.LCSchema.Remove(id)
+		g.LCJSON.Remove(id)
+	}
+	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(idList)))
+}
+
+// pubToNode : Send Data to N3-Transport
+func pubToNode(c echo.Context) error {
 	defer func() {
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
@@ -99,6 +121,8 @@ func queryGQL(c echo.Context) error {
 	// ********************* POSTMAN client *********************
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
 	// qTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
+
+	fPln(":::", c.QueryParam("objid"))
 
 	// ********************* GRAPHIQL client *********************
 	req := new(Request) //
@@ -151,8 +175,9 @@ func HostHTTPAsync() {
 	// Route
 	e.GET(CFG.Rest.PathTest, func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
 	e.GET(CFG.Rest.PathID, getIDList)
-	e.POST(CFG.Rest.PathSend, sendToNode)
+	e.POST(CFG.Rest.PathPub, pubToNode)
 	e.POST(CFG.Rest.PathGQL, queryGQL)
+	e.POST(CFG.Rest.PathDel, delToNode)
 
 	// Server
 	e.Start(fSf(":%d", CFG.Rest.Port))

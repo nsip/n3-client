@@ -5,7 +5,7 @@ import (
 )
 
 // IDsByPO :
-func IDsByPO(mParamPath map[string]string, mParamValue map[string]interface{}) (IDs []string) {
+func IDsByPO(mParamPath map[string]string, mParamValue map[string]interface{}, all bool) (IDs []string) {
 
 	// *** remove "" empty string value items from <mParamValue>
 	for k, v := range mParamValue {
@@ -23,7 +23,7 @@ func IDsByPO(mParamPath map[string]string, mParamValue map[string]interface{}) (
 
 	idx := 0
 	for param, value := range mParamValue {
-		s, _, _, _ := q.Data("", mParamPath[param], value.(string))
+		s, _, _, _ := q.Data(IF(all, "*", "").(string), mParamPath[param], value.(string))
 		for _, eachID := range s {
 			idsList[idx] = append(idsList[idx], eachID)
 		}

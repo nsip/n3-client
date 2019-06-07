@@ -18,8 +18,9 @@ type rest struct {
 	Port     int
 	PathTest string
 	PathID   string
-	PathSend string
+	PathPub  string
 	PathGQL  string
+	PathDel  string
 }
 
 type rpc struct {

@@ -1,6 +1,6 @@
 {
-    lessonRoot {
-        lesson {
+    lesson {
+        lessonList {
             courseid
             editcontent
             summary
