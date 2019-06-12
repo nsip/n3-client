@@ -32,7 +32,7 @@ var (
 	XMLSegsCount  = gjxy.XMLSegsCount
 	XMLFamilyTree = gjxy.XMLFamilyTree
 	XMLCntInfo    = gjxy.XMLCntInfo
-	IsJSON = gjxy.IsJSON
+	IsJSON        = gjxy.IsJSON
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf
@@ -57,6 +57,7 @@ const (
 	CHILD_DEL = " + "
 	ALL       = w.ALL
 	LAST      = w.LAST
+	QSingle   = w.QSingle
 	DT_XML    = xjy.DT_XML
 	DT_JSON   = xjy.DT_JSON
 )

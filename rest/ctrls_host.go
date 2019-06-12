@@ -126,7 +126,7 @@ func queryGQL(c echo.Context) error {
 
 	// ********************* GRAPHIQL client *********************
 	req := new(Request) //
-	PE(c.Bind(req))     //                            *** ONLY <POST> echo can Bind OK ***
+	PE(c.Bind(req))     //                   *** ONLY <POST> echo can Bind OK ***
 	qTxt := req.Query
 	mPV := map[string]interface{}{}
 	for k, v := range req.Variables {

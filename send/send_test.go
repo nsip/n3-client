@@ -25,9 +25,9 @@ func TestToNode(t *testing.T) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	TestN3LoadConfig(t)
 
-	datafile := "../inbound/sif/sif.json" //             *** change file ***
+	datafile := "../inbound/hsie/geography/stage2/content.json" //             *** change file ***
 	data := string(Must(ioutil.ReadFile(datafile)).([]byte))
-	IDs, _, _, _ := ToNode(data, "RefId", "sif") //      *** change <idmark>, <default root> ***
+	IDs, _, _, _ := ToNode(data, "id", "hsie") //                        *** change <idmark>, <default root> ***
 	time.Sleep(1 * time.Second)
 	for _, id := range IDs {
 		fPln("sent:", id)

@@ -91,7 +91,7 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 			continue
 		}
 
-		queryObject(objID)         //    *** GET root, mapStruct, mapArray, mapValue ***
+		queryObject(objID)         //    *** GET root, mStruct, mArray, mValue ***
 		modStructMap(rmStructs...) //    *** eliminate some unnecessary properties ***
 
 		if len(mStruct) == 0 || len(mValue) == 0 {

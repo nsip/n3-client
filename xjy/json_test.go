@@ -11,8 +11,8 @@ func TestJSONGetObjID(t *testing.T) {
 	cfg := c.FromFile("./config.toml", "../config/config.toml")
 	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 	jsonbytes := Must(ioutil.ReadFile("./files/sample.json")).([]byte)
-	id, autoID := JSONGetObjID(string(jsonbytes), "id", "DefaultRoot", PATH_DEL)
-	fPln(id, autoID)
+	id, autoID, addRoot := JSONGetObjID(string(jsonbytes), "id", "DefaultRoot", PATH_DEL)
+	fPln(id, autoID, addRoot)
 }
 
 func TestJSONScanObjects(t *testing.T) {
