@@ -1,4 +1,4 @@
-package rest
+package preprocess
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 
 type (
 	Str  = w.Str
-	Strs = w.Strs
+	I32s = w.I32s
 )
 
 var (
@@ -26,30 +26,31 @@ var (
 	Must = u.Must
 	IF   = u.IF
 
+	XMLAttributes = gjxy.XMLAttributes
+	XMLSegPos     = gjxy.XMLSegPos
+	XMLSegsCount  = gjxy.XMLSegsCount
+	XMLFamilyTree = gjxy.XMLFamilyTree
+	XMLCntInfo    = gjxy.XMLCntInfo
+	IsJSON        = gjxy.IsJSON
+
 	fPln = fmt.Println
 	fPf  = fmt.Printf
 	fEf  = fmt.Errorf
 	fSf  = fmt.Sprintf
 
 	lPln = log.Println
+	LPln = lPln
 
-	sCtns   = strings.Contains
-	sRepAll = strings.ReplaceAll
-	sJ      = strings.Join
-	sSpl    = strings.Split
-
-	IArrIntersect = w.IArrIntersect
-	IArrRmRep     = w.IArrRmRep
-	IsJSON        = gjxy.IsJSON
+	sCtns = strings.Contains
+	sJ    = strings.Join
+	sCnt  = strings.Count
 
 	e   error
 	CFG *c.Config
-	ver int64 = 1
 )
 
 const (
-	TERMMARK  = "--------------------------------------"
-	DELAY     = 2000
-	PATH_DEL  = " ~ "
-	CHILD_DEL = " + "
+	ALL     = w.ALL
+	LAST    = w.LAST
+	QSingle = w.QSingle
 )

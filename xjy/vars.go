@@ -50,16 +50,16 @@ var (
 	Xstr2Y = gjxy.Xstr2Y
 	Jstr2Y = gjxy.Jstr2Y
 
-	sI  = strings.Index
-	sLI = strings.LastIndex
-	sT  = strings.Trim
-	sTL = strings.TrimLeft
-	sTR = strings.TrimRight
-	sHP = strings.HasPrefix
-	sHS = strings.HasSuffix
-	sFF = strings.FieldsFunc
-	sC  = strings.Contains
-	sJ  = strings.Join
+	sI    = strings.Index
+	sLI   = strings.LastIndex
+	sT    = strings.Trim
+	sTL   = strings.TrimLeft
+	sTR   = strings.TrimRight
+	sHP   = strings.HasPrefix
+	sHS   = strings.HasSuffix
+	sFF   = strings.FieldsFunc
+	sCtns = strings.Contains
+	sJ    = strings.Join
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf

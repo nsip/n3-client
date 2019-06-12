@@ -19,16 +19,13 @@ func TestJSONScanObjects(t *testing.T) {
 	cfg := c.FromFile("./config.toml", "../config/config.toml")
 	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 
-	xapibytes := Must(ioutil.ReadFile("./files/sample.json")).([]byte)
-	xapi := Str(xapibytes)
-	xapi.SetEnC()
-
-	mapStructRecord := map[string][]string{}
+	data := string(Must(ioutil.ReadFile("./files/content.json")).([]byte))
+	mStructRecord := map[string][]string{}
 	procIdx := 1
-	JSONObjScan(xapi.V(), "id", "ROOT",
+	JSONObjScan(data, "id", "ROOT",
 		func(p, id string, v []string, lastObjTuple bool) {
-			if _, ok := mapStructRecord[p]; !ok {
-				mapStructRecord[p] = v
+			if _, ok := mStructRecord[p]; !ok {
+				mStructRecord[p] = v
 				fPf("S%3d ---> %-70s:: %s\n", procIdx, p, sJ(v, CHILD_DEL))
 				procIdx++
 			}

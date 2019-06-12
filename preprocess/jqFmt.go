@@ -1,4 +1,4 @@
-package send
+package preprocess
 
 import (
 	"os"
@@ -19,7 +19,8 @@ func prepareJQ(jqDirs ...string) {
 	PE(os.Chdir(jqDir))
 }
 
-func fmtJSONStr(json string, jqDirs ...string) string {
+// FmtJSONStr :
+func FmtJSONStr(json string, jqDirs ...string) string {
 	prepareJQ(jqDirs...)
 	if !IsJSON(json) {
 		return ""
@@ -30,7 +31,8 @@ func fmtJSONStr(json string, jqDirs ...string) string {
 	return string(output)
 }
 
-func fmtJSONFile(file string, jqDirs ...string) string {
+// FmtJSONFile : <file> is the <relative path> to <jq>
+func FmtJSONFile(file string, jqDirs ...string) string {
 	prepareJQ(jqDirs...)
 	cmdstr := "cat " + file + ` | jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)

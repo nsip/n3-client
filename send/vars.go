@@ -42,8 +42,9 @@ var (
 	lPln = log.Println
 	LPln = lPln
 
-	sC = strings.Contains
-	sJ = strings.Join
+	sCtns = strings.Contains
+	sJ    = strings.Join
+	sCnt  = strings.Count
 
 	e   error
 	CFG *c.Config
