@@ -11,6 +11,6 @@ func TestCheck(t *testing.T) {
 	fPln(hasSQuoteInValue(string(bytes)))
 	// fPln(hasHyphen(string(bytes)))
 
-	data := FmtJSONFile("../xjy/files/content.json", "./")
+	data := FmtJSONFile("../../xjy/files/content.json", "./util/")
 	fPln(data)
 }

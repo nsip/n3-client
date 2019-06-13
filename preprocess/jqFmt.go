@@ -19,8 +19,10 @@ func prepareJQ(jqDirs ...string) {
 	PE(os.Chdir(jqDir))
 }
 
-// FmtJSONStr :
+// FmtJSONStr : <json string> must not have single quote <'>
 func FmtJSONStr(json string, jqDirs ...string) string {
+	dir := Must(os.Getwd()).(string)
+	defer func() { PE(os.Chdir(dir)) }()
 	prepareJQ(jqDirs...)
 	if !IsJSON(json) {
 		return ""
@@ -33,6 +35,8 @@ func FmtJSONStr(json string, jqDirs ...string) string {
 
 // FmtJSONFile : <file> is the <relative path> to <jq>
 func FmtJSONFile(file string, jqDirs ...string) string {
+	dir := Must(os.Getwd()).(string)
+	defer func() { PE(os.Chdir(dir)) }()
 	prepareJQ(jqDirs...)
 	cmdstr := "cat " + file + ` | jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)

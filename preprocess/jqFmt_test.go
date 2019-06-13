@@ -1,15 +1,14 @@
 package preprocess
 
 import (
-	"io/ioutil"
 	"testing"
 )
 
 func TestJQ(t *testing.T) {
-
-	data := string(Must(ioutil.ReadFile("../xjy/files/content.json")).([]byte))
-	data = FmtJSONStr(data, "./")
-	fPln(data)
+	// data := string(Must(ioutil.ReadFile("../xjy/files/content.json")).([]byte))
+	// data = FmtJSONStr(data, "./util/")
+	// fPln(data)
 	fPln(" **************** ")
-	//fPln(FmtJSONFile("../xjy/files/content.json", "./"))
+	fPln(FmtJSONFile("../../xjy/files/content.json", "./util/"))
+	fPln(FmtJSONFile("../sample.json", "./util/"))
 }
