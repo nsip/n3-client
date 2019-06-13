@@ -11,7 +11,10 @@ func TestCheck(t *testing.T) {
 	fPln("hasColonInValue", hasColonInValue(json))
 	fPln("hasSQuoteInValue", hasSQuoteInValue(json))
 	// fPln(hasHyphen(string(bytes)))
-	fPln(FmtJSONFile("../"+file, "./util/"))	
+	json1 := FmtJSONFile("../"+file, "./util/")
+	json2 := FmtJSONStr(json, "./util/")
+	PC(json1 != json2, fEf("[error in FmtJSONFile or FmtJSONStr]"))
+	fPln(json1)
 	fPln(" ***** ")
-	// fPln(FmtJSONStr(json, "./util/"))
+	fPln(json2)
 }

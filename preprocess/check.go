@@ -5,7 +5,7 @@ func hasColonInValue(str string) bool {
 }
 
 func hasSQuoteInValue(str string) bool {
-	return sCtns(str, "'")
+	return Str(str).Contains("'")	
 }
 
 // func hasHyphenInTag(str string) bool {
