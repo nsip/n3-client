@@ -30,36 +30,24 @@ var (
 
 	min = w.Min
 
-	JSONXPathValue = gjxy.JSONXPathValue
-	JSONWrapRoot   = gjxy.JSONWrapRoot
-	JSONArrInfo    = gjxy.JSONArrInfo
-	IsJSONArray    = gjxy.IsJSONArray
-	IsJSONSingle   = gjxy.IsJSONSingle
-
-	XMLAttributes = gjxy.XMLAttributes
-	XMLSegPos     = gjxy.XMLSegPos
-	XMLSegsCount  = gjxy.XMLSegsCount
-	XMLFamilyTree = gjxy.XMLFamilyTree
-	XMLCntInfo    = gjxy.XMLCntInfo
-
+	JSONXPathValue        = gjxy.JSONXPathValue
+	JSONWrapRoot          = gjxy.JSONWrapRoot
+	JSONArrInfo           = gjxy.JSONArrInfo
+	IsJSONArray           = gjxy.IsJSONArray
+	IsJSONSingle          = gjxy.IsJSONSingle
+	XMLAttributes         = gjxy.XMLAttributes
+	XMLSegPos             = gjxy.XMLSegPos
+	XMLSegsCount          = gjxy.XMLSegsCount
+	XMLFamilyTree         = gjxy.XMLFamilyTree
+	XMLCntInfo            = gjxy.XMLCntInfo
 	YAMLTag               = gjxy.YAMLTag
 	YAMLValue             = gjxy.YAMLValue
 	YAMLInfo              = gjxy.YAMLInfo
 	YAMLJoinSplittedLines = gjxy.YAMLJoinSplittedLines
+	Xstr2Y                = gjxy.Xstr2Y
+	Jstr2Y                = gjxy.Jstr2Y
 
-	Xstr2Y = gjxy.Xstr2Y
-	Jstr2Y = gjxy.Jstr2Y
-
-	sI    = strings.Index
-	sLI   = strings.LastIndex
-	sT    = strings.Trim
-	sTL   = strings.TrimLeft
-	sTR   = strings.TrimRight
-	sHP   = strings.HasPrefix
-	sHS   = strings.HasSuffix
-	sFF   = strings.FieldsFunc
-	sCtns = strings.Contains
-	sJ    = strings.Join
+	sJ = strings.Join
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf

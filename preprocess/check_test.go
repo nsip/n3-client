@@ -6,11 +6,12 @@ import (
 )
 
 func TestCheck(t *testing.T) {
-	bytes := Must(ioutil.ReadFile("../inbound/hsie/geography/stage2/content.json")).([]byte)
-	fPln(hasColonInValue(string(bytes)))
-	fPln(hasSQuoteInValue(string(bytes)))
+	file := "../inbound/hsie/history/stage1/overview.json"
+	json := string(Must(ioutil.ReadFile(file)).([]byte))
+	fPln("hasColonInValue", hasColonInValue(json))
+	fPln("hasSQuoteInValue", hasSQuoteInValue(json))
 	// fPln(hasHyphen(string(bytes)))
-
-	data := FmtJSONFile("../../xjy/files/content.json", "./util/")
-	fPln(data)
+	fPln(FmtJSONFile("../"+file, "./util/"))	
+	fPln(" ***** ")
+	// fPln(FmtJSONStr(json, "./util/"))
 }
