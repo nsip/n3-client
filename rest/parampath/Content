@@ -1,0 +1,3 @@
+learning_area : Content ~ learning_area
+subject : Content ~ subject
+stage : Content ~ stage

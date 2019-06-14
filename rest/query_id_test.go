@@ -5,13 +5,17 @@ import "testing"
 func TestQueryIDs(t *testing.T) {
 
 	mapPP := map[string]string{
-		"userId":    "lesson ~ userId",		
+		"learning_area": "Content ~ learning_area",
+		"subject":       "Content ~ subject",
+		"stage":         "Content ~ stage",
 	}
 	mapPV := map[string]interface{}{
-		"userId":    "Angie",		
+		"learning_area": "HSIE",
+		"subject":       "Geography",
+		"stage":         "1",
 	}
 
-	ids := IDsByPO(mapPP, mapPV)
+	ids := IDsByPO(mapPP, mapPV, false)
 	for _, id := range ids {
 		fPln(id)
 	}

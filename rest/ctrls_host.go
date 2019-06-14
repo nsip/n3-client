@@ -36,7 +36,8 @@ func getIDList(c echo.Context) error {
 	if object, ok := params["object"]; ok {
 		files := Must(ioutil.ReadDir(CFG.Query.ParamPathDir)).([]os.FileInfo)
 		for _, f := range files {
-			if Str(f.Name()).HP(object[0] + ".") {
+			// if Str(f.Name()).HP(object[0] + ".") {
+			if f.Name() == object[0] {
 				data := string(Must(ioutil.ReadFile(CFG.Query.ParamPathDir + f.Name())).([]byte))
 				mKV = Str(data).KeyValueMap('\n', ':', '#')
 				break
