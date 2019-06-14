@@ -133,7 +133,12 @@ func queryGQL(c echo.Context) error {
 		mPV[k] = v.(string)
 	}
 
-	IDs, rmStructs, root, mReplace := []string{}, []string{}, "", map[string]string{"en-US": "en_US"}
+	IDs, rmStructs, root := []string{}, []string{}, ""
+	mReplace := map[string]string{
+		"en-US":  "en_US",
+		"#COLON": ":",
+	}
+
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
 	if id, ok := mPV["objid"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
 		IDs = append(IDs, id.(string))

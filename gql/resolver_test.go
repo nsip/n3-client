@@ -22,7 +22,10 @@ func TestGQL(t *testing.T) {
 			qTxt,
 			map[string]interface{}{},
 			[]string{},
-			map[string]string{"en-US": "en_US"},
+			map[string]string{
+				"en-US":  "en_US",
+				"#COLON": ":",
+			},
 		)
 		ioutil.WriteFile(fSf("./yield/%s.json", objID), []byte(result), 0666)
 		return
