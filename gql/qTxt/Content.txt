@@ -1,0 +1,27 @@
+{
+  Content {
+    learning_area
+    subject
+    stage
+    yrLvls
+    overview
+    courses {
+      name
+      outcomes {
+        description
+        id
+      }
+      lifeskills_outcomes
+      inquiry_questions
+      focus
+      content_areas {
+        name
+        investigations {
+          description
+          ac
+          examples
+        }
+      }
+    }
+  }
+}

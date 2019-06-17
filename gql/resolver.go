@@ -35,7 +35,7 @@ func modStructMap(rmStructs ...string) {
 
 // GetInfoFromID : (FOR testing use)
 func GetInfoFromID(infoType, objID string, rmStructs ...string) string {
-	defer clrQueryBuf()
+	defer clrQueryCache()
 	if objID == "" {
 		return ""
 	}
@@ -51,12 +51,14 @@ func GetInfoFromID(infoType, objID string, rmStructs ...string) string {
 			schema := SchemaBuild("", root)
 			schema = sRepAll(schema, "\t-", "\t")
 			schema = sRepAll(schema, "\t#", "\t")
+			g.LCSchema.Add(objID, schema) //           *** LRU ***
 			return schema
 		}
 	case "JSON":
 		{
 			JSONBuild(root)
 			_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
+			g.LCJSON.Add(objID, json) //               *** LRU ***
 			return json
 		}
 	default:
@@ -84,7 +86,7 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 
 		// ********************************************************************* //
 
-		clrQueryBuf()
+		clrQueryCache(objID)
 
 		if objID == "" {
 			mSchema[objID], mJSON[objID] = "", ""

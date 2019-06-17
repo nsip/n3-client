@@ -29,11 +29,11 @@ func TestToNode(t *testing.T) {
 	for i := 1; i <= 5; i++ {
 		file := fSf("../inbound/hsie/history/stage%d/overview.json", i) //   *** change <file> ***
 		data := string(Must(ioutil.ReadFile(file)).([]byte))
-		data = pp.FmtJSONStr(data, "../preprocess/util/", "./") // *** format json string ***
+		data = pp.FmtJSONStr(data, "../preprocess/util/", "./") //           *** format json string ***
 		if pp.HasColonInValue(data) {
-			data = pp.RplcColonInValue(data, "#COLON") //          *** deal with <:> ***
+			data = pp.RplcColonInValue(data, "#COLON") //                    *** deal with <:> ***
 		}
-		IDs, _, _, _ := ToNode(data, "id", "Overview") //              *** change <idmark>, <default root> ***
+		IDs, _, _, _ := ToNode(data, "id", "Overview") //                    *** change <idmark>, <default root> ***
 		time.Sleep(1 * time.Second)
 		for _, id := range IDs {
 			fPln("sent:", id)

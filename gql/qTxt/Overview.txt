@@ -1,0 +1,25 @@
+{
+    Overview {
+        learning_area
+        subject
+        stage
+        yrLvls
+        overview
+        concepts {
+            name
+            description
+        }
+        inquiry_skills {
+            name
+            skills {
+                skill
+                ac
+            }
+        }
+        tools {
+            name
+            examples
+            code
+        }
+    }
+}
