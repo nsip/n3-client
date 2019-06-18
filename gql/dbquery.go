@@ -14,17 +14,13 @@ func Init(config *c.Config) {
 	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
-func clrQueryCache(objIDs ...string) {
+func clrQueryCache() {
 	mStruct = map[string]string{}
 	mValue = map[string][]*valver{}
 	mArray = map[string]int{}
 	mIndicesList = map[string][][]int{}
 	mIPathObj = map[string]string{}
-	mIPathSubIPaths = map[string][]string{}
-	for _, objID := range objIDs {
-		g.LCSchema.Remove(objID)
-		g.LCJSON.Remove(objID)
-	}
+	mIPathSubIPaths = map[string][]string{}	
 }
 
 // filling root, mStruct, mValue, mArray

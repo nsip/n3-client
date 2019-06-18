@@ -52,11 +52,8 @@ func InitClient(config *c.Config) {
 
 // ToNode :
 func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
-
 	PC(CFG == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
-	data := Str(str)
-	data.SetEnC()
-
+	
 	prevIDs, termIDs := "", ""
 	prevIDa, termIDa := "", ""
 	prevIDv, termIDv, prevTermIDv := "", "", ""
@@ -65,7 +62,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 	switch IF(IsJSON(str), g.JSON, g.XML).(g.SQDType) {
 	case g.XML:
 		{
-			IDs = xjy.XMLInfoScan(data.V(), idmark, PATH_DEL,
+			IDs = xjy.XMLInfoScan(str, idmark, PATH_DEL,
 				func(p, id string, v []string, lastObjTuple bool) {
 					// fPln("S ---> ", p, "::", v)
 					id = "::" + id
@@ -98,7 +95,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 				},
 			)
 
-			xjy.YAMLScan(data.V(), idmark, dfltRoot, IDs, DT_XML,
+			xjy.YAMLScan(str, idmark, dfltRoot, IDs, DT_XML,
 				func(p, v, id string) {
 					defer func() { verV, cntV, prevIDv, prevTermIDv = verV+1, cntV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
@@ -118,7 +115,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 
 	case g.JSON:
 		{
-			IDs = xjy.JSONObjScan(data.V(), idmark, dfltRoot,
+			IDs = xjy.JSONObjScan(str, idmark, dfltRoot,
 				func(p, id string, v []string, lastObjTuple bool) {
 					id = "::" + id
 					defer func() { verS, cntS, prevIDs = verS+1, cntS+1, id }()
@@ -149,7 +146,7 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 				},
 			)
 
-			xjy.YAMLScan(data.V(), idmark, dfltRoot, IDs, DT_JSON,
+			xjy.YAMLScan(str, idmark, dfltRoot, IDs, DT_JSON,
 				func(p, v, id string) {
 					defer func() { verV, cntV, prevIDv, prevTermIDv = verV+1, cntV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)

@@ -9,6 +9,7 @@ import (
 	d "../delete"
 	g "../global"
 	"../gql"
+	pp "../preprocess"
 	q "../query"
 	"../send"
 	"github.com/labstack/echo"
@@ -67,10 +68,7 @@ func delToNode(c echo.Context) error {
 
 	idList := c.QueryParams()["id"]
 	d.DelBat(idList...)
-	for _, id := range idList {
-		g.LCSchema.Remove(id)
-		g.LCJSON.Remove(id)
-	}
+	g.RmIDsInLRU(idList...)
 	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(idList)))
 }
 
@@ -96,13 +94,19 @@ func pubToNode(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
 
-	ioutil.WriteFile("./debug.json", []byte(data), 0666)
+	if !IsJSON(data) {
+		panic("here ???")
+	}
+
+	ioutil.WriteFile("./debug_in_pubToNode.json", []byte(data), 0666)
+
+	data = pp.FmtJSONStr(data, "../preprocess/util/", "./preprocess/util/", "./") //    *** format json string ***
+	if pp.HasColonInValue(data) {
+		data = pp.RplcColonInValue(data, "#COLON") //             *** deal with <:> ***
+	}
 
 	IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
-	for _, id := range IDs {
-		g.LCSchema.Remove(id)
-		g.LCJSON.Remove(id)
-	}
+	g.RmIDsInLRU(IDs...)
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
@@ -123,7 +127,7 @@ func queryGQL(c echo.Context) error {
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
 	// qTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
 
-	fPln(":::", c.QueryParam("objid"))
+	fPln(":::queryGQL:::", c.QueryParam("objid"))
 
 	// ********************* GRAPHIQL client *********************
 	req := new(Request) //

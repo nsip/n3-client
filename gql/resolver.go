@@ -51,14 +51,14 @@ func GetInfoFromID(infoType, objID string, rmStructs ...string) string {
 			schema := SchemaBuild("", root)
 			schema = sRepAll(schema, "\t-", "\t")
 			schema = sRepAll(schema, "\t#", "\t")
-			g.LCSchema.Add(objID, schema) //           *** LRU ***
+			// g.LCSchema.Add(objID, schema) //           *** LRU ***
 			return schema
 		}
 	case "JSON":
 		{
 			JSONBuild(root)
 			_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
-			g.LCJSON.Add(objID, json) //               *** LRU ***
+			// g.LCJSON.Add(objID, json) //               *** LRU ***
 			return json
 		}
 	default:
@@ -73,20 +73,24 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 
 	for _, objID := range objIDs {
 
-		ok1, ok2 := false, false
+		ok1, ok2, ok3 := false, false, false
 		if schema, ok := g.LCSchema.Get(objID); ok {
 			mSchema[objID], ok1 = schema.(string), ok
 		}
 		if json, ok := g.LCJSON.Get(objID); ok {
 			mJSON[objID], ok2 = json.(string), ok
 		}
-		if ok1 && ok2 {
+		if rt, ok := g.LCRoot.Get(objID); ok {
+			root, ok3 = rt.(string), ok
+		}
+		if ok1 && ok2 && ok3 {
 			continue
 		}
 
 		// ********************************************************************* //
 
-		clrQueryCache(objID)
+		clrQueryCache()
+		g.RmIDsInLRU(objID)
 
 		if objID == "" {
 			mSchema[objID], mJSON[objID] = "", ""
@@ -111,6 +115,8 @@ func GetResourceFromID(objIDs []string, rmStructs ...string) (mSchema, mJSON map
 		_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
 		mJSON[objID] = json
 		g.LCJSON.Add(objID, json) //          *** LRU ***
+
+		g.LCRoot.Add(objID, root) //          *** LRU ***
 	}
 
 	return
@@ -144,12 +150,13 @@ func Query(objIDs []string, qSchema, qSchemaDir, qTxt string, variables map[stri
 		schema = sRepAll(schema, k, v)
 	}
 
-	// ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) // *** DEBUG ***
+	ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) // *** DEBUG ***
 
 	fResolver := func(params *graphql.ResolveParams) (interface{}, error) {
 		jsonBytes := rsvResource(objIDs, mJSON, mReplace) //                  *** Get Reconstructed JSON ***
 		jsonMap := make(map[string]interface{})
 		PE(json.Unmarshal(jsonBytes, &jsonMap))
+		fPln(root)
 		return jsonMap[root], nil
 	}
 

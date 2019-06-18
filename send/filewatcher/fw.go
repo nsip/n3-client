@@ -44,10 +44,7 @@ func StartFileWatcherAsync() {
 				}
 
 				IDs, _, _, _ := s.ToNode(string(bytes), "id", "xapi")
-				for _, id := range IDs {
-					g.LCSchema.Remove(id)
-					g.LCJSON.Remove(id)
-				}
+				g.RmIDsInLRU(IDs...)
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {

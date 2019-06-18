@@ -10,9 +10,6 @@ import (
 
 func TestXMLScanObjects(t *testing.T) {
 	sifbytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte)
-	sif := Str(sifbytes)
-	sif.SetEnC()
-
 	ids, objtags, starts, ends := XMLScanObjects(string(sifbytes), "RefId")
 	fPln(len(objtags))
 	for i := range ids {
@@ -22,9 +19,6 @@ func TestXMLScanObjects(t *testing.T) {
 
 func TestXMLObjStrByID(t *testing.T) {
 	sifbytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte)
-	sif := Str(sifbytes)
-	sif.SetEnC()
-
 	xmlobj := XMLObjStrByID(string(sifbytes), "RefId", "1822AF7A-F9CB-4F0D-96EA-9280DD0B6AB2")
 	fPln(xmlobj)
 	fPln()
@@ -37,10 +31,7 @@ func TestXMLInfoScan(t *testing.T) {
 	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 
 	sifbytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte)
-	sif := Str(sifbytes)
-	sif.SetEnC()
-
-	XMLInfoScan(sif.V(), "RefId", PATH_DEL,
+	XMLInfoScan(string(sifbytes), "RefId", PATH_DEL,
 		func(p, id string, v []string, lastOne bool) {
 			fPln("S --->>> ", p, " : ", v)
 		},

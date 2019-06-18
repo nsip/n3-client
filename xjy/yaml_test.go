@@ -12,10 +12,7 @@ func TestYAMLScan(t *testing.T) {
 	defer func() { PH(recover(), cfg.Global.ErrLog) }()
 
 	databytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte) //     *** change file name ***
-	datastr := Str(databytes)
-	datastr.SetEnC()
-
-	YAMLScan(datastr.V(), "RefId", "ROOT", nil, DT_XML, func(path, value, id string) { //   *** change idmark & DataType ***
+	YAMLScan(string(databytes), "RefId", "ROOT", nil, DT_XML, func(path, value, id string) { //   *** change idmark & DataType ***
 		fPf("%s : %-70s : %s\n", id, path, value)
 	})
 }

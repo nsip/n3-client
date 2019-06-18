@@ -14,11 +14,20 @@ var (
 	fPln = fmt.Println
 	Must = u.Must
 
-	LCSchema = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
-		fPln("Schema onEvicted:", k, v)
+	LCRoot = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
+		fPln("Query Root onEvicted:", k, v)
 	})).(*lru.Cache)
+
+	LCSchema = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
+		fPln("Query Schema onEvicted:", k, v)
+	})).(*lru.Cache)
+
 	LCJSON = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
-		fPln("JSON onEvicted:", k, v)
+		fPln("Query JSON onEvicted:", k, v)
+	})).(*lru.Cache)
+
+	LCQryID = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
+		fPln("Query-IDs onEvicted:", k, v)
 	})).(*lru.Cache)
 )
 
@@ -28,6 +37,6 @@ type (
 
 const (
 	XML SQDType = iota
-	JSON	
+	JSON
 	LRUCOUNT = 4096
 )
