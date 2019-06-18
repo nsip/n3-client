@@ -27,10 +27,13 @@ func InitClient(config *c.Config) {
 // getIDList :
 func getIDList(c echo.Context) error {
 	defer func() {
+		mutexID.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
+
+	mutexID.Lock()
 
 	params := c.QueryParams()
 	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
@@ -61,10 +64,13 @@ func getIDList(c echo.Context) error {
 // delToNode :
 func delToNode(c echo.Context) error {
 	defer func() {
+		mutexDel.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
+
+	mutexDel.Lock()
 
 	idList := c.QueryParams()["id"]
 	d.DelBat(idList...)
@@ -75,10 +81,13 @@ func delToNode(c echo.Context) error {
 // pubToNode : Send Data to N3-Transport
 func pubToNode(c echo.Context) error {
 	defer func() {
+		mutexPub.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
+
+	mutexPub.Lock()
 
 	idmark, dfltRoot := c.QueryParam("idmark"), c.QueryParam("dfltRoot")
 	// fPln(idmark, ":", dfltRoot)
@@ -118,18 +127,21 @@ type Request struct {
 
 func queryGQL(c echo.Context) error {
 	defer func() {
+		mutexQry.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
 
-	// ********************* POSTMAN client *********************
+	mutexQry.Lock()
+
+	// ********************* POSTMAN client ********************* //
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
 	// qTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
 
 	fPln(":::queryGQL:::", c.QueryParam("objid"))
 
-	// ********************* GRAPHIQL client *********************
+	// ********************* GRAPHIQL client ********************* //
 	req := new(Request) //
 	PE(c.Bind(req))     //                   *** ONLY <POST> echo can Bind OK ***
 	qTxt := req.Query

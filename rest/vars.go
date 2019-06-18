@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"sync"
 
 	c "../config"
 	gjxy "github.com/cdutwhu/go-gjxy"
@@ -45,6 +46,11 @@ var (
 	e   error
 	CFG *c.Config
 	ver int64 = 1
+
+	mutexQry = &sync.Mutex{}
+	mutexPub = &sync.Mutex{}
+	mutexDel = &sync.Mutex{}
+	mutexID  = &sync.Mutex{}
 )
 
 const (

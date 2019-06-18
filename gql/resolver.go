@@ -51,14 +51,14 @@ func GetInfoFromID(infoType, objID string, rmStructs ...string) string {
 			schema := SchemaBuild("", root)
 			schema = sRepAll(schema, "\t-", "\t")
 			schema = sRepAll(schema, "\t#", "\t")
-			// g.LCSchema.Add(objID, schema) //           *** LRU ***
+			g.LCSchema.Add(objID, schema) //           *** LRU ***
 			return schema
 		}
 	case "JSON":
 		{
 			JSONBuild(root)
 			_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
-			// g.LCJSON.Add(objID, json) //               *** LRU ***
+			g.LCJSON.Add(objID, json) //               *** LRU ***
 			return json
 		}
 	default:
@@ -150,13 +150,13 @@ func Query(objIDs []string, qSchema, qSchemaDir, qTxt string, variables map[stri
 		schema = sRepAll(schema, k, v)
 	}
 
-	ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) // *** DEBUG ***
+	// ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) // *** DEBUG ***
 
 	fResolver := func(params *graphql.ResolveParams) (interface{}, error) {
 		jsonBytes := rsvResource(objIDs, mJSON, mReplace) //                  *** Get Reconstructed JSON ***
 		jsonMap := make(map[string]interface{})
 		PE(json.Unmarshal(jsonBytes, &jsonMap))
-		fPln(root)
+		// fPln(root)
 		return jsonMap[root], nil
 	}
 
