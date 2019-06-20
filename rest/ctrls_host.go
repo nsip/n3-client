@@ -190,7 +190,7 @@ func HostHTTPAsync() {
 	// CORS
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
-		AllowMethods: []string{echo.GET, echo.POST},
+		AllowMethods: []string{echo.GET, echo.POST, echo.DELETE},
 	}))
 
 	// Route

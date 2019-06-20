@@ -31,7 +31,7 @@ func TestToNode(t *testing.T) {
 		data := string(Must(ioutil.ReadFile(file)).([]byte))
 		data = pp.FmtJSONStr(data, "../preprocess/util/", "./") //           *** format json string ***
 		if pp.HasColonInValue(data) {
-			data = pp.RplcColonInValue(data, "^1m$") //                    *** deal with <:> ***
+			data = pp.RplcColonInValueTo(data, "^1m$") //                    *** deal with <:> ***
 		}
 		IDs, _, _, _ := ToNode(data, "id", "Overview") //                    *** change <idmark>, <default root> ***
 		time.Sleep(1 * time.Second)
