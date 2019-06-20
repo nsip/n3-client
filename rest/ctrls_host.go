@@ -39,8 +39,7 @@ func getIDList(c echo.Context) error {
 	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
 	if object, ok := params["object"]; ok {
 		files := Must(ioutil.ReadDir(CFG.Query.ParamPathDir)).([]os.FileInfo)
-		for _, f := range files {
-			// if Str(f.Name()).HP(object[0] + ".") {
+		for _, f := range files {			
 			if f.Name() == object[0] {
 				data := string(Must(ioutil.ReadFile(CFG.Query.ParamPathDir + f.Name())).([]byte))
 				mKV = Str(data).KeyValueMap('\n', ':', '#')
@@ -49,7 +48,7 @@ func getIDList(c echo.Context) error {
 		}
 		for k, v := range params {
 			if _, ok := mKV[k]; ok {
-				mPP[k], mPV[k] = mKV[k], v[0]
+				mPP[k], mPV[k] = mKV[k], Str(v[0]).T(BLANK).V()
 			}
 		}
 

@@ -126,7 +126,7 @@ func rsvResource(objIDs []string, mJSON, mReplace map[string]string) []byte {
 	jsonAll := ""
 	for _, objID := range objIDs {
 		jsonstr := mJSON[objID]
-		// ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666) //   *** DEBUG ***
+		ioutil.WriteFile("./debug/"+objIDs[0]+".json", []byte(jsonstr), 0666) //   *** DEBUG ***
 		jsonAll = JSONObjectMerge(jsonAll, jsonstr)
 	}
 	for k, v := range mReplace {
@@ -150,7 +150,7 @@ func Query(objIDs []string, qSchema, qSchemaDir, qTxt string, variables map[stri
 		schema = sRepAll(schema, k, v)
 	}
 
-	// ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) // *** DEBUG ***
+	ioutil.WriteFile("./debug/"+objIDs[0]+".gql", []byte(schema), 0666) //    *** DEBUG ***
 
 	fResolver := func(params *graphql.ResolveParams) (interface{}, error) {
 		jsonBytes := rsvResource(objIDs, mJSON, mReplace) //                  *** Get Reconstructed JSON ***
