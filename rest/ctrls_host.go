@@ -60,8 +60,8 @@ func getIDList(c echo.Context) error {
 	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }
 
-// delToNode :
-func delToNode(c echo.Context) error {
+// delFromNode :
+func delFromNode(c echo.Context) error {
 	defer func() {
 		mutexDel.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
@@ -198,7 +198,7 @@ func HostHTTPAsync() {
 	e.GET(CFG.Rest.PathID, getIDList)
 	e.POST(CFG.Rest.PathPub, pubToNode)
 	e.POST(CFG.Rest.PathGQL, queryGQL)
-	e.POST(CFG.Rest.PathDel, delToNode)
+	e.DELETE(CFG.Rest.PathDel, delFromNode)
 
 	// Server
 	e.Start(fSf(":%d", CFG.Rest.Port))
