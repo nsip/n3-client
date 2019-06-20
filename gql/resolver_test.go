@@ -23,8 +23,8 @@ func TestGQL(t *testing.T) {
 			map[string]interface{}{},
 			[]string{},
 			map[string]string{
-				"en-US":  "en_US",
-				"#COLON": ":",
+				"en-US": "en_US",
+				"^1m$":  ":",
 			},
 		)
 		ioutil.WriteFile(fSf("./yield/%s.json", objID), []byte(result), 0666)

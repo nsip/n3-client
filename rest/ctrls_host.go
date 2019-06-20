@@ -39,7 +39,7 @@ func getIDList(c echo.Context) error {
 	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
 	if object, ok := params["object"]; ok {
 		files := Must(ioutil.ReadDir(CFG.Query.ParamPathDir)).([]os.FileInfo)
-		for _, f := range files {			
+		for _, f := range files {
 			if f.Name() == object[0] {
 				data := string(Must(ioutil.ReadFile(CFG.Query.ParamPathDir + f.Name())).([]byte))
 				mKV = Str(data).KeyValueMap('\n', ':', '#')
@@ -110,7 +110,7 @@ func pubToNode(c echo.Context) error {
 
 	data = pp.FmtJSONStr(data, "../preprocess/util/", "./preprocess/util/", "./") //    *** format json string ***
 	if pp.HasColonInValue(data) {
-		data = pp.RplcColonInValue(data, "#COLON") //             *** deal with <:> ***
+		data = pp.RplcColonInValueTo(data, "^1m$") //                                   *** deal with <:> ***
 	}
 
 	IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
@@ -151,8 +151,8 @@ func queryGQL(c echo.Context) error {
 
 	IDs, rmStructs, root := []string{}, []string{}, ""
 	mReplace := map[string]string{
-		"en-US":  "en_US",
-		"#COLON": ":",
+		"en-US": "en_US",
+		"^1m$":  ":",
 	}
 
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
