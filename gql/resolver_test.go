@@ -27,7 +27,7 @@ func TestGQL(t *testing.T) {
 			},
 		)
 
-		result = ASCIIToOri(result)
+		result = ASCIIToOri(result) //                                                   *** ascii result back to original result ***
 		ioutil.WriteFile(fSf("./yield/%s.json", objID), []byte(result), 0666)
 		return
 	}

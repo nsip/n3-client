@@ -42,6 +42,7 @@ var (
 	IArrIntersect = w.IArrIntersect
 	IArrRmRep     = w.IArrRmRep
 	ASCIIToOri    = w.ASCIIToOri
+	UTF8ToASCII   = w.UTF8ToASCII
 
 	IsJSON = gjxy.IsJSON
 
