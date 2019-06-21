@@ -41,7 +41,9 @@ var (
 
 	IArrIntersect = w.IArrIntersect
 	IArrRmRep     = w.IArrRmRep
-	IsJSON        = gjxy.IsJSON
+	ASCIIToOri    = w.ASCIIToOri
+
+	IsJSON = gjxy.IsJSON
 
 	e   error
 	CFG *c.Config

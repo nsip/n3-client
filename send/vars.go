@@ -27,6 +27,9 @@ var (
 	Must = u.Must
 	IF   = u.IF
 
+	UTF8ToASCII = w.UTF8ToASCII
+	ASCIIToOri  = w.ASCIIToOri
+
 	XMLAttributes = gjxy.XMLAttributes
 	XMLSegPos     = gjxy.XMLSegPos
 	XMLSegsCount  = gjxy.XMLSegsCount

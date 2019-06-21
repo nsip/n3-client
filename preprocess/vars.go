@@ -26,6 +26,9 @@ var (
 	Must = u.Must
 	IF   = u.IF
 
+	UTF8ToASCII = w.UTF8ToASCII
+	ASCIIToOri  = w.ASCIIToOri
+
 	XMLAttributes = gjxy.XMLAttributes
 	XMLSegPos     = gjxy.XMLSegPos
 	XMLSegsCount  = gjxy.XMLSegsCount
@@ -41,8 +44,8 @@ var (
 	lPln = log.Println
 	LPln = lPln
 
-	sJ       = strings.Join
-	sCnt     = strings.Count	
+	sJ   = strings.Join
+	sCnt = strings.Count
 
 	e   error
 	CFG *c.Config

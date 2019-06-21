@@ -108,9 +108,9 @@ func pubToNode(c echo.Context) error {
 
 	ioutil.WriteFile("./debug_in_pubToNode.json", []byte(data), 0666)
 
-	data = pp.FmtJSONStr(data, "../preprocess/util/", "./preprocess/util/", "./") //    *** format json string ***
+	data = pp.FmtJSONStr(data, "../preprocess/util/", "./preprocess/util/", "./") //  *** format json string ***
 	if pp.HasColonInValue(data) {
-		data = pp.RplcColonInValueTo(data, "^1m$") //                                   *** deal with <:> ***
+		data = pp.RplcValueColons(data) //                                            *** deal with <:> ***
 	}
 
 	IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
@@ -151,8 +151,7 @@ func queryGQL(c echo.Context) error {
 
 	IDs, rmStructs, root := []string{}, []string{}, ""
 	mReplace := map[string]string{
-		"en-US": "en_US",
-		"^1m$":  ":",
+		"en-US": "en_US",		
 	}
 
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
@@ -171,6 +170,7 @@ func queryGQL(c echo.Context) error {
 	qSchema := string(Must(ioutil.ReadFile(CFG.Query.SchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
 	if len(IDs) >= 1 {
 		rst := gql.Query(IDs, qSchema, CFG.Query.SchemaDir, qTxt, mPV, rmStructs, mReplace) // *** rst is already JSON string, so use String to return ***
+		rst = ASCIIToOri(rst)
 		return c.String(http.StatusAccepted, rst)
 	}
 

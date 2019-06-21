@@ -1,12 +1,15 @@
 package preprocess
 
+import "strconv"
+
 // HasColonInValue :
 func HasColonInValue(str string) bool {
 	return sCnt(str, "\":") != sCnt(str, ":")
 }
 
-// RplcColonInValueTo :
-func RplcColonInValueTo(str, colonTo string) string {
+// RplcValueColons :
+func RplcValueColons(str string) string {
+	colonTo := "^" + strconv.FormatInt((int64)(':'), 36) + "$"
 	s := Str(str).Replace("\":", "#TAGEND#")
 	s = s.Replace(":", colonTo)
 	s = s.Replace("#TAGEND#", "\":")

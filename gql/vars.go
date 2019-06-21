@@ -35,6 +35,7 @@ var (
 	IArrStrJoinEx = w.IArrStrJoinEx
 	SortIntArr2D  = w.SortIntArr2D
 	IArrMake      = w.IArrMake
+	ASCIIToOri    = w.ASCIIToOri
 
 	JSONWrapRoot    = gjxy.JSONWrapRoot
 	JSONMake        = gjxy.JSONMakeIPath
