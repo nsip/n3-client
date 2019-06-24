@@ -3,6 +3,8 @@ package preprocess
 import (
 	"os"
 	"os/exec"
+
+	g "../global"
 )
 
 func prepareJQ(jqDirs ...string) {
@@ -21,13 +23,13 @@ func prepareJQ(jqDirs ...string) {
 
 // FmtJSONStr : <json string> must not have single quote <'>
 func FmtJSONStr(json string, jqDirs ...string) string {
-	dir := Must(os.Getwd()).(string)
-	defer func() { PE(os.Chdir(dir)) }()
+	// dir := Must(os.Getwd()).(string)
+	defer func() { PE(os.Chdir(g.OriExePath)) }()
 	prepareJQ(jqDirs...)
 	if !IsJSON(json) {
 		return ""
 	}
-	sJSON := Str(json).Replace("'", "\\'") //                      deal with <single quote> in "echo"
+	sJSON := Str(json).Replace("'", "\\'") //        *** deal with <single quote> in "echo" ***
 	cmdstr := "echo $" + sJSON.MkQuotes(QSingle).V() + ` | jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)
 	output := Must(cmd.Output()).([]byte)
@@ -36,8 +38,8 @@ func FmtJSONStr(json string, jqDirs ...string) string {
 
 // FmtJSONFile : <file> is the <relative path> to <jq>
 func FmtJSONFile(file string, jqDirs ...string) string {
-	dir := Must(os.Getwd()).(string)
-	defer func() { PE(os.Chdir(dir)) }()
+	// dir := Must(os.Getwd()).(string)
+	defer func() { PE(os.Chdir(g.OriExePath)) }()
 	prepareJQ(jqDirs...)
 	cmdstr := "cat " + file + ` | jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)

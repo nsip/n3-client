@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"time"
 
 	c "../config"
 	d "../delete"
@@ -18,6 +19,15 @@ import (
 
 // **************************** controllers **************************** //
 
+// OriExePathChk :
+func OriExePathChk() {
+AGAIN:
+	if path, _ := os.Getwd(); path != g.OriExePath {
+		time.Sleep(100 * time.Millisecond)
+		goto AGAIN
+	}
+}
+
 // InitClient :
 func InitClient(config *c.Config) {
 	PC(config == nil, fEf("Init Config"))
@@ -27,13 +37,14 @@ func InitClient(config *c.Config) {
 // getIDList :
 func getIDList(c echo.Context) error {
 	defer func() {
-		mutexID.Unlock()
+		mtxID.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
 
-	mutexID.Lock()
+	OriExePathChk()
+	mtxID.Lock()
 
 	params := c.QueryParams()
 	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
@@ -63,13 +74,14 @@ func getIDList(c echo.Context) error {
 // delFromNode :
 func delFromNode(c echo.Context) error {
 	defer func() {
-		mutexDel.Unlock()
+		mtxDel.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
 
-	mutexDel.Lock()
+	OriExePathChk()
+	mtxDel.Lock()
 
 	idList := c.QueryParams()["id"]
 	d.DelBat(idList...)
@@ -77,16 +89,17 @@ func delFromNode(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(idList)))
 }
 
-// pubToNode : Send Data to N3-Transport
-func pubToNode(c echo.Context) error {
+// postToNode : Publish Data to N3-Transport
+func postToNode(c echo.Context) error {
 	defer func() {
-		mutexPub.Unlock()
+		mtxPub.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
 
-	mutexPub.Lock()
+	OriExePathChk()
+	mtxPub.Lock()
 
 	idmark, dfltRoot := c.QueryParam("idmark"), c.QueryParam("dfltRoot")
 	// fPln(idmark, ":", dfltRoot)
@@ -125,15 +138,17 @@ type Request struct {
 	Variables map[string]interface{} `json:"variables"`
 }
 
-func queryGQL(c echo.Context) error {
+// postQueryGQL :
+func postQueryGQL(c echo.Context) error {
 	defer func() {
-		mutexQry.Unlock()
+		mtxQry.Unlock()
 		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
 
-	mutexQry.Lock()
+	OriExePathChk()
+	mtxQry.Lock()
 
 	// ********************* POSTMAN client ********************* //
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
@@ -178,6 +193,54 @@ func queryGQL(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, "Nothing Found")
 }
 
+// getObject :
+func getObject(c echo.Context) error {
+	defer func() {
+		mtxObj.Unlock()
+		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+			c.JSON(http.StatusBadRequest, msg)
+		})
+	}()
+
+	OriExePathChk()
+	mtxObj.Lock()
+
+	id := c.QueryParam("id")
+	return c.JSON(http.StatusAccepted, id)
+}
+
+// getSchema :
+func getSchema(c echo.Context) error {
+	defer func() {
+		mtxScm.Unlock()
+		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+			c.JSON(http.StatusBadRequest, msg)
+		})
+	}()
+
+	OriExePathChk()
+	mtxScm.Lock()
+
+	id := c.QueryParam("id")
+	return c.JSON(http.StatusAccepted, id)
+}
+
+// getQueryText :
+func getQueryText(c echo.Context) error {
+	defer func() {
+		mtxQryTxt.Unlock()
+		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+			c.JSON(http.StatusBadRequest, msg)
+		})
+	}()
+
+	OriExePathChk()
+	mtxQryTxt.Lock()
+
+	id := c.QueryParam("id")
+	return c.JSON(http.StatusAccepted, id)
+}
+
 // ************************************************ HOST ************************************************ //
 
 // HostHTTPAsync : Host a HTTP Server for publishing xml json string(request body) to <n3-transport> grpc Server
@@ -197,8 +260,11 @@ func HostHTTPAsync() {
 	// Route
 	e.GET(CFG.Rest.PathTest, func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
 	e.GET(CFG.Rest.PathID, getIDList)
-	e.POST(CFG.Rest.PathPub, pubToNode)
-	e.POST(CFG.Rest.PathGQL, queryGQL)
+	e.GET(CFG.Rest.PathObj, getObject)
+	e.GET(CFG.Rest.PathScm, getSchema)
+	e.GET(CFG.Rest.PathGQLTxt, getQueryText)
+	e.POST(CFG.Rest.PathPub, postToNode)
+	e.POST(CFG.Rest.PathGQL, postQueryGQL)
 	e.DELETE(CFG.Rest.PathDel, delFromNode)
 
 	// Server

@@ -62,7 +62,7 @@ func GetInfoFromID(infoType, objID string, rmStructs ...string) string {
 			return json
 		}
 	default:
-		panic("Need SCHEMA or JSON for infoType")
+		return "ERROR: Need SCHEMA or JSON for infoType"
 	}
 }
 

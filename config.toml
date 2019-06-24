@@ -13,6 +13,9 @@ Path = "./config.toml"
   PathPub = "/pub"  
   PathGQL = "/gql"
   PathDel = "/del"
+  PathObj = "/obj"
+  PathScm = "/scm"
+  PathGQLTxt = "/qrytxt"
 
 [RPC]
   Namespace = "F7AoxkA2RTtrmjCg6nEuCtvSp5C6sp6R5RCjUKaXYkpp"

@@ -50,10 +50,13 @@ var (
 	CFG *c.Config
 	ver int64 = 1
 
-	mutexQry = &sync.Mutex{}
-	mutexPub = &sync.Mutex{}
-	mutexDel = &sync.Mutex{}
-	mutexID  = &sync.Mutex{}
+	mtxQry    = &sync.Mutex{}
+	mtxPub    = &sync.Mutex{}
+	mtxDel    = &sync.Mutex{}
+	mtxID     = &sync.Mutex{}
+	mtxObj    = &sync.Mutex{}
+	mtxScm    = &sync.Mutex{}
+	mtxQryTxt = &sync.Mutex{}
 )
 
 const (

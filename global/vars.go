@@ -2,6 +2,7 @@ package global
 
 import (
 	"fmt"
+	"os"
 
 	u "github.com/cdutwhu/go-util"
 	lru "github.com/hashicorp/golang-lru"
@@ -13,6 +14,8 @@ var (
 
 	fPln = fmt.Println
 	Must = u.Must
+
+	OriExePath, _ = os.Getwd()
 
 	LCRoot = Must(lru.NewWithEvict(LRUCOUNT, func(k, v interface{}) {
 		fPln("Query Root onEvicted:", k, v)

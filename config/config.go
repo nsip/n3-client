@@ -15,12 +15,15 @@ type filewatcher struct {
 }
 
 type rest struct {
-	Port     int
-	PathTest string
-	PathID   string
-	PathPub  string
-	PathGQL  string
-	PathDel  string
+	Port       int
+	PathTest   string
+	PathID     string
+	PathPub    string
+	PathGQL    string
+	PathDel    string
+	PathObj    string
+	PathScm    string
+	PathGQLTxt string
 }
 
 type rpc struct {
