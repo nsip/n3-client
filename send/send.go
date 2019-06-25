@@ -1,8 +1,11 @@
 package send
 
 import (
+	"io/ioutil"
+
 	c "../config"
 	g "../global"
+	pp "../preprocess"
 	q "../query"
 	xjy "../xjy"
 	"github.com/nsip/n3-messages/messages"
@@ -50,10 +53,10 @@ func InitClient(config *c.Config) {
 	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
-// ToNode :
-func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
+// Pub2Node :
+func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 	PC(CFG == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
-	
+
 	prevIDs, termIDs := "", ""
 	prevIDa, termIDa := "", ""
 	prevIDv, termIDv, prevTermIDv := "", "", ""
@@ -62,6 +65,8 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 	switch IF(IsJSON(str), g.JSON, g.XML).(g.SQDType) {
 	case g.XML:
 		{
+			str = ppXML(str)
+
 			IDs = xjy.XMLInfoScan(str, idmark, PATH_DEL,
 				func(p, id string, v []string, lastObjTuple bool) {
 					// fPln("S ---> ", p, "::", v)
@@ -115,6 +120,8 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 
 	case g.JSON:
 		{
+			str = ppJSON(str)
+
 			IDs = xjy.JSONObjScan(str, idmark, dfltRoot,
 				func(p, id string, v []string, lastObjTuple bool) {
 					id = "::" + id
@@ -166,4 +173,25 @@ func ToNode(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
 	}
 
 	return
+}
+
+func ppJSON(json string) string {
+	ioutil.WriteFile("./debug_in_ppJSON.json", []byte(json), 0666)
+	json = pp.FmtJSONStr(json, "../preprocess/util/", "./") //      *** format json string ***
+	if pp.HasColonInValue(json) {
+		json = pp.RplcValueColons(json) //                          *** deal with <:> ***
+	}
+	if ascii, ajson := UTF8ToASCII(json); !ascii { //               *** convert to ASCII ***
+		fPln("is utf8")
+		return ajson
+	}
+	return json
+}
+
+func ppXML(xml string) string {
+	if ascii, axml := UTF8ToASCII(xml); !ascii { //                 *** convert to ASCII ***
+		fPln("is utf8")
+		return axml
+	}
+	return xml
 }

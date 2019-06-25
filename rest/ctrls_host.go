@@ -10,7 +10,6 @@ import (
 	d "../delete"
 	g "../global"
 	"../gql"
-	pp "../preprocess"
 	q "../query"
 	"../send"
 	"github.com/labstack/echo"
@@ -115,19 +114,7 @@ func postToNode(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
 
-	// if !IsJSON(data) {
-	// 	panic("here ???")
-	// }
-
-	ioutil.WriteFile("./debug_in_pubToNode.json", []byte(data), 0666)
-
-	data = pp.FmtJSONStr(data, "../preprocess/util/", "./preprocess/util/", "./") //  *** format json string ***
-	if pp.HasColonInValue(data) {
-		data = pp.RplcValueColons(data) //                                            *** deal with <:> ***
-	}
-	_, data = UTF8ToASCII(data) //                                                    *** convert to ASCII ***
-
-	IDs, nV, nS, nA := send.ToNode(data, idmark, dfltRoot)
+	IDs, nV, nS, nA := send.Pub2Node(data, idmark, dfltRoot)
 	g.RmIDsInLRU(IDs...)
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }

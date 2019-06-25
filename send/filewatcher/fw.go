@@ -42,8 +42,7 @@ func StartFileWatcherAsync() {
 					time.Sleep(1000 * time.Millisecond)
 					goto READ_AGAIN
 				}
-
-				IDs, _, _, _ := s.ToNode(string(bytes), "id", "xapi")
+				IDs, _, _, _ := s.Pub2Node(string(bytes), "id", "xapi")
 				g.RmIDsInLRU(IDs...)
 			}
 		case err, ok := <-watcher.Errors:
