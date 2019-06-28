@@ -10,8 +10,8 @@ import (
 	d "../delete"
 	g "../global"
 	"../gql"
+	pub "../publish"
 	q "../query"
-	"../send"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -114,8 +114,7 @@ func postToNode(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
 
-	IDs, nV, nS, nA := send.Pub2Node(data, idmark, dfltRoot)
-	g.RmIDsInLRU(IDs...)
+	_, _, nV, nS, nA := pub.Pub2Node(data, idmark, dfltRoot) //             *** preprocess, postprocess included ***
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
@@ -145,36 +144,26 @@ func postQueryGQL(c echo.Context) error {
 
 	// ********************* GRAPHIQL client ********************* //
 	req := new(Request) //
-	PE(c.Bind(req))     //                   *** ONLY <POST> echo can Bind OK ***
-	qTxt := req.Query
+	PE(c.Bind(req))     //          *** ONLY <POST> echo can Bind OK ***
 	mPV := map[string]interface{}{}
 	for k, v := range req.Variables {
 		mPV[k] = v.(string)
 	}
 
-	IDs, rmStructs, root := []string{}, []string{}, ""
-	mReplace := map[string]string{
-		"en-US": "en_US",
-	}
-
+	IDs := []string{}
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
 	if id, ok := mPV["objid"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
 		IDs = append(IDs, id.(string))
-		_, _, o, _ := q.Data(id.(string), "")
-		if len(o) > 0 && o[0] != "" {
-			root = o[0]
-		} else {
+		if _, _, o, _ := q.Data(id.(string), ""); len(o) == 0 || o[0] == "" {
 			return c.JSON(http.StatusAccepted, "id provided is not in db")
 		}
 	} else {
 		return c.JSON(http.StatusAccepted, "<objid> is missing")
 	}
 
-	qSchema := string(Must(ioutil.ReadFile(CFG.Query.SchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
 	if len(IDs) >= 1 {
-		rst := gql.Query(IDs, qSchema, CFG.Query.SchemaDir, qTxt, mPV, rmStructs, mReplace) // *** rst is already JSON string, so use String to return ***
-		rst = ASCIIToOri(rst)                                                               // *** ascii rst back to original rst ***
-		return c.String(http.StatusAccepted, rst)
+		gqlrst := gql.Query(IDs, CFG.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc) // *** gqlrst is already JSON string, use String to return ***
+		return c.String(http.StatusAccepted, gqlrst)
 	}
 
 	return c.JSON(http.StatusAccepted, "Nothing Found")
@@ -212,22 +201,6 @@ func getSchema(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, id)
 }
 
-// getQueryText :
-func getQueryText(c echo.Context) error {
-	defer func() {
-		mtxQryTxt.Unlock()
-		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
-			c.JSON(http.StatusBadRequest, msg)
-		})
-	}()
-
-	OriExePathChk()
-	mtxQryTxt.Lock()
-
-	id := c.QueryParam("id")
-	return c.JSON(http.StatusAccepted, id)
-}
-
 // ************************************************ HOST ************************************************ //
 
 // HostHTTPAsync : Host a HTTP Server for publishing xml json string(request body) to <n3-transport> grpc Server
@@ -249,7 +222,6 @@ func HostHTTPAsync() {
 	e.GET(CFG.Rest.PathID, getIDList)
 	e.GET(CFG.Rest.PathObj, getObject)
 	e.GET(CFG.Rest.PathScm, getSchema)
-	e.GET(CFG.Rest.PathGQLTxt, getQueryText)
 	e.POST(CFG.Rest.PathPub, postToNode)
 	e.POST(CFG.Rest.PathGQL, postQueryGQL)
 	e.DELETE(CFG.Rest.PathDel, delFromNode)

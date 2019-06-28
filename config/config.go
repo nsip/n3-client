@@ -36,6 +36,7 @@ type rpc struct {
 
 type query struct {
 	SchemaDir    string
+	SampleTxtDir string
 	ParamPathDir string
 }
 

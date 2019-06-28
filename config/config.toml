@@ -26,5 +26,6 @@ Path = "./config.toml"
 
 [Query]
   SchemaDir = "./gql/qSchema/"
+  SampleTxtDir = "./gql/qTxt/"
   ParamPathDir = "./rest/parampath/"
   

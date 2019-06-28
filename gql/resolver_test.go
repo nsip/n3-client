@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"testing"
 
+	g "../global"
 	q "../query"
 )
 
@@ -13,21 +14,15 @@ func TestGQL(t *testing.T) {
 	if len(o) > 0 {
 		root := o[0]
 		qSchemaDir, qTxtDir := "./qSchema/", "./qTxt/"
-		qSchema := string(Must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) // *** file content must be related to resolver path ***
-		qTxt := string(Must(ioutil.ReadFile(qTxtDir + root + ".txt")).([]byte))       // *** change ***
+		qTxt := string(Must(ioutil.ReadFile(qTxtDir + root + ".txt")).([]byte)) // *** change ***
 		result := Query(
 			[]string{objID},
-			qSchema,
 			qSchemaDir,
 			qTxt,
 			map[string]interface{}{},
-			[]string{},
-			map[string]string{
-				"en-US": "en_US",				
-			},
+			g.MpQryRstRplc,
 		)
 
-		result = ASCIIToOri(result) //                                                   *** ascii result back to original result ***
 		ioutil.WriteFile(fSf("./yield/%s.json", objID), []byte(result), 0666)
 		return
 	}

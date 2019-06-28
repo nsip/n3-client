@@ -14,4 +14,7 @@ func TestBuildInfoFromID(t *testing.T) {
 	if data := GetInfoFromID("SCHEMA", ID); data != "" {
 		ioutil.WriteFile(fSf("./debug/%s.gql", ID), []byte(data), 0666)
 	}
+	if data := GetInfoFromID("QRYTXT", ID); data != "" {
+		ioutil.WriteFile(fSf("./debug/%s.txt", ID), []byte(data), 0666)
+	}
 }

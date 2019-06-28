@@ -1,11 +1,8 @@
-package send
+package publish
 
 import (
-	"io/ioutil"
-
 	c "../config"
 	g "../global"
-	pp "../preprocess"
 	q "../query"
 	xjy "../xjy"
 	"github.com/nsip/n3-messages/messages"
@@ -54,7 +51,7 @@ func InitClient(config *c.Config) {
 }
 
 // Pub2Node :
-func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int) {
+func Pub2Node(str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 	PC(CFG == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
 
 	prevIDs, termIDs := "", ""
@@ -65,13 +62,13 @@ func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int)
 	switch IF(IsJSON(str), g.JSON, g.XML).(g.SQDType) {
 	case g.XML:
 		{
-			str = ppXML(str)
+			strMod := prepXML(str)
 
-			IDs = xjy.XMLInfoScan(str, idmark, PATH_DEL,
+			IDs, Objs = xjy.XMLInfoScan(strMod, idmark, PATH_DEL,
 				func(p, id string, v []string, lastObjTuple bool) {
 					// fPln("S ---> ", p, "::", v)
 					id = "::" + id
-					defer func() { verS, cntS, prevIDs = verS+1, cntS+1, id }()
+					defer func() { verS, nS, prevIDs = verS+1, nS+1, id }()
 					if id != prevIDs {
 						verS, termIDs = RequireVer(id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
@@ -86,7 +83,7 @@ func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int)
 				func(p, id string, n int, lastObjTuple bool) {
 					// fPln("A ---> ", p, id, n)
 					id = "[]" + id
-					defer func() { verA, cntA, prevIDa = verA+1, cntA+1, id }()
+					defer func() { verA, nA, prevIDa = verA+1, nA+1, id }()
 					if id != prevIDa {
 						verA, termIDa = RequireVer(id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
@@ -100,9 +97,9 @@ func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int)
 				},
 			)
 
-			xjy.YAMLScan(str, idmark, dfltRoot, IDs, DT_XML,
+			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, DT_XML,
 				func(p, v, id string) {
-					defer func() { verV, cntV, prevIDv, prevTermIDv = verV+1, cntV+1, id, termIDv }()
+					defer func() { verV, nV, prevIDv, prevTermIDv = verV+1, nV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
 					if id != prevIDv {
 						if prevIDv != "" {
@@ -111,21 +108,27 @@ func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int)
 						verV, termIDv = RequireVer(id, "V")
 						// fPln("Got Ver V:", verV, termIDv)
 					}
+					if l := len(v); l > 2 && v[0] == '\'' && v[l-1] == '\'' {
+						v = v[1 : l-1]
+					}
 					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 					tuple.Version = verV
 					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
 				})
 			Terminate(prevIDv, prevTermIDv, verV) //                              *** object values terminator ***
-		}
+
+			postpXML(str, IDs, Objs)
+
+		} // XML
 
 	case g.JSON:
 		{
-			str = ppJSON(str)
+			strMod := prepJSON(str)
 
-			IDs = xjy.JSONObjScan(str, idmark, dfltRoot,
+			IDs, Objs = xjy.JSONObjScan(strMod, idmark, dfltRoot,
 				func(p, id string, v []string, lastObjTuple bool) {
 					id = "::" + id
-					defer func() { verS, cntS, prevIDs = verS+1, cntS+1, id }()
+					defer func() { verS, nS, prevIDs = verS+1, nS+1, id }()
 					if id != prevIDs {
 						verS, termIDs = RequireVer(id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
@@ -139,7 +142,7 @@ func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int)
 				},
 				func(p, id string, n int, lastObjTuple bool) {
 					id = "[]" + id
-					defer func() { verA, cntA, prevIDa = verA+1, cntA+1, id }()
+					defer func() { verA, nA, prevIDa = verA+1, nA+1, id }()
 					if id != prevIDa {
 						verA, termIDa = RequireVer(id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
@@ -153,9 +156,9 @@ func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int)
 				},
 			)
 
-			xjy.YAMLScan(str, idmark, dfltRoot, IDs, DT_JSON,
+			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, DT_JSON,
 				func(p, v, id string) {
-					defer func() { verV, cntV, prevIDv, prevTermIDv = verV+1, cntV+1, id, termIDv }()
+					defer func() { verV, nV, prevIDv, prevTermIDv = verV+1, nV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
 					if id != prevIDv {
 						if prevIDv != "" {
@@ -164,34 +167,20 @@ func Pub2Node(str, idmark, dfltRoot string) (IDs []string, cntV, cntS, cntA int)
 						verV, termIDv = RequireVer(id, "V")
 						// fPln("Got Ver V:", verV, termIDv)
 					}
+					if l := len(v); l > 2 && v[0] == '\'' && v[l-1] == '\'' {
+						v = v[1 : l-1]
+					}
 					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 					tuple.Version = verV
 					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
 				})
 			Terminate(prevIDv, prevTermIDv, verV) //                              *** object terminator ***
-		}
-	}
+
+			postpJSON(str, IDs, Objs)
+
+		} // JSON
+
+	} // case
 
 	return
-}
-
-func ppJSON(json string) string {
-	ioutil.WriteFile("./debug_in_ppJSON.json", []byte(json), 0666)
-	json = pp.FmtJSONStr(json, "../preprocess/util/", "./") //      *** format json string ***
-	if pp.HasColonInValue(json) {
-		json = pp.RplcValueColons(json) //                          *** deal with <:> ***
-	}
-	if ascii, ajson := UTF8ToASCII(json); !ascii { //               *** convert to ASCII ***
-		fPln("is utf8")
-		return ajson
-	}
-	return json
-}
-
-func ppXML(xml string) string {
-	if ascii, axml := UTF8ToASCII(xml); !ascii { //                 *** convert to ASCII ***
-		fPln("is utf8")
-		return axml
-	}
-	return xml
 }

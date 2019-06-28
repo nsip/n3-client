@@ -5,9 +5,9 @@ import (
 )
 
 // JSONGetObjID : (must have TOP-LEVEL "id" like `"id": "6690e6c9-3ef0-4ed3-8b37-7f3964730bee",` )
-func JSONGetObjID(jsonstr, idmark, dfltRoot, pDel string) (id string, autoID, addRoot bool) {
-	root, addRoot, newJSON := JSONWrapRoot(jsonstr, dfltRoot)
-	jsonstr = IF(addRoot, newJSON, jsonstr).(string)
+func JSONGetObjID(jsonstr, idmark, dfltRoot, pDel string) (id, root string, autoID, addedRoot bool) {
+	root, addedRoot, newJSON := JSONWrapRoot(jsonstr, dfltRoot)
+	jsonstr = IF(addedRoot, newJSON, jsonstr).(string)
 	id, _ = JSONXPathValue(jsonstr, root+pDel+idmark, pDel, []int{1, 1}...)
 	if id == "" {
 		autoID, id = true, uuid.New().String()
@@ -18,12 +18,12 @@ func JSONGetObjID(jsonstr, idmark, dfltRoot, pDel string) (id string, autoID, ad
 // JSONModelInfo :
 func JSONModelInfo(jsonstr, ObjIDMark, dfltRoot, pDel string,
 	OnStruFetch func(string, string, []string, bool),
-	OnArrFetch func(string, string, int, bool)) (ID string) {
+	OnArrFetch func(string, string, int, bool)) (string, string) {
 
-	id, _, addRoot := JSONGetObjID(jsonstr, ObjIDMark, dfltRoot, pDel) //                  *** find ID Value by ObjIDMark ***
+	id, root, _, addedRoot := JSONGetObjID(jsonstr, ObjIDMark, dfltRoot, pDel) //                  *** find ID Value by ObjIDMark ***
 	id = Str(id).RmQuotes(QDouble).V()
 
-	mFT, mArr := JSONArrInfo(jsonstr, IF(addRoot, dfltRoot, "").(string), pDel, id, nil)
+	mFT, mArr := JSONArrInfo(jsonstr, IF(addedRoot, dfltRoot, "").(string), pDel, id, nil)
 	j, lFT, lArr := 0, len(*mFT), len(*mArr)
 	for k, v := range *mFT {
 		j++
@@ -35,22 +35,26 @@ func JSONModelInfo(jsonstr, ObjIDMark, dfltRoot, pDel string,
 		j++
 		OnArrFetch(k, v.ID, v.Count, (j == lArr))
 	}
-	return id
+	return id, root
 }
 
 // JSONObjScan :
 func JSONObjScan(json, idmark, dfltRoot string,
 	OnStruFetch func(string, string, []string, bool),
-	OnArrFetch func(string, string, int, bool)) (IDs []string) {
+	OnArrFetch func(string, string, int, bool)) (IDs, Objs []string) {
 
 	if ok, eleType, n, eles := IsJSONArray(json); ok {
 		if eleType == JT_OBJ {
 			for i := 1; i <= n; i++ {
-				IDs = append(IDs, JSONModelInfo(eles[i-1], idmark, dfltRoot, PATH_DEL, OnStruFetch, OnArrFetch))
+				id, root := JSONModelInfo(eles[i-1], idmark, dfltRoot, PATH_DEL, OnStruFetch, OnArrFetch)
+				IDs = append(IDs, id)
+				Objs = append(Objs, root)
 			}
 		}
 	} else {
-		IDs = append(IDs, JSONModelInfo(json, idmark, dfltRoot, PATH_DEL, OnStruFetch, OnArrFetch))
+		id, root := JSONModelInfo(json, idmark, dfltRoot, PATH_DEL, OnStruFetch, OnArrFetch)
+		IDs = append(IDs, id)
+		Objs = append(Objs, root)
 	}
 	return
 }

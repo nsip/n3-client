@@ -3,9 +3,10 @@ package filewatcher
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"time"
 
-	s ".."
+	pub ".."
 	g "../../global"
 	w "github.com/cdutwhu/go-wrappers"
 	"github.com/fsnotify/fsnotify"
@@ -13,16 +14,17 @@ import (
 
 var (
 	fPln = fmt.Println
+	lPln = log.Println
 )
 
 // StartFileWatcherAsync :
 func StartFileWatcherAsync() {
-	defer func() { s.PH(recover(), s.CFG.Global.ErrLog) }()
+	defer func() { pub.PH(recover(), pub.CFG.Global.ErrLog) }()
 
-	watcher := s.Must(fsnotify.NewWatcher()).(*fsnotify.Watcher)
+	watcher := pub.Must(fsnotify.NewWatcher()).(*fsnotify.Watcher)
 
 	defer watcher.Close()
-	s.PE(watcher.Add(s.CFG.Filewatcher.Dir))
+	pub.PE(watcher.Add(pub.CFG.Filewatcher.Dir))
 
 	for {
 		select {
@@ -30,10 +32,10 @@ func StartFileWatcherAsync() {
 			if !ok {
 				return
 			}
-			s.LPln("event:", event) // CREATE WRITE REMOVE RENAME
+			lPln("event:", event) // CREATE WRITE REMOVE RENAME
 			if event.Op&fsnotify.Create == fsnotify.Create {
 				time.Sleep(2 * time.Second)
-				s.LPln("created file:", event.Name)
+				lPln("created file:", event.Name)
 
 			READ_AGAIN:
 				bytes, e := ioutil.ReadFile(event.Name)
@@ -42,14 +44,14 @@ func StartFileWatcherAsync() {
 					time.Sleep(1000 * time.Millisecond)
 					goto READ_AGAIN
 				}
-				IDs, _, _, _ := s.Pub2Node(string(bytes), "id", "xapi")
+				IDs, _, _, _, _ := pub.Pub2Node(string(bytes), "id", "xapi")
 				g.RmIDsInLRU(IDs...)
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {
 				return
 			}
-			s.LPln("error:", err)
+			lPln("error:", err)
 		}
 	}
 }

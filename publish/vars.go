@@ -1,8 +1,7 @@
-package send
+package publish
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	c "../config"
@@ -36,14 +35,12 @@ var (
 	XMLFamilyTree = gjxy.XMLFamilyTree
 	XMLCntInfo    = gjxy.XMLCntInfo
 	IsJSON        = gjxy.IsJSON
+	JSONWrapRoot  = gjxy.JSONWrapRoot
 
 	fPln = fmt.Println
 	fPf  = fmt.Printf
 	fEf  = fmt.Errorf
 	fSf  = fmt.Sprintf
-
-	lPln = log.Println
-	LPln = lPln
 
 	sCtns = strings.Contains
 	sJ    = strings.Join
