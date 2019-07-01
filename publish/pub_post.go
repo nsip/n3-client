@@ -29,7 +29,7 @@ func postpJSON(json string, IDs, Objs []string) {
 		ID, root := IDs[0], Objs[0]
 		_, _, json = JSONWrapRoot(json, root)
 		json = pp.FmtJSONStr(json, "../preprocess/util/", "./preprocess/util/", "./")
-		ioutil.WriteFile(fSf("./debug_pub/%s.json", ID), []byte(json), 0666)
+		ioutil.WriteFile(fSf("../build/debug_pub/%s.json", ID), []byte(json), 0666)
 	}
 
 	g.RmIDsInLRU(IDs...)                            // *** remove id from lru cache ***

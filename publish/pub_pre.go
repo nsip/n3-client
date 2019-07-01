@@ -8,16 +8,23 @@ import (
 
 func prepJSON(json string) string {
 
-	// json = pp.FmtJSONStr(json, "../preprocess/util/", "./preprocess/util/", "./") //      *** format json string ***
+	// *** format json ***
 
-	ioutil.WriteFile("../build/debug_pub/temp.json", []byte(json), 0666)
-	json = pp.FmtJSONFile("../../build/debug_pub/temp.json", "../preprocess/util/", "./preprocess/util/", "./") // *** unit test ***
-	ioutil.WriteFile("../build/debug_pub/tempFmt.json", []byte(json), 0666)
+	// json = pp.FmtJSONStr(json, "../preprocess/util/", "./")
+	ioutil.WriteFile("../build/debug_pub/in.json", []byte(json), 0666)
+	json = pp.FmtJSONFile("../../build/debug_pub/in.json", "../preprocess/util/", "./")
+	ioutil.WriteFile("../build/debug_pub/infmt.json", []byte(json), 0666)
 
+	// *** ': null' => ': "null"' ***
+	json = Str(json).Replace(`": null`, `": "null"`).V()
+
+	// *** dealing with colon ***
 	if pp.HasColonInValue(json) {
-		json = pp.RplcValueColons(json) //                        *** deal with <:> ***
+		json = pp.RplcValueColons(json)
 	}
-	if ascii, ajson := UTF8ToASCII(json); !ascii { //               *** convert to ASCII ***
+
+	// *** convert to ASCII ***
+	if ascii, ajson := UTF8ToASCII(json); !ascii {
 		fPln("is utf8")
 		return ajson
 	}
@@ -25,7 +32,9 @@ func prepJSON(json string) string {
 }
 
 func prepXML(xml string) string {
-	if ascii, axml := UTF8ToASCII(xml); !ascii { //                 *** convert to ASCII ***
+
+	// *** convert to ASCII ***
+	if ascii, axml := UTF8ToASCII(xml); !ascii {
 		fPln("is utf8")
 		return axml
 	}

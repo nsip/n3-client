@@ -41,8 +41,8 @@ var (
 	})).(*lru.Cache)
 
 	MpQryRstRplc = map[string]string{
-		`en-US`: `en_US`,
-		// `"'`:    `"`,
-		// `'"`:    `"`,
+		`en-US`:      `en_US`,
+		`": "true"`:  `": true`,
+		`": "false"`: `": false`,
 	}
 )
