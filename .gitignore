@@ -1,3 +1,5 @@
 # git rm -r --cached .
+
 .vscode/
 n3-client
+build/n3-client
