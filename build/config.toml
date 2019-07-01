@@ -4,7 +4,7 @@ Path = "./config.toml"
   ErrLog = "./log.txt"
 
 [Filewatcher]
-  Dir = "./inbound/"
+  Dir = "../inbound/"
 
 [Rest]
   Port = 1323
@@ -25,7 +25,7 @@ Path = "./config.toml"
   CtxMeta = "demo-meta"
 
 [Query]
-  SchemaDir = "./gql/qSchema/"
-  SampleTxtDir = "./gql/qTxt/"
-  ParamPathDir = "./rest/parampath/"
+  SchemaDir = "../gql/qSchema/"
+  SampleTxtDir = "../gql/qTxt/"
+  ParamPathDir = "../rest/parampath/"
   

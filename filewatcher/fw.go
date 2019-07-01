@@ -1,20 +1,13 @@
 package filewatcher
 
 import (
-	"fmt"
 	"io/ioutil"
-	"log"
 	"time"
 
-	pub ".."
-	g "../../global"
+	g "../global"
+	pub "../publish"
 	w "github.com/cdutwhu/go-wrappers"
 	"github.com/fsnotify/fsnotify"
-)
-
-var (
-	fPln = fmt.Println
-	lPln = log.Println
 )
 
 // StartFileWatcherAsync :

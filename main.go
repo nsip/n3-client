@@ -2,10 +2,10 @@ package main
 
 import (
 	cfg "./config"
+	fw "./filewatcher"
+	pub "./publish"
 	"./query"
 	"./rest"
-	pub "./publish"
-	fw "./publish/filewatcher"
 )
 
 func main() {
