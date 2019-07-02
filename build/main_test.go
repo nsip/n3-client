@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	cfg "../config"
+	fw "../filewatcher"
 	pub "../publish"
-	fw "../publish/filewatcher"
 	"../query"
 	"../rest"
 	u "github.com/cdutwhu/go-util"

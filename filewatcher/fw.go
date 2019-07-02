@@ -39,6 +39,7 @@ func StartFileWatcherAsync() {
 				}
 				IDs, _, _, _, _ := pub.Pub2Node(string(bytes), "id", "xapi")
 				g.RmIDsInLRU(IDs...)
+				g.RmQryIDsCache(IDs...)
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {

@@ -32,11 +32,13 @@ func postpJSON(json string, IDs, Objs []string) {
 		ioutil.WriteFile(fSf("../build/debug_pub/%s.json", ID), []byte(json), 0666)
 	}
 
-	g.RmIDsInLRU(IDs...)                            // *** remove id from lru cache ***
+	g.RmIDsInLRU(IDs...) // *** remove id from lru cache ***
+	g.RmQryIDsCache(IDs...)
 	mkSchemaQueryHead(CFG.Query.SchemaDir, Objs...) // *** create gql schema query header ***
 }
 
 func postpXML(xml string, IDs, Objs []string) {
-	g.RmIDsInLRU(IDs...)                            // *** remove id from lru cache ***
+	g.RmIDsInLRU(IDs...) // *** remove id from lru cache ***
+	g.RmQryIDsCache(IDs...)
 	mkSchemaQueryHead(CFG.Query.SchemaDir, Objs...) // *** create gql schema query header ***
 }

@@ -55,24 +55,24 @@ func GetInfoFromID(infoType, objID string) string {
 	}
 }
 
-// GetResourceFromID :
-func GetResourceFromID(objIDs []string) (mSchema, mJSON map[string]string) {
+// GetDataFromID :
+func GetDataFromID(objIDs []string) (mSchema, mJSON map[string]string) {
 
 	mSchema, mJSON = make(map[string]string), make(map[string]string)
 
 	for _, objID := range objIDs {
 
-		ok1, ok2, ok3 := false, false, false
+		okS, okJ, okR := false, false, false
 		if schema, ok := g.LCSchema.Get(objID); ok {
-			mSchema[objID], ok1 = schema.(string), ok
+			mSchema[objID], okS = schema.(string), ok
 		}
 		if json, ok := g.LCJSON.Get(objID); ok {
-			mJSON[objID], ok2 = json.(string), ok
+			mJSON[objID], okJ = json.(string), ok
 		}
 		if rt, ok := g.LCRoot.Get(objID); ok {
-			root, ok3 = rt.(string), ok
+			root, okR = rt.(string), ok
 		}
-		if ok1 && ok2 && ok3 {
+		if okS && okJ && okR {
 			continue
 		}
 
@@ -128,7 +128,7 @@ func rsvResource(objIDs []string, mJSON, mReplace map[string]string) []byte {
 // Query : if id is known, use Query
 func Query(objIDs []string, qSchemaDir, qTxt string, variables map[string]interface{}, mReplace map[string]string) (rstJSON string) {
 
-	mSchema, mJSON := GetResourceFromID(objIDs)
+	mSchema, mJSON := GetDataFromID(objIDs)
 	autoSchema := mSchema[objIDs[0]]
 	if autoSchema == "" {
 		return ""

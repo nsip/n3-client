@@ -46,26 +46,24 @@ func getIDList(c echo.Context) error {
 	mtxID.Lock()
 
 	params := c.QueryParams()
-	mPP, mPV, mKV := map[string]string{}, map[string]interface{}{}, map[string]string{}
 	if object, ok := params["object"]; ok {
-		files := Must(ioutil.ReadDir(CFG.Query.ParamPathDir)).([]os.FileInfo)
-		for _, f := range files {
+		mPP, mPV := map[string]string{}, map[string]interface{}{}
+		ppDir := CFG.Query.ParamPathDir
+		for _, f := range Must(ioutil.ReadDir(ppDir)).([]os.FileInfo) {
 			if f.Name() == object[0] {
-				data := string(Must(ioutil.ReadFile(CFG.Query.ParamPathDir + f.Name())).([]byte))
-				mKV = Str(data).KeyValueMap('\n', ':', '#')
+				data := string(Must(ioutil.ReadFile(ppDir + f.Name())).([]byte))
+				mPP = Str(data).KeyValueMap('\n', ':', '#')
 				break
 			}
 		}
 		for k, v := range params {
-			if _, ok := mKV[k]; ok {
-				mPP[k], mPV[k] = mKV[k], Str(v[0]).T(BLANK).V()
+			if _, ok := mPP[k]; ok {
+				mPV[k] = Str(v[0]).T(BLANK).V()
 			}
 		}
-
-		if all, ok := params["all"]; ok && all[0] == "true" {
-			return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV, true))
-		}
-		return c.JSON(http.StatusAccepted, IDsByPO(mPP, mPV, false))
+		all, ok := params["all"]
+		getall := IF(ok && all[0] == "true", true, false).(bool)
+		return c.JSON(http.StatusAccepted, GetIDs(mPP, mPV, getall))
 	}
 	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }
@@ -85,6 +83,7 @@ func delFromNode(c echo.Context) error {
 	idList := c.QueryParams()["id"]
 	d.DelBat(idList...)
 	g.RmIDsInLRU(idList...)
+	g.RmQryIDsCache(idList...)
 	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(idList)))
 }
 

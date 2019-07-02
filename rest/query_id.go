@@ -1,11 +1,32 @@
 package rest
 
 import (
+	"reflect"
+
+	g "../global"
 	q "../query"
 )
 
-// IDsByPO :
-func IDsByPO(mParamPath map[string]string, mParamValue map[string]interface{}, all bool) (IDs []string) {
+// GetIDs :
+func GetIDs(mParamPath map[string]string, mParamValue map[string]interface{}, all bool) []string {
+	for _, qry := range g.CacheQryIDs {
+		if reflect.DeepEqual(qry.Qry, mParamValue) && qry.IDs != nil {
+			return qry.IDs
+		}
+	}
+	IDs := IdsByPO(mParamPath, mParamValue, all)
+	if len(IDs) > 0 && IDs[0] != "" {
+		g.CacheQryIDsPtr++
+		if g.CacheQryIDsPtr >= g.NQryIDsCache {
+			g.CacheQryIDsPtr = 0
+		}
+		g.CacheQryIDs[g.CacheQryIDsPtr] = g.QryIDs{Qry: mParamValue, IDs: IDs}
+	}
+	return IDs
+}
+
+// IdsByPO :
+func IdsByPO(mParamPath map[string]string, mParamValue map[string]interface{}, all bool) (IDs []string) {
 
 	// *** remove "" empty string value items from <mParamValue>
 	for k, v := range mParamValue {
