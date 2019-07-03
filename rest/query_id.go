@@ -8,25 +8,23 @@ import (
 )
 
 // GetIDs :
-func GetIDs(mParamPath map[string]string, mParamValue map[string]interface{}, all bool) []string {
+func GetIDs(ctx string, mParamPath map[string]string, mParamValue map[string]interface{}, all bool) []string {
 	for _, qry := range g.CacheQryIDs {
 		if reflect.DeepEqual(qry.Qry, mParamValue) && qry.IDs != nil {
 			return qry.IDs
 		}
 	}
-	IDs := IdsByPO(mParamPath, mParamValue, all)
+	IDs := IDsByPO(ctx, mParamPath, mParamValue, all)
 	if len(IDs) > 0 && IDs[0] != "" {
 		g.CacheQryIDsPtr++
-		if g.CacheQryIDsPtr >= g.NQryIDsCache {
-			g.CacheQryIDsPtr = 0
-		}
-		g.CacheQryIDs[g.CacheQryIDsPtr] = g.QryIDs{Qry: mParamValue, IDs: IDs}
+		g.CacheQryIDsPtr %= g.NQryIDsCache
+		g.CacheQryIDs[g.CacheQryIDsPtr] = g.QryIDs{Ctx: g.CurCtx, Qry: mParamValue, IDs: IDs}
 	}
 	return IDs
 }
 
-// IdsByPO :
-func IdsByPO(mParamPath map[string]string, mParamValue map[string]interface{}, all bool) (IDs []string) {
+// IDsByPO :
+func IDsByPO(ctx string, mParamPath map[string]string, mParamValue map[string]interface{}, all bool) (IDs []string) {
 
 	// *** remove "" empty string value items from <mParamValue>
 	for k, v := range mParamValue {
@@ -44,7 +42,7 @@ func IdsByPO(mParamPath map[string]string, mParamValue map[string]interface{}, a
 
 	idx := 0
 	for param, value := range mParamValue {
-		s, _, _, _ := q.Data(IF(all, "*", "").(string), mParamPath[param], value.(string))
+		s, _, _, _ := q.Data(ctx, IF(all, "*", "").(string), mParamPath[param], value.(string))
 		for _, eachID := range s {
 			idsList[idx] = append(idsList[idx], eachID)
 		}

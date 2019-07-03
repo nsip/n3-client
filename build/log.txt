@@ -1,0 +1,13 @@
+
+*** Panic Error *** Fatal : false ***
+2019/07/03 13:39:15 *errors.withStack unable to create stream connection to server: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing dial tcp 192.168.76.37:5777: connect: connection refused"
+/home/qing/go/src/github.com/nsip/n3-messages/n3grpc/client.go:29 (0x8d46ef)
+	NewClient: PE1(err, "unable to create stream connection to server")
+/home/qing/Desktop/n3-client/publish/pub.go:50 (0x97ac5f)
+	InitClient: g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+/home/qing/Desktop/n3-client/main.go:35 (0x9eeeb6)
+	main: pub.InitClient(CFG)
+/usr/local/go/src/runtime/proc.go:200 (0x42f23c)
+	main: fn()
+/usr/local/go/src/runtime/asm_amd64.s:1337 (0x459801)
+	goexit: BYTE	$0x90	// NOP

@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"testing"
 	"time"
+	g "../global"
 )
 
 // func TestPermu(t *testing.T) {
@@ -25,7 +26,7 @@ func TestStrsJoinEx(t *testing.T) {
 
 func TestAMapIndicesList(t *testing.T) {
 	objID := "d6971037-e2ff-4db6-a669-ba5fbab0d318"
-	queryObject(objID) //                                 *** get root, mapStruct, mapValue ***
+	queryObject(g.CurCtx, objID) //                                 *** get root, mapStruct, mapValue ***
 
 	fPln()
 
@@ -44,7 +45,7 @@ func TestAMapIndicesList(t *testing.T) {
 func TestQueryObject(t *testing.T) {
 
 	objID := "c58f2f19-32ed-4258-a71b-6506b2a2f33b"
-	queryObject(objID) //                                 *** get root, mapStruct, mapValue ***
+	queryObject(g.CurCtx, objID) //                                 *** get root, mapStruct, mapValue ***
 
 	fPln(root)
 	fPln("<-------------------------------------------------------------------------------------------------------------->")

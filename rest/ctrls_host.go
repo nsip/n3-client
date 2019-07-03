@@ -63,7 +63,7 @@ func getIDList(c echo.Context) error {
 		}
 		all, ok := params["all"]
 		getall := IF(ok && all[0] == "true", true, false).(bool)
-		return c.JSON(http.StatusAccepted, GetIDs(mPP, mPV, getall))
+		return c.JSON(http.StatusAccepted, GetIDs(g.CurCtx, mPP, mPV, getall))
 	}
 	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }
@@ -81,7 +81,7 @@ func delFromNode(c echo.Context) error {
 	mtxDel.Lock()
 
 	idList := c.QueryParams()["id"]
-	d.DelBat(idList...)
+	d.DelBat(g.CurCtx, idList...)
 	g.RmIDsInLRU(idList...)
 	g.RmQryIDsCache(idList...)
 	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(idList)))
@@ -113,7 +113,7 @@ func postToNode(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
 
-	_, _, nV, nS, nA := pub.Pub2Node(data, idmark, dfltRoot) //             *** preprocess, postprocess included ***
+	_, _, nV, nS, nA := pub.Pub2Node(g.CurCtx, data, idmark, dfltRoot) //             *** preprocess, postprocess included ***
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
@@ -153,7 +153,7 @@ func postQueryGQL(c echo.Context) error {
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
 	if id, ok := mPV["objid"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
 		IDs = append(IDs, id.(string))
-		if _, _, o, _ := q.Data(id.(string), ""); len(o) == 0 || o[0] == "" {
+		if _, _, o, _ := q.Data(g.CurCtx, id.(string), ""); len(o) == 0 || o[0] == "" {
 			return c.JSON(http.StatusAccepted, "id provided is not in db")
 		}
 	} else {
@@ -161,7 +161,7 @@ func postQueryGQL(c echo.Context) error {
 	}
 
 	if len(IDs) >= 1 {
-		gqlrst := gql.Query(IDs, CFG.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc) // *** gqlrst is already JSON string, use String to return ***
+		gqlrst := gql.Query(g.CurCtx, IDs, CFG.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc) // *** gqlrst is already JSON string, use String to return ***
 		return c.String(http.StatusAccepted, gqlrst)
 	}
 

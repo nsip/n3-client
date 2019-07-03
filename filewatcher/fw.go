@@ -37,7 +37,7 @@ func StartFileWatcherAsync() {
 					time.Sleep(1000 * time.Millisecond)
 					goto READ_AGAIN
 				}
-				IDs, _, _, _, _ := pub.Pub2Node(string(bytes), "id", "xapi")
+				IDs, _, _, _, _ := pub.Pub2Node(g.CurCtx, string(bytes), "id", "xapi")
 				g.RmIDsInLRU(IDs...)
 				g.RmQryIDsCache(IDs...)
 			}

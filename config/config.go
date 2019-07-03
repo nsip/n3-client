@@ -30,8 +30,7 @@ type rpc struct {
 	Namespace string
 	Server    string
 	Port      int
-	Ctx       string
-	CtxMeta   string
+	CtxList   []string	
 }
 
 type query struct {

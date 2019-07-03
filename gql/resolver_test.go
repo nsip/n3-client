@@ -10,12 +10,14 @@ import (
 
 func TestGQL(t *testing.T) {
 	objID := "ca669951-9511-4e53-ae92-50845d3bdcd6"
-	_, _, o, _ := q.Data(objID, "") //                 *** get root ***
+	ctx := g.CurCtx
+	_, _, o, _ := q.Data(ctx, objID, "") //           *** get root ***
 	if len(o) > 0 {
 		root := o[0]
 		qSchemaDir, qTxtDir := "./qSchema/", "./qTxt/"
 		qTxt := string(Must(ioutil.ReadFile(qTxtDir + root + ".txt")).([]byte)) // *** change ***
 		result := Query(
+			ctx,
 			[]string{objID},
 			qSchemaDir,
 			qTxt,

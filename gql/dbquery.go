@@ -24,11 +24,11 @@ func clrQueryCache() {
 }
 
 // filling root, mStruct, mValue, mArray
-func queryObject(id string) {
+func queryObject(ctx, id string) {
 	defer func() { PH(recover(), CFG.Global.ErrLog) }()
 	Init(c.FromFile("./config.toml", "../config/config.toml"))
 
-	_, _, o, _ := q.Data(id, "") //              *** Object's Root ***
+	_, _, o, _ := q.Data(ctx, id, "") //         *** Object's Root ***
 	if len(o) > 0 {
 		root = o[0]
 	} else {
@@ -37,7 +37,7 @@ func queryObject(id string) {
 
 	fPln(" ---------------------------------------------- ")
 
-	s, p, o, v := q.Data(id, "::") //            *** Struct ***
+	s, p, o, v := q.Data(ctx, id, "::") //       *** Struct ***
 	for i := range s {
 		mStruct[p[i]] = o[i]
 		// fPf("S mStruct --> %-70s%-70s%10d\n", p[i], o[i], v[i])
@@ -45,7 +45,7 @@ func queryObject(id string) {
 
 	fPln(" ---------------------------------------------- ")
 
-	s, p, o, v = q.Data(id, "[]") //             *** Array ***
+	s, p, o, v = q.Data(ctx, id, "[]") //        *** Array ***
 	for i := range s {
 		mArray[p[i]] = Str(o[i]).ToInt()
 		// fPf("A mArray --> %-70s%-70s%10d\n", p[i], o[i], v[i])
@@ -54,7 +54,7 @@ func queryObject(id string) {
 
 	fPln(" ---------------------------------------------- ")
 
-	s, p, o, v = q.Data(id, root) //             *** Values ***
+	s, p, o, v = q.Data(ctx, id, root) //        *** Values ***
 	for i := range s {
 		mValue[p[i]] = append(mValue[p[i]], &valver{value: o[i], ver: v[i]})
 		// fPf("V mValue --> %-70s%-70s%10d\n", p[i], o[i], v[i])

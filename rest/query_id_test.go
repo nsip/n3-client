@@ -1,6 +1,7 @@
 package rest
 
 import "testing"
+import g "../global"
 
 func TestQueryIDs(t *testing.T) {
 
@@ -15,7 +16,7 @@ func TestQueryIDs(t *testing.T) {
 		"stage":         "1",
 	}
 
-	ids := IDsByPO(mapPP, mapPV, false)
+	ids := IDsByPO(g.CurCtx, mapPP, mapPV, false)
 	for _, id := range ids {
 		fPln(id)
 	}

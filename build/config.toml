@@ -1,4 +1,4 @@
-Path = "./config.toml"
+Path = "../build/config.toml"
 
 [Global]
   ErrLog = "./log.txt"
@@ -10,7 +10,7 @@ Path = "./config.toml"
   Port = 1323
   PathTest = "/"
   PathID = "/id"
-  PathPub = "/pub"  
+  PathPub = "/pub"
   PathGQL = "/gql"
   PathDel = "/del"
   PathObj = "/obj"
@@ -21,11 +21,9 @@ Path = "./config.toml"
   Namespace = "F7AoxkA2RTtrmjCg6nEuCtvSp5C6sp6R5RCjUKaXYkpp"
   Server = "192.168.76.37"
   Port = 5777
-  Ctx = "demo"
-  CtxMeta = "demo-meta"
+  Ctx = ["demo", "demo1", "demo2"]  
 
 [Query]
   SchemaDir = "../gql/qSchema/"
   SampleTxtDir = "../gql/qTxt/"
   ParamPathDir = "../rest/parampath/"
-  

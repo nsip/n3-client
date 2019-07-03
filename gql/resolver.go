@@ -23,12 +23,12 @@ func qSchemaList(qSchemaDir string) (fnames []string) {
 }
 
 // GetInfoFromID : (FOR testing use)
-func GetInfoFromID(infoType, objID string) string {
+func GetInfoFromID(ctx, infoType, objID string) string {
 	defer clrQueryCache()
 	if objID == "" {
 		return ""
 	}
-	queryObject(objID) //         *** GET root, mStruct, mArray, mValue ***
+	queryObject(ctx, objID) //     *** GET root, mStruct, mArray, mValue ***
 
 	if len(mValue) == 0 {
 		return ""
@@ -56,7 +56,7 @@ func GetInfoFromID(infoType, objID string) string {
 }
 
 // GetDataFromID :
-func GetDataFromID(objIDs []string) (mSchema, mJSON map[string]string) {
+func GetDataFromID(ctx string, objIDs []string) (mSchema, mJSON map[string]string) {
 
 	mSchema, mJSON = make(map[string]string), make(map[string]string)
 
@@ -86,7 +86,7 @@ func GetDataFromID(objIDs []string) (mSchema, mJSON map[string]string) {
 			continue
 		}
 
-		queryObject(objID) //    *** GET root, mStruct, mArray, mValue ***
+		queryObject(ctx, objID) //    *** GET root, mStruct, mArray, mValue ***
 
 		if len(mStruct) == 0 || len(mValue) == 0 {
 			mSchema[objID], mJSON[objID] = "", ""
@@ -126,9 +126,9 @@ func rsvResource(objIDs []string, mJSON, mReplace map[string]string) []byte {
 }
 
 // Query : if id is known, use Query
-func Query(objIDs []string, qSchemaDir, qTxt string, variables map[string]interface{}, mReplace map[string]string) (rstJSON string) {
+func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[string]interface{}, mReplace map[string]string) (rstJSON string) {
 
-	mSchema, mJSON := GetDataFromID(objIDs)
+	mSchema, mJSON := GetDataFromID(ctx, objIDs)
 	autoSchema := mSchema[objIDs[0]]
 	if autoSchema == "" {
 		return ""

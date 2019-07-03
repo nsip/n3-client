@@ -13,6 +13,7 @@ type (
 	SQDType int
 
 	QryIDs struct {
+		Ctx string
 		Qry map[string]interface{}
 		IDs []string
 	}
@@ -26,12 +27,13 @@ const (
 )
 
 var (
-	N3clt *n3grpc.Client
-
 	fPln = fmt.Println
 	fSf  = fmt.Sprintf
 	Must = u.Must
 
+	N3clt *n3grpc.Client
+
+	CurCtx        = "demo"
 	OriExePath, _ = os.Getwd()
 
 	// LCRoot *** ID : Root *** ID query cache

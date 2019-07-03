@@ -15,17 +15,17 @@ func Init(config *c.Config) {
 }
 
 // Del :
-func Del(subject string) {
+func Del(ctx, subject string) {
 	if CFG == nil || g.N3clt == nil {
 		Init(c.FromFile("./config.toml", "../config/config.toml"))
 	}
 	dTuple := &pb.SPOTuple{Subject: subject, Predicate: DEADMARK}
-	PE(g.N3clt.Publish(dTuple, CFG.RPC.Namespace, CFG.RPC.Ctx))
+	PE(g.N3clt.Publish(dTuple, CFG.RPC.Namespace, ctx))
 }
 
 // DelBat :
-func DelBat(subjects ...string) {
+func DelBat(ctx string, subjects ...string) {
 	for _, s := range subjects {
-		Del(s)
+		Del(ctx, s)
 	}
 }
