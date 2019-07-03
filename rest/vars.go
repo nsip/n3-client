@@ -44,8 +44,7 @@ var (
 	UTF8ToASCII   = w.UTF8ToASCII
 
 	IsJSON = gjxy.IsJSON
-
-	e   error
+	
 	ver int64 = 1
 
 	mtxQry    = &sync.Mutex{}

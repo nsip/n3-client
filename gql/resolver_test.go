@@ -15,7 +15,7 @@ func TestGQL(t *testing.T) {
 	if len(o) > 0 {
 		root := o[0]
 		qSchemaDir, qTxtDir := "./qSchema/", "./qTxt/"
-		qTxt := string(Must(ioutil.ReadFile(qTxtDir + root + ".txt")).([]byte)) // *** change ***
+		qTxt := string(must(ioutil.ReadFile(qTxtDir + root + ".txt")).([]byte)) // *** change ***
 		result := Query(
 			ctx,
 			[]string{objID},

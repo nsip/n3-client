@@ -43,10 +43,7 @@ var (
 
 	sCtns = strings.Contains
 	sJ    = strings.Join
-	sCnt  = strings.Count
-
-	e error
-	// ver int64 = 1
+	sCnt  = strings.Count	
 )
 
 const (

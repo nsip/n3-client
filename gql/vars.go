@@ -53,8 +53,7 @@ var (
 	sRepAll = strings.ReplaceAll
 	sJ      = strings.Join
 	sCnt    = strings.Count
-
-	e               error
+	
 	root            = ""
 	mStruct         = map[string]string{}
 	mValue          = map[string][]*valver{}

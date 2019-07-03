@@ -44,9 +44,7 @@ var (
 	LPln = lPln
 
 	sJ   = strings.Join
-	sCnt = strings.Count
-
-	e error
+	sCnt = strings.Count	
 )
 
 const (

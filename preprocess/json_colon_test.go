@@ -8,7 +8,7 @@ import (
 func TestCheck(t *testing.T) {
 	// file := "../inbound/hsie/history/stage4/content.json"
 	file := "./sample.json"
-	json := string(Must(ioutil.ReadFile(file)).([]byte))
+	json := string(must(ioutil.ReadFile(file)).([]byte))
 
 	ascii, _ := UTF8ToASCII(json)
 	if !ascii {
@@ -25,7 +25,7 @@ func TestCheck(t *testing.T) {
 	fPln("HasColonInValue json2", HasColonInValue(json2), "\n")
 	json22 := RplcValueColons(json2)
 
-	PC(json11 != json22, fEf("1 [error in FmtJSONFile or FmtJSONStr]"))
+	pc(json11 != json22, fEf("1 [error in FmtJSONFile or FmtJSONStr]"))
 
 	json111 := ASCIIToOri(json11)
 	json222 := ASCIIToOri(json22)
@@ -40,6 +40,6 @@ func TestCheck(t *testing.T) {
 	// fPln(" ***** ")
 	// fPln(json22)
 
-	PC(json222 != json111, fEf("2 [error in FmtJSONFile or FmtJSONStr]"))
-	PC(json1 != json111, fEf("3 [error in FmtJSONFile or FmtJSONStr]"))
+	pc(json222 != json111, fEf("2 [error in FmtJSONFile or FmtJSONStr]"))
+	pc(json1 != json111, fEf("3 [error in FmtJSONFile or FmtJSONStr]"))
 }

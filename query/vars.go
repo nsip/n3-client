@@ -25,7 +25,5 @@ var (
 	fEf  = fmt.Errorf
 	fSf  = fmt.Sprintf
 
-	lPln = log.Println
-
-	e error
+	lPln = log.Println	
 )

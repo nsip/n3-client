@@ -19,8 +19,6 @@ var (
 	fSf  = fmt.Sprintf
 
 	lPln = log.Println
-
-	e error
 )
 
 const (
