@@ -16,7 +16,7 @@ var (
 )
 
 func main() {
-	g.Cfg = c.FromFile("./build/config.toml")
+	g.Cfg = c.FromFile("../build/config.toml")
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	pub.InitClient(g.Cfg)
 	query.InitClient(g.Cfg)
