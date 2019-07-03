@@ -1,6 +1,5 @@
 #!/bin/bash
 
-rm -f ./build/debug_pub/*.json
-rm -f ./build/debug_qry/*.json
-rm -f ./build/log.txt
+rm -f ./build/debug*/*.json
 rm -f ./build/n3-client
+rm -f ./*/errlog.txt

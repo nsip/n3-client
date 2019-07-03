@@ -26,6 +26,8 @@ func TestToNode(t *testing.T) {
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	TestN3LoadConfig(t)
 
+	g.CurCtx = g.Cfg.RPC.CtxList[0]
+
 	// for i := 1; i <= 5; i++ {
 	// 	file := fSf("../inbound/hsie/history/stage%d/overview.json", i) // *** change <file> ***
 	// 	json := string(must(ioutil.ReadFile(file)).([]byte))

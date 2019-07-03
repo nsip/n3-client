@@ -33,10 +33,10 @@ var (
 	fSf  = fmt.Sprintf
 	must = u.Must
 
-	Cfg *c.Config
+	Cfg   *c.Config
 	N3clt *n3grpc.Client
 
-	CurCtx        = "demo"
+	CurCtx        = ""
 	OriExePath, _ = os.Getwd()
 
 	// LCRoot *** ID : Root *** ID query cache
