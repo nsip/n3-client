@@ -9,7 +9,7 @@ import (
 )
 
 func TestXMLScanObjects(t *testing.T) {
-	sifbytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte)
+	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)
 	ids, objtags, starts, ends := XMLScanObjects(string(sifbytes), "RefId")
 	fPln(len(objtags))
 	for i := range ids {
@@ -18,7 +18,7 @@ func TestXMLScanObjects(t *testing.T) {
 }
 
 func TestXMLObjStrByID(t *testing.T) {
-	sifbytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte)
+	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)
 	xmlobj := XMLObjStrByID(string(sifbytes), "RefId", "1822AF7A-F9CB-4F0D-96EA-9280DD0B6AB2")
 	fPln(xmlobj)
 	fPln()
@@ -27,10 +27,10 @@ func TestXMLObjStrByID(t *testing.T) {
 }
 
 func TestXMLInfoScan(t *testing.T) {
-	cfg := c.FromFile("./config.toml", "../config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog) }()
+	cfg := c.FromFile("../build/config.toml")
+	defer func() { ph(recover(), cfg.ErrLog) }()
 
-	sifbytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte)
+	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)
 	XMLInfoScan(string(sifbytes), "RefId", PATH_DEL,
 		func(p, id string, v []string, lastOne bool) {
 			fPln("S --->>> ", p, " : ", v)

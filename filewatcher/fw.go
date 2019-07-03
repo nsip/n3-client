@@ -12,12 +12,12 @@ import (
 
 // StartFileWatcherAsync :
 func StartFileWatcherAsync() {
-	defer func() { pub.PH(recover(), pub.CFG.Global.ErrLog) }()
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 
-	watcher := pub.Must(fsnotify.NewWatcher()).(*fsnotify.Watcher)
+	watcher := must(fsnotify.NewWatcher()).(*fsnotify.Watcher)
 
 	defer watcher.Close()
-	pub.PE(watcher.Add(pub.CFG.Filewatcher.Dir))
+	pe(watcher.Add(g.Cfg.Filewatcher.Dir))
 
 	for {
 		select {

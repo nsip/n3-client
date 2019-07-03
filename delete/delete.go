@@ -9,18 +9,18 @@ import (
 
 // Init :
 func Init(config *c.Config) {
-	PC(config == nil, fEf("Init Config"))
-	CFG = config
-	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+	pc(config == nil, fEf("Init Config"))
+	g.Cfg = config
+	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(g.Cfg.RPC.Server, g.Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
 // Del :
 func Del(ctx, subject string) {
-	if CFG == nil || g.N3clt == nil {
-		Init(c.FromFile("./config.toml", "../config/config.toml"))
+	if g.Cfg == nil || g.N3clt == nil {
+		Init(c.FromFile("../build/config.toml"))
 	}
 	dTuple := &pb.SPOTuple{Subject: subject, Predicate: DEADMARK}
-	PE(g.N3clt.Publish(dTuple, CFG.RPC.Namespace, ctx))
+	pe(g.N3clt.Publish(dTuple, g.Cfg.RPC.Namespace, ctx))
 }
 
 // DelBat :

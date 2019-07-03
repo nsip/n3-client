@@ -9,9 +9,9 @@ import (
 
 // Init :
 func Init(config *c.Config) {
-	PC(config == nil, fEf("Init Config"))
-	CFG = config
-	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+	pc(config == nil, fEf("Init Config"))
+	g.Cfg = config
+	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(g.Cfg.RPC.Server, g.Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
 func clrQueryCache() {
@@ -20,12 +20,12 @@ func clrQueryCache() {
 	mArray = map[string]int{}
 	mIndicesList = map[string][][]int{}
 	mIPathObj = map[string]string{}
-	mIPathSubIPaths = map[string][]string{}	
+	mIPathSubIPaths = map[string][]string{}
 }
 
 // filling root, mStruct, mValue, mArray
 func queryObject(ctx, id string) {
-	defer func() { PH(recover(), CFG.Global.ErrLog) }()
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	Init(c.FromFile("./config.toml", "../config/config.toml"))
 
 	_, _, o, _ := q.Data(ctx, id, "") //         *** Object's Root ***

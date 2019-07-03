@@ -12,7 +12,7 @@ func TestN3LoadConfig(t *testing.T) {
 }
 
 func TestQueryMeta(t *testing.T) {
-	defer func() { PH(recover(), CFG.Global.ErrLog) }()
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	TestN3LoadConfig(t)
 
 	ctx := g.CurCtx
@@ -26,7 +26,7 @@ func TestQueryMeta(t *testing.T) {
 }
 
 func TestQuery1(t *testing.T) {
-	defer func() { PH(recover(), CFG.Global.ErrLog) }()
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	TestN3LoadConfig(t)
 
 	ctx := g.CurCtx
@@ -61,7 +61,7 @@ func TestQuery1(t *testing.T) {
 }
 
 func TestQuery2(t *testing.T) {
-	defer func() { PH(recover(), CFG.Global.ErrLog) }()
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	TestN3LoadConfig(t)
 
 	ctx := g.CurCtx

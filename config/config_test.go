@@ -9,8 +9,8 @@ func TestLoad(t *testing.T) {
 	fPln(cfg.Rest.PathGQL)
 	fPln(cfg.RPC)
 	fPln(cfg.Filewatcher)
-	fPln(cfg.Global.ErrLog)
-	fPln(cfg.RPC.Ctx)
+	fPln(cfg.ErrLog)
+	fPln(cfg.RPC.CtxList)
 	fPln(cfg.Query.ParamPathDir)
 }
 

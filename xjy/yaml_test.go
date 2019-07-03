@@ -8,10 +8,10 @@ import (
 )
 
 func TestYAMLScan(t *testing.T) {
-	cfg := c.FromFile("./config.toml", "../config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog) }()
+	cfg := c.FromFile("../build/config.toml")
+	defer func() { ph(recover(), cfg.ErrLog) }()
 
-	databytes := Must(ioutil.ReadFile("./files/sif.xml")).([]byte) //     *** change file name ***
+	databytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)                           //   *** change file name ***
 	YAMLScan(string(databytes), "RefId", "ROOT", nil, DT_XML, func(path, value, id string) { //   *** change idmark & DataType ***
 		fPf("%s : %-70s : %s\n", id, path, value)
 	})

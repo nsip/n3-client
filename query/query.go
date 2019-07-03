@@ -10,13 +10,13 @@ import (
 
 // InitClient :
 func InitClient(config *c.Config) {
-	PC(config == nil, fEf("Init Config"))
-	CFG = config
-	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+	pc(config == nil, fEf("Init Config"))
+	g.Cfg = config
+	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(g.Cfg.RPC.Server, g.Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
 func query(ctx string, metaQry bool, spo []string) (s, p, o []string, v []int64) {
-	if CFG == nil || g.N3clt == nil {
+	if g.Cfg == nil || g.N3clt == nil {
 		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
 
@@ -30,7 +30,7 @@ func query(ctx string, metaQry bool, spo []string) (s, p, o []string, v []int64)
 		panic("subject & predicate must be provided to general query, empty-subject & predicate & object must be provided to id query")
 	}
 
-	for _, t := range g.N3clt.Query(qTuple, CFG.RPC.Namespace, IF(!metaQry, ctx, ctx+"-meta").(string)) {
+	for _, t := range g.N3clt.Query(qTuple, g.Cfg.RPC.Namespace, IF(!metaQry, ctx, ctx+"-meta").(string)) {
 		s, p, o, v = append(s, t.Subject), append(p, t.Predicate), append(o, t.Object), append(v, t.Version)
 	}
 	return

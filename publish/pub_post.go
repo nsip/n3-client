@@ -34,11 +34,11 @@ func postpJSON(json string, IDs, Objs []string) {
 
 	g.RmIDsInLRU(IDs...) // *** remove id from lru cache ***
 	g.RmQryIDsCache(IDs...)
-	mkSchemaQueryHead(CFG.Query.SchemaDir, Objs...) // *** create gql schema query header ***
+	mkSchemaQueryHead(g.Cfg.Query.SchemaDir, Objs...) // *** create gql schema query header ***
 }
 
 func postpXML(xml string, IDs, Objs []string) {
 	g.RmIDsInLRU(IDs...) // *** remove id from lru cache ***
 	g.RmQryIDsCache(IDs...)
-	mkSchemaQueryHead(CFG.Query.SchemaDir, Objs...) // *** create gql schema query header ***
+	mkSchemaQueryHead(g.Cfg.Query.SchemaDir, Objs...) // *** create gql schema query header ***
 }

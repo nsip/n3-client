@@ -8,18 +8,18 @@ import (
 )
 
 func TestJSONGetObjID(t *testing.T) {
-	cfg := c.FromFile("./config.toml", "../config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog) }()
-	jsonbytes := Must(ioutil.ReadFile("./files/sample.json")).([]byte)
-	id, autoID, addRoot := JSONGetObjID(string(jsonbytes), "id", "DefaultRoot", PATH_DEL)
-	fPln(id, autoID, addRoot)
+	cfg := c.FromFile("../build/config.toml")
+	defer func() { ph(recover(), cfg.ErrLog) }()
+	jsonbytes := must(ioutil.ReadFile("./files/sample.json")).([]byte)
+	id, root, autoID, addRoot := JSONGetObjID(string(jsonbytes), "id", "DefaultRoot", PATH_DEL)
+	fPln(id, root, autoID, addRoot)
 }
 
 func TestJSONScanObjects(t *testing.T) {
-	cfg := c.FromFile("./config.toml", "../config/config.toml")
-	defer func() { PH(recover(), cfg.Global.ErrLog) }()
+	cfg := c.FromFile("../build/config.toml")
+	defer func() { ph(recover(), cfg.ErrLog) }()
 
-	data := string(Must(ioutil.ReadFile("./files/content.json")).([]byte))
+	data := string(must(ioutil.ReadFile("./files/content.json")).([]byte))
 	mStructRecord := map[string][]string{}
 	procIdx := 1
 	JSONObjScan(data, "id", "ROOT",

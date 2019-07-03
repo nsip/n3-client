@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"strings"
-
-	cfg "./config"
+	c "./config"
 	fw "./filewatcher"
+	g "./global"
 	pub "./publish"
 	"./query"
 	"./rest"
@@ -14,27 +12,15 @@ import (
 )
 
 var (
-	PE  = u.PanicOnError
-	PE1 = u.PanicOnError1
-	PH  = u.PanicHandle
-	PC  = u.PanicOnCondition
-
-	sFF = strings.FieldsFunc
-	sC  = strings.Contains
-	sJ  = strings.Join
-
-	fPln = fmt.Println
-	fPf  = fmt.Printf
-	fEf  = fmt.Errorf
-	fSf  = fmt.Sprintf
+	ph = u.PanicHandle
 )
 
 func main() {
-	CFG := cfg.FromFile("./config.toml", "./config/config.toml")
-	defer func() { PH(recover(), CFG.Global.ErrLog) }()
-	pub.InitClient(CFG)
-	query.InitClient(CFG)
-	rest.InitClient(CFG)
+	g.Cfg = c.FromFile("./build/config.toml")
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()
+	pub.InitClient(g.Cfg)
+	query.InitClient(g.Cfg)
+	rest.InitClient(g.Cfg)
 
 	done := make(chan string)
 	go rest.HostHTTPAsync()

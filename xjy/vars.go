@@ -21,11 +21,11 @@ const (
 )
 
 var (
-	PE   = u.PanicOnError
-	PE1  = u.PanicOnError1
-	PH   = u.PanicHandle
-	PC   = u.PanicOnCondition
-	Must = u.Must
+	pe   = u.PanicOnError
+	pe1  = u.PanicOnError1
+	ph   = u.PanicHandle
+	pc   = u.PanicOnCondition
+	must = u.Must
 	IF   = u.IF
 
 	min = w.Min

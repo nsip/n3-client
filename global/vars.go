@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	c "../config"
+
 	u "github.com/cdutwhu/go-util"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/nsip/n3-messages/n3grpc"
@@ -29,25 +31,26 @@ const (
 var (
 	fPln = fmt.Println
 	fSf  = fmt.Sprintf
-	Must = u.Must
+	must = u.Must
 
+	Cfg *c.Config
 	N3clt *n3grpc.Client
 
 	CurCtx        = "demo"
 	OriExePath, _ = os.Getwd()
 
 	// LCRoot *** ID : Root *** ID query cache
-	LCRoot = Must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
+	LCRoot = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
 		fPln("Query Root onEvicted:", k, v)
 	})).(*lru.Cache)
 
 	// LCSchema *** ID : Schema *** Schema query cache
-	LCSchema = Must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
+	LCSchema = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
 		fPln("Query Schema onEvicted:", k, v)
 	})).(*lru.Cache)
 
 	// LCJSON *** ID : JSON *** JSON query cache
-	LCJSON = Must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
+	LCJSON = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
 		fPln("Query JSON onEvicted:", k, v)
 	})).(*lru.Cache)
 

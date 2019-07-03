@@ -18,13 +18,12 @@ func prepareJQ(jqDirs ...string) {
 	if _, err := os.Stat(jqPath); err != nil {
 		panic("jq is not found")
 	}
-	PE(os.Chdir(jqDir))
+	pe(os.Chdir(jqDir))
 }
 
 // FmtJSONStr : <json string> must not have single quote <'>
-func FmtJSONStr(json string, jqDirs ...string) string {
-	// dir := Must(os.Getwd()).(string)
-	defer func() { PE(os.Chdir(g.OriExePath)) }()
+func FmtJSONStr(json string, jqDirs ...string) string {	
+	defer func() { pe(os.Chdir(g.OriExePath)) }()
 	prepareJQ(jqDirs...)
 	if !IsJSON(json) {
 		return ""
@@ -32,17 +31,16 @@ func FmtJSONStr(json string, jqDirs ...string) string {
 	sJSON := Str(json).Replace("'", "\\'") //        *** deal with <single quote> in "echo" ***
 	cmdstr := "echo $" + sJSON.MkQuotes(QSingle).V() + ` | jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)
-	output := Must(cmd.Output()).([]byte)
+	output := must(cmd.Output()).([]byte)
 	return string(output)
 }
 
 // FmtJSONFile : <file> is the <relative path> to <jq>
-func FmtJSONFile(file string, jqDirs ...string) string {
-	// dir := Must(os.Getwd()).(string)
-	defer func() { PE(os.Chdir(g.OriExePath)) }()
+func FmtJSONFile(file string, jqDirs ...string) string {	
+	defer func() { pe(os.Chdir(g.OriExePath)) }()
 	prepareJQ(jqDirs...)
 	cmdstr := "cat " + file + ` | jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)
-	output := Must(cmd.Output()).([]byte)
+	output := must(cmd.Output()).([]byte)
 	return string(output)
 }

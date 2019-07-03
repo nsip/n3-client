@@ -5,7 +5,6 @@ import (
 	"log"
 	"strings"
 
-	c "../config"
 	gjxy "github.com/cdutwhu/go-gjxy"
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
@@ -19,13 +18,13 @@ type (
 )
 
 var (
-	PE   = u.PanicOnError
-	PE1  = u.PanicOnError1
-	PC   = u.PanicOnCondition
-	PH   = u.PanicHandle
-	PHE  = u.PanicHandleEx
-	LE   = u.LogOnError
-	Must = u.Must
+	pe   = u.PanicOnError
+	pe1  = u.PanicOnError1
+	pc   = u.PanicOnCondition
+	ph   = u.PanicHandle
+	phe  = u.PanicHandleEx
+	le   = u.LogOnError
+	must = u.Must
 	IF   = u.IF
 
 	Max           = w.Max
@@ -56,7 +55,6 @@ var (
 	sCnt    = strings.Count
 
 	e               error
-	CFG             *c.Config
 	root            = ""
 	mStruct         = map[string]string{}
 	mValue          = map[string][]*valver{}

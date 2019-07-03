@@ -1,7 +1,5 @@
 Path = "../build/config.toml"
-
-[Global]
-  ErrLog = "./log.txt"
+ErrLog = "./errlog.txt"
 
 [Filewatcher]
   Dir = "../inbound/"
@@ -21,7 +19,7 @@ Path = "../build/config.toml"
   Namespace = "F7AoxkA2RTtrmjCg6nEuCtvSp5C6sp6R5RCjUKaXYkpp"
   Server = "192.168.76.37"
   Port = 5777
-  Ctx = ["demo", "demo1", "demo2"]  
+  CtxList = ["demo", "demo1", "demo2"]  
 
 [Query]
   SchemaDir = "../gql/qSchema/"

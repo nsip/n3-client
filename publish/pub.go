@@ -12,31 +12,31 @@ import (
 
 // Junk :
 func Junk(ctx string, n int) {
-	PC(CFG == nil || g.N3clt == nil, fEf("Missing Init, do 'Init(&config) before sending'\n"))
+	pc(g.Cfg == nil || g.N3clt == nil, fEf("Missing Init, do 'Init(&config) before sending'\n"))
 	for i := 0; i < n; i++ {
-		tuple := Must(messages.NewTuple("ab", "pre", "obj")).(*pb.SPOTuple)
+		tuple := must(messages.NewTuple("ab", "pre", "obj")).(*pb.SPOTuple)
 		tuple.Version = int64(i)
-		PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+		pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 	}
 }
 
 // Terminate :
 func Terminate(ctx, objID, termID string, ver int64) {
-	if CFG == nil || g.N3clt == nil {
+	if g.Cfg == nil || g.N3clt == nil {
 		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
-	tuple := Must(messages.NewTuple(termID, TERMMARK, objID)).(*pb.SPOTuple)
+	tuple := must(messages.NewTuple(termID, TERMMARK, objID)).(*pb.SPOTuple)
 	tuple.Version = ver
-	PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 }
 
 // RequireVer : verType ( "V" / "A" / "S" )
 func RequireVer(ctx, objID, verType string) (ver int64, termID string) {
-	if CFG == nil || g.N3clt == nil {
+	if g.Cfg == nil || g.N3clt == nil {
 		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
 	_, p, o, _ := q.Meta(ctx, objID, verType)
-	PC(len(o) == 0, fEf("Got Version Error, Dead ObjectID: %s", objID))
+	pc(len(o) == 0, fEf("Got Version Error, Dead ObjectID: %s", objID))
 	ver, termID = Str(o[0]).ToInt64()+1, p[0]
 	return
 }
@@ -45,14 +45,14 @@ func RequireVer(ctx, objID, verType string) (ver int64, termID string) {
 
 // InitClient :
 func InitClient(config *c.Config) {
-	PC(config == nil, fEf("Init Config"))
-	CFG = config
-	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(CFG.RPC.Server, CFG.RPC.Port), g.N3clt).(*n3grpc.Client)
+	pc(config == nil, fEf("Init Config"))
+	g.Cfg = config
+	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(g.Cfg.RPC.Server, g.Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
 }
 
 // Pub2Node :
 func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
-	PC(CFG == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
+	pc(g.Cfg == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
 
 	prevIDs, termIDs := "", ""
 	prevIDa, termIDa := "", ""
@@ -73,9 +73,9 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := Must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
 					tuple.Version = verS
-					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {
 						Terminate(ctx, id, termIDs, verS+1) //                 *** object struct terminator ***
 					}
@@ -88,9 +88,9 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verA, termIDa = RequireVer(ctx, id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
 					}
-					tuple := Must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
 					tuple.Version = verA
-					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {
 						Terminate(ctx, id, termIDa, verA+1) //                 *** object array terminator ***
 					}
@@ -111,9 +111,9 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 					if l := len(v); l > 2 && v[0] == '\'' && v[l-1] == '\'' {
 						v = v[1 : l-1]
 					}
-					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 					tuple.Version = verV
-					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 				})
 			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object values terminator ***
 
@@ -133,9 +133,9 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := Must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
 					tuple.Version = verS
-					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {
 						Terminate(ctx, id, termIDs, verS+1)
 					}
@@ -147,9 +147,9 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verA, termIDa = RequireVer(ctx, id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
 					}
-					tuple := Must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
 					tuple.Version = verA
-					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {
 						Terminate(ctx, id, termIDa, verA+1)
 					}
@@ -170,9 +170,9 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 					if l := len(v); l > 2 && v[0] == '\'' && v[l-1] == '\'' {
 						v = v[1 : l-1]
 					}
-					tuple := Must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
 					tuple.Version = verV
-					PE(g.N3clt.Publish(tuple, CFG.RPC.Namespace, ctx))
+					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 				})
 			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object terminator ***
 

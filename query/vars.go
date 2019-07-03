@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	c "../config"
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
 )
@@ -15,14 +14,9 @@ type (
 )
 
 var (
-	PE         = u.PanicOnError
-	PE1        = u.PanicOnError1
-	PC         = u.PanicOnCondition
-	PH         = u.PanicHandle
-	PHE        = u.PanicHandleEx
-	LE         = u.LogOnError
-	Must       = u.Must
-	IF         = u.IF	
+	pc = u.PanicOnCondition
+	ph = u.PanicHandle
+	IF = u.IF
 
 	IArrIntersect = w.IArrIntersect
 
@@ -33,6 +27,5 @@ var (
 
 	lPln = log.Println
 
-	e   error
-	CFG *c.Config
+	e error
 )

@@ -6,10 +6,6 @@ import (
 	"github.com/burntsushi/toml"
 )
 
-type global struct {
-	ErrLog string
-}
-
 type filewatcher struct {
 	Dir string
 }
@@ -30,7 +26,7 @@ type rpc struct {
 	Namespace string
 	Server    string
 	Port      int
-	CtxList   []string	
+	CtxList   []string
 }
 
 type query struct {
@@ -42,7 +38,7 @@ type query struct {
 // Config is toml
 type Config struct {
 	Path        string
-	Global      global
+	ErrLog      string
 	Filewatcher filewatcher
 	Rest        rest
 	RPC         rpc
@@ -62,17 +58,17 @@ func FromFile(cfgfiles ...string) *Config {
 
 // set is
 func (cfg *Config) set() *Config {
-	defer func() { PH(recover(), "./log.txt") }()
+	defer func() { ph(recover(), cfg.ErrLog) }()
 	path := cfg.Path /* make a copy of original path for restoring */
-	Must(toml.DecodeFile(cfg.Path, cfg))
+	must(toml.DecodeFile(cfg.Path, cfg))
 	cfg.Path = path
 	return cfg
 }
 
 // Save is
 func (cfg *Config) Save() {
-	defer func() { PH(recover(), cfg.Global.ErrLog) }()
-	f := Must(os.OpenFile(cfg.Path, os.O_WRONLY|os.O_TRUNC, 0666)).(*os.File)
+	defer func() { ph(recover(), cfg.ErrLog) }()
+	f := must(os.OpenFile(cfg.Path, os.O_WRONLY|os.O_TRUNC, 0666)).(*os.File)
 	defer f.Close()
-	PE(toml.NewEncoder(f).Encode(cfg))
+	pe(toml.NewEncoder(f).Encode(cfg))
 }

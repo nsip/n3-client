@@ -12,7 +12,7 @@ import (
 )
 
 func qSchemaList(qSchemaDir string) (fnames []string) {
-	files := Must(ioutil.ReadDir(qSchemaDir)).([]os.FileInfo)
+	files := must(ioutil.ReadDir(qSchemaDir)).([]os.FileInfo)
 	for _, file := range files {
 		fname := file.Name()
 		if !Str(fname).HP("_") {
@@ -135,7 +135,7 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 	}
 
 	// fPln(root)
-	qSchema := string(Must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
+	qSchema := string(must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
 	schema := qSchema + autoSchema                                                //  *** qSchema is mannually coded ***
 	for k, v := range mReplace {
 		schema = sRepAll(schema, k, v)
@@ -148,7 +148,7 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 		resolvers["QueryRoot/"+fname] = func(params *graphql.ResolveParams) (interface{}, error) { // *** PATH : related to <querySchema> ***
 			jsonBytes := rsvResource(objIDs, mJSON, mReplace) //                                      *** Get Reconstructed JSON ***
 			jsonMap := make(map[string]interface{})
-			PE(json.Unmarshal(jsonBytes, &jsonMap))
+			pe(json.Unmarshal(jsonBytes, &jsonMap))
 			return jsonMap[root], nil
 		}
 	}
@@ -163,8 +163,8 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 	// 	return ""
 	// }
 
-	result := Must(executor.Execute(context, qTxt, variables, ""))
-	rstJSON = string(Must(json.Marshal(result)).([]byte))
+	result := must(executor.Execute(context, qTxt, variables, ""))
+	rstJSON = string(must(json.Marshal(result)).([]byte))
 	// ioutil.WriteFile("temp.json", []byte(rstJSON), 0666)
 	return
 

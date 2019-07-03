@@ -29,15 +29,15 @@ AGAIN:
 
 // InitClient :
 func InitClient(config *c.Config) {
-	PC(config == nil, fEf("Init Config"))
-	CFG = config
+	pc(config == nil, fEf("Init Config"))
+	g.Cfg = config
 }
 
 // getIDList :
 func getIDList(c echo.Context) error {
 	defer func() {
 		mtxID.Unlock()
-		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
@@ -48,10 +48,10 @@ func getIDList(c echo.Context) error {
 	params := c.QueryParams()
 	if object, ok := params["object"]; ok {
 		mPP, mPV := map[string]string{}, map[string]interface{}{}
-		ppDir := CFG.Query.ParamPathDir
-		for _, f := range Must(ioutil.ReadDir(ppDir)).([]os.FileInfo) {
+		ppDir := g.Cfg.Query.ParamPathDir
+		for _, f := range must(ioutil.ReadDir(ppDir)).([]os.FileInfo) {
 			if f.Name() == object[0] {
-				data := string(Must(ioutil.ReadFile(ppDir + f.Name())).([]byte))
+				data := string(must(ioutil.ReadFile(ppDir + f.Name())).([]byte))
 				mPP = Str(data).KeyValueMap('\n', ':', '#')
 				break
 			}
@@ -72,7 +72,7 @@ func getIDList(c echo.Context) error {
 func delFromNode(c echo.Context) error {
 	defer func() {
 		mtxDel.Unlock()
-		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
@@ -91,7 +91,7 @@ func delFromNode(c echo.Context) error {
 func postToNode(c echo.Context) error {
 	defer func() {
 		mtxPub.Unlock()
-		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
@@ -108,7 +108,7 @@ func postToNode(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "<dfltRoot> must be provided")
 	}
 
-	data := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
+	data := string(must(ioutil.ReadAll(c.Request().Body)).([]byte))
 	if data == "" {
 		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
@@ -127,7 +127,7 @@ type Request struct {
 func postQueryGQL(c echo.Context) error {
 	defer func() {
 		mtxQry.Unlock()
-		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
@@ -143,7 +143,7 @@ func postQueryGQL(c echo.Context) error {
 
 	// ********************* GRAPHIQL client ********************* //
 	req := new(Request) //
-	PE(c.Bind(req))     //          *** ONLY <POST> echo can Bind OK ***
+	pe(c.Bind(req))     //          *** ONLY <POST> echo can Bind OK ***
 	mPV := map[string]interface{}{}
 	for k, v := range req.Variables {
 		mPV[k] = v.(string)
@@ -161,7 +161,7 @@ func postQueryGQL(c echo.Context) error {
 	}
 
 	if len(IDs) >= 1 {
-		gqlrst := gql.Query(g.CurCtx, IDs, CFG.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc) // *** gqlrst is already JSON string, use String to return ***
+		gqlrst := gql.Query(g.CurCtx, IDs, g.Cfg.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc) // *** gqlrst is already JSON string, use String to return ***
 		return c.String(http.StatusAccepted, gqlrst)
 	}
 
@@ -172,7 +172,7 @@ func postQueryGQL(c echo.Context) error {
 func getObject(c echo.Context) error {
 	defer func() {
 		mtxObj.Unlock()
-		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
@@ -188,7 +188,7 @@ func getObject(c echo.Context) error {
 func getSchema(c echo.Context) error {
 	defer func() {
 		mtxScm.Unlock()
-		PHE(recover(), CFG.Global.ErrLog, func(msg string, others ...interface{}) {
+		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
 			c.JSON(http.StatusBadRequest, msg)
 		})
 	}()
@@ -217,14 +217,14 @@ func HostHTTPAsync() {
 	}))
 
 	// Route
-	e.GET(CFG.Rest.PathTest, func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
-	e.GET(CFG.Rest.PathID, getIDList)
-	e.GET(CFG.Rest.PathObj, getObject)
-	e.GET(CFG.Rest.PathScm, getSchema)
-	e.POST(CFG.Rest.PathPub, postToNode)
-	e.POST(CFG.Rest.PathGQL, postQueryGQL)
-	e.DELETE(CFG.Rest.PathDel, delFromNode)
+	e.GET(g.Cfg.Rest.PathTest, func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
+	e.GET(g.Cfg.Rest.PathID, getIDList)
+	e.GET(g.Cfg.Rest.PathObj, getObject)
+	e.GET(g.Cfg.Rest.PathScm, getSchema)
+	e.POST(g.Cfg.Rest.PathPub, postToNode)
+	e.POST(g.Cfg.Rest.PathGQL, postQueryGQL)
+	e.DELETE(g.Cfg.Rest.PathDel, delFromNode)
 
 	// Server
-	e.Start(fSf(":%d", CFG.Rest.Port))
+	e.Start(fSf(":%d", g.Cfg.Rest.Port))
 }
