@@ -32,7 +32,7 @@ func TestXMLInfoScan(t *testing.T) {
 	defer func() { ph(recover(), cfg.ErrLog) }()
 
 	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)
-	XMLInfoScan(string(sifbytes), "RefId", g.PATH_DEL,
+	XMLInfoScan(string(sifbytes), "RefId", g.DELIPath,
 		func(p, id string, v []string, lastOne bool) {
 			fPln("S --->>> ", p, " : ", v)
 		},

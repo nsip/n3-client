@@ -25,7 +25,7 @@ func YAMLScanFromXMLBat(xml, idmark string, IDs []string, OnValueFetch func(path
 
 		yamlstr := Xstr2Y(thisxml)
 		yamlstr = YAMLJoinSplittedLines(yamlstr)
-		info := YAMLInfo(yamlstr, idmark, g.PATH_DEL, true)
+		info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
 		for _, item := range *info {
 			ID := item.ID
 			if IDs != nil && len(IDs) > 0 {
@@ -42,7 +42,7 @@ func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFet
 	if ok, _ := IsJSONSingle(json); ok {
 		yamlstr := Jstr2Y(json)
 		yamlstr = YAMLJoinSplittedLines(yamlstr)
-		info := YAMLInfo(yamlstr, idmark, g.PATH_DEL, true)
+		info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
 		for _, item := range *info {
 			ID := item.ID
 			if IDs != nil && len(IDs) > 0 {
@@ -64,7 +64,7 @@ func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFet
 
 				yamlstr := Jstr2Y(extjson)
 				yamlstr = YAMLJoinSplittedLines(yamlstr)
-				info := YAMLInfo(yamlstr, idmark, g.PATH_DEL, true)
+				info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
 				for _, item := range *info {
 					ID := item.ID
 					if IDs != nil && len(IDs) > 0 {
@@ -83,7 +83,7 @@ func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFet
 		
 		// ioutil.WriteFile("tempyaml.yaml", []byte(yamlstr), 0666 )
 
-		info := YAMLInfo(yamlstr, idmark, g.PATH_DEL, true)
+		info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
 		for _, item := range *info {
 			ID := item.ID
 			if IDs != nil && len(IDs) > 0 {

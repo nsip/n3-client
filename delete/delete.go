@@ -19,7 +19,7 @@ func Del(ctx, subject string) {
 	if g.Cfg == nil || g.N3clt == nil {
 		Init(c.FromFile("../build/config.toml"))
 	}
-	dTuple := &pb.SPOTuple{Subject: subject, Predicate: DEADMARK}
+	dTuple := &pb.SPOTuple{Subject: subject, Predicate: g.MARKDead}
 	pe(g.N3clt.Publish(dTuple, g.Cfg.RPC.Namespace, ctx))
 }
 

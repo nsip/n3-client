@@ -10,10 +10,10 @@ func JSONBuild(path string) {
 		return
 	}
 
-	for _, field := range sSpl(childList, g.CHILD_DEL) {
+	for _, field := range sSpl(childList, g.DELIChild) {
 
 		tfield := sRepAll(field, "[]", "")
-		xpath := path + g.PATH_DEL + field
+		xpath := path + g.DELIPath + field
 		xpath = sRepAll(xpath, "[]", "")
 
 		if ok, valvers := isLeafValue(xpath); ok { //                                        *** PLAIN VALUE(S) ***
@@ -30,7 +30,7 @@ func JSONBuild(path string) {
 				for _, ixpath := range ixpaths {
 					if okArr, nArr, plain := isArray(ixpath); okArr && plain {
 						vidx := getVIdxForIPath(ixpaths, ixpath)
-						ipath := S(ixpath).RmTailFromLast(g.PATH_DEL).V() //                 * already has '#' *
+						ipath := S(ixpath).RmTailFromLast(g.DELIPath).V() //                 * already has '#' *
 						for i := vidx; i < vidx+nArr; i++ {
 							JSONMake(mIPathObj, ipath, tfield, valvers[i].value, true)
 						}
@@ -43,9 +43,9 @@ func JSONBuild(path string) {
 						JSONMake(mIPathObj, ipath, tfield, valvers[i].value, false)
 					}
 				} else {
-					fs := sSpl(path, g.PATH_DEL)
+					fs := sSpl(path, g.DELIPath)
 					is := IArrMake("Strs", len(fs), "1")
-					ipath := IArrStrJoinEx(Ss(fs), is.(Ss), "#", g.PATH_DEL)
+					ipath := IArrStrJoinEx(Ss(fs), is.(Ss), "#", g.DELIPath)
 					JSONMake(mIPathObj, ipath, tfield, valvers[0].value, false)
 				}
 			}
@@ -60,7 +60,7 @@ func JSONBuild(path string) {
 
 				for _, ixpath := range ixpaths {
 					if okArr, nArr, plain := isArray(ixpath); okArr && !plain {
-						ipath := S(ixpath).RmTailFromLast(g.PATH_DEL).V() //                 * already has '#' *
+						ipath := S(ixpath).RmTailFromLast(g.DELIPath).V() //                 * already has '#' *
 						for i := 1; i <= nArr; i++ {
 							sub := fSf("%s#%d", ixpath, i)
 							JSONMake(mIPathObj, ipath, tfield, sub, true)
@@ -77,18 +77,18 @@ func JSONBuild(path string) {
 
 					for i := 0; i < len(subIPathList); i++ {
 						ipath := subIPathList[i]
-						ixpath := ipath + g.PATH_DEL + tfield
-						sub := ipath + g.PATH_DEL + tfield + "#1"
+						ixpath := ipath + g.DELIPath + tfield
+						sub := ipath + g.DELIPath + tfield + "#1"
 						JSONMake(mIPathObj, ipath, tfield, sub, false)
 						mIPathSubIPaths[ixpath] = append(mIPathSubIPaths[ixpath], sub)
 					}
 
 				} else {
 
-					fs := sSpl(path, g.PATH_DEL)
+					fs := sSpl(path, g.DELIPath)
 					is := IArrMake("Strs", len(fs), "1")
-					ipath := IArrStrJoinEx(Ss(fs), is.(Ss), "#", g.PATH_DEL)
-					sub := ipath + g.PATH_DEL + tfield + "#1"
+					ipath := IArrStrJoinEx(Ss(fs), is.(Ss), "#", g.DELIPath)
+					sub := ipath + g.DELIPath + tfield + "#1"
 					JSONMake(mIPathObj, ipath, tfield, sub, false)
 
 				}

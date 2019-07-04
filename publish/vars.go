@@ -27,9 +27,3 @@ var (
 	fSf          = fmt.Sprintf
 	sJ           = strings.Join
 )
-
-const (
-	TERMMARK = "--------------------------------------"
-	// DT_XML    = xjy.DT_XML
-	// DT_JSON   = xjy.DT_JSON
-)

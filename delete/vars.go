@@ -15,7 +15,3 @@ var (
 	fEf  = fmt.Errorf
 	lPln = log.Println
 )
-
-const (
-	DEADMARK = "TOMBSTONE"
-)

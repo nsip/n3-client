@@ -28,9 +28,17 @@ const (
 	XML DataType = iota
 	// JSON : json data type
 	JSON
+)
 
-	PATH_DEL  = " ~ "
-	CHILD_DEL = " + "
+const (
+	// DELIPath :
+	DELIPath = " ~ "
+	// DELIChild :
+	DELIChild = " + "
+	// MARKTerm :
+	MARKTerm = "--------------------------------------"
+	// MARKDead :
+	MARKDead = "TOMBSTONE"
 )
 
 const (

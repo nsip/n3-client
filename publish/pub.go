@@ -25,7 +25,7 @@ func Terminate(ctx, objID, termID string, ver int64) {
 	if g.Cfg == nil || g.N3clt == nil {
 		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
 	}
-	tuple := must(messages.NewTuple(termID, TERMMARK, objID)).(*pb.SPOTuple)
+	tuple := must(messages.NewTuple(termID, g.MARKTerm, objID)).(*pb.SPOTuple)
 	tuple.Version = ver
 	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 }
@@ -64,7 +64,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 		{
 			strMod := prepXML(str)
 
-			IDs, Objs = xjy.XMLInfoScan(strMod, idmark, g.PATH_DEL,
+			IDs, Objs = xjy.XMLInfoScan(strMod, idmark, g.DELIPath,
 				func(p, id string, v []string, lastObjTuple bool) {
 					// fPln("S ---> ", p, "::", v)
 					id = "::" + id
@@ -73,7 +73,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := must(messages.NewTuple(p, id, sJ(v, g.CHILD_DEL))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, sJ(v, g.DELIChild))).(*pb.SPOTuple)
 					tuple.Version = verS
 					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {
@@ -133,7 +133,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := must(messages.NewTuple(p, id, sJ(v, g.CHILD_DEL))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, sJ(v, g.DELIChild))).(*pb.SPOTuple)
 					tuple.Version = verS
 					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {

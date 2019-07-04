@@ -5,10 +5,10 @@ import g "../global"
 // SchemaBuild : init path is root
 func SchemaBuild(gql, path string) string {
 
-	tps := sSpl(path, g.PATH_DEL)
+	tps := sSpl(path, g.DELIPath)
 	tp := tps[len(tps)-1]
 
-	for _, f := range sSpl(mStruct[path], g.CHILD_DEL) {
+	for _, f := range sSpl(mStruct[path], g.DELIChild) {
 		if f == "" {
 			return gql
 		}
@@ -18,7 +18,7 @@ func SchemaBuild(gql, path string) string {
 			f, arrFlag = f[2:], true
 		}
 
-		xpath := path + g.PATH_DEL + f
+		xpath := path + g.DELIPath + f
 		if ok, _ := isLeafValue(xpath); ok {
 			if arrFlag {
 				gql = SchemaMake(S(gql), tp, f, "[String]")

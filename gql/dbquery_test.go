@@ -70,10 +70,10 @@ func TestQueryObject(t *testing.T) {
 	// JSONMake(mIPathObj, "xapi ~ courses#2 ~ outcomes#1", "description", "describes features of places and the connections people have with places")
 
 	JSONBuild(root)
-	json := JSONMakeRep(mIPathObj, PATH_DEL)
+	json := JSONMakeRep(mIPathObj, DELIPath)
 	ioutil.WriteFile("temp.json", []byte(json), 0666)
 
-	// schema := SchemaMake("", root, PATH_DEL, CHILD_DEL)
+	// schema := SchemaMake("", root, DELIPath, DELIChild)
 	// schema = sRepAll(schema, "\t-", "\t")
 	// schema = sRepAll(schema, "\t#", "\t")
 	// ioutil.WriteFile(fSf("./yield/%s.gql", objID), []byte(schema), 0666)

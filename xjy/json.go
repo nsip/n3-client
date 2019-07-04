@@ -47,13 +47,13 @@ func JSONObjScan(json, idmark, dfltRoot string,
 	if ok, eleType, n, eles := IsJSONArray(json); ok {
 		if eleType == JT_OBJ {
 			for i := 1; i <= n; i++ {
-				id, root := JSONModelInfo(eles[i-1], idmark, dfltRoot, g.PATH_DEL, OnStruFetch, OnArrFetch)
+				id, root := JSONModelInfo(eles[i-1], idmark, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
 				IDs = append(IDs, id)
 				Objs = append(Objs, root)
 			}
 		}
 	} else {
-		id, root := JSONModelInfo(json, idmark, dfltRoot, g.PATH_DEL, OnStruFetch, OnArrFetch)
+		id, root := JSONModelInfo(json, idmark, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
 		IDs = append(IDs, id)
 		Objs = append(Objs, root)
 	}

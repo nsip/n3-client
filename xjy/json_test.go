@@ -12,7 +12,7 @@ func TestJSONGetObjID(t *testing.T) {
 	cfg := c.FromFile("../build/config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 	jsonbytes := must(ioutil.ReadFile("./files/sample.json")).([]byte)
-	id, root, autoID, addRoot := JSONGetObjID(string(jsonbytes), "id", "DefaultRoot", g.PATH_DEL)
+	id, root, autoID, addRoot := JSONGetObjID(string(jsonbytes), "id", "DefaultRoot", g.DELIPath)
 	fPln(id, root, autoID, addRoot)
 }
 
@@ -27,7 +27,7 @@ func TestJSONScanObjects(t *testing.T) {
 		func(p, id string, v []string, lastObjTuple bool) {
 			if _, ok := mStructRecord[p]; !ok {
 				mStructRecord[p] = v
-				fPf("S%3d ---> %-70s:: %s\n", procIdx, p, sJ(v, g.CHILD_DEL))
+				fPf("S%3d ---> %-70s:: %s\n", procIdx, p, sJ(v, g.DELIChild))
 				procIdx++
 			}
 		},
