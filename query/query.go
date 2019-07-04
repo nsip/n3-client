@@ -17,7 +17,7 @@ func InitClient(config *c.Config) {
 
 func query(ctx string, metaQry bool, spo []string) (s, p, o []string, v []int64) {
 	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
+		InitClient(c.FromFile("../build/config.toml"))
 	}
 
 	qTuple := &pb.SPOTuple{}

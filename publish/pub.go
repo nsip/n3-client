@@ -23,7 +23,7 @@ func Junk(ctx string, n int) {
 // Terminate :
 func Terminate(ctx, objID, termID string, ver int64) {
 	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
+		InitClient(c.FromFile("../build/config.toml"))
 	}
 	tuple := must(messages.NewTuple(termID, g.MARKTerm, objID)).(*pb.SPOTuple)
 	tuple.Version = ver
@@ -33,7 +33,7 @@ func Terminate(ctx, objID, termID string, ver int64) {
 // RequireVer : verType ( "V" / "A" / "S" )
 func RequireVer(ctx, objID, verType string) (ver int64, termID string) {
 	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("./config.toml", "../config/config.toml"))
+		InitClient(c.FromFile("../build/config.toml"))
 	}
 	_, p, o, _ := q.Meta(ctx, objID, verType)
 	pc(len(o) == 0, fEf("Got Version Error, Dead ObjectID: %s", objID))
