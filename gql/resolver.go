@@ -46,7 +46,7 @@ func GetInfoFromID(ctx, infoType, objID string) string {
 	case "JSON":
 		{
 			JSONBuild(root)
-			_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
+			_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, g.PATH_DEL), root)
 			g.LCJSON.Add(objID, json) //               *** LRU ***
 			return json
 		}
@@ -100,7 +100,7 @@ func GetDataFromID(ctx string, objIDs []string) (mSchema, mJSON map[string]strin
 		g.LCSchema.Add(objID, schema) //      *** LRU ***
 
 		JSONBuild(root)
-		_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, PATH_DEL), root)
+		_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, g.PATH_DEL), root)
 		mJSON[objID] = json
 		g.LCJSON.Add(objID, json) //          *** LRU ***
 

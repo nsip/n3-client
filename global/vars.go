@@ -28,6 +28,9 @@ const (
 	XML DataType = iota
 	// JSON : json data type
 	JSON
+
+	PATH_DEL  = " ~ "
+	CHILD_DEL = " + "
 )
 
 const (

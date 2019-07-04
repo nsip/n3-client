@@ -10,13 +10,7 @@ import (
 )
 
 type (
-	S        = w.Str
-	DataType int
-)
-
-const (
-	DT_XML DataType = iota
-	DT_JSON
+	S = w.Str
 )
 
 var (
@@ -45,9 +39,6 @@ var (
 )
 
 const (
-	PATH_DEL  = " ~ "
-	CHILD_DEL = " + "
-
 	JT_NULL = gjxy.JT_NULL
 	JT_OBJ  = gjxy.JT_OBJ
 	JT_ARR  = gjxy.JT_ARR

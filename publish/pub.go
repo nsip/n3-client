@@ -64,7 +64,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 		{
 			strMod := prepXML(str)
 
-			IDs, Objs = xjy.XMLInfoScan(strMod, idmark, PATH_DEL,
+			IDs, Objs = xjy.XMLInfoScan(strMod, idmark, g.PATH_DEL,
 				func(p, id string, v []string, lastObjTuple bool) {
 					// fPln("S ---> ", p, "::", v)
 					id = "::" + id
@@ -73,7 +73,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, sJ(v, g.CHILD_DEL))).(*pb.SPOTuple)
 					tuple.Version = verS
 					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {
@@ -97,7 +97,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 				},
 			)
 
-			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, DT_XML,
+			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, g.XML,
 				func(p, v, id string) {
 					defer func() { verV, nV, prevIDv, prevTermIDv = verV+1, nV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
@@ -133,7 +133,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := must(messages.NewTuple(p, id, sJ(v, CHILD_DEL))).(*pb.SPOTuple)
+					tuple := must(messages.NewTuple(p, id, sJ(v, g.CHILD_DEL))).(*pb.SPOTuple)
 					tuple.Version = verS
 					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 					if lastObjTuple {
@@ -156,7 +156,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 				},
 			)
 
-			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, DT_JSON,
+			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, g.JSON,
 				func(p, v, id string) {
 					defer func() { verV, nV, prevIDv, prevTermIDv = verV+1, nV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)

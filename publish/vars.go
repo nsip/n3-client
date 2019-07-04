@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	xjy "../xjy"
 	gjxy "github.com/cdutwhu/go-gjxy"
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
@@ -30,9 +29,7 @@ var (
 )
 
 const (
-	TERMMARK  = "--------------------------------------"
-	PATH_DEL  = " ~ "
-	CHILD_DEL = " + "
-	DT_XML    = xjy.DT_XML
-	DT_JSON   = xjy.DT_JSON
+	TERMMARK = "--------------------------------------"
+	// DT_XML    = xjy.DT_XML
+	// DT_JSON   = xjy.DT_JSON
 )

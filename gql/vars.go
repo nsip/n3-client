@@ -52,8 +52,3 @@ type valver struct {
 	value string
 	ver   int64
 }
-
-const (
-	PATH_DEL  = " ~ "
-	CHILD_DEL = " + "
-)
