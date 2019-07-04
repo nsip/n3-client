@@ -12,8 +12,10 @@ import (
 )
 
 type (
-	SQDType int
+	// DataType : XML(0) or JSON(1)
+	DataType int
 
+	// QryIDs : ID-Query Cache Element
 	QryIDs struct {
 		Ctx string
 		Qry map[string]interface{}
@@ -22,9 +24,16 @@ type (
 )
 
 const (
-	XML SQDType = iota
+	// XML : xml data type
+	XML DataType = iota
+	// JSON : json data type
 	JSON
-	NLRU         = 8192
+)
+
+const (
+	// NLRU : LRU Cache Capacity
+	NLRU = 8192
+	// NQryIDsCache : ID-Query Cache Capacity
 	NQryIDsCache = 524288
 )
 
@@ -33,10 +42,16 @@ var (
 	fSf  = fmt.Sprintf
 	must = u.Must
 
-	Cfg   *c.Config
+	// Cfg : Config File Struct
+	Cfg *c.Config
+
+	// N3clt : GRPC Client
 	N3clt *n3grpc.Client
 
-	CurCtx        = ""
+	// CurCtx : Current Context
+	CurCtx = ""
+
+	// OriExePath : Original Running Path
 	OriExePath, _ = os.Getwd()
 
 	// LCRoot *** ID : Root *** ID query cache
@@ -54,9 +69,13 @@ var (
 		fPln("Query JSON onEvicted:", k, v)
 	})).(*lru.Cache)
 
-	CacheQryIDs    = make([]QryIDs, NQryIDsCache)
+	// CacheQryIDs : Cache for ID-Query
+	CacheQryIDs = make([]QryIDs, NQryIDsCache)
+
+	// CacheQryIDsPtr : ID-Query Cache Current Pointer
 	CacheQryIDsPtr = -1
 
+	// MpQryRstRplc : Replacement Map for Query OutCome JSON
 	MpQryRstRplc = map[string]string{
 		`en-US`:      `en_US`,
 		`": "true"`:  `": true`,

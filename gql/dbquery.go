@@ -70,7 +70,7 @@ func isLeafValue(path string) (bool, []*valver) {
 }
 
 func isObject(path string) bool {
-	path = sRepAll(path, "[]", "")
+	path = Str(path).Replace("[]", "").V()
 	_, ok1 := mStruct[path]
 	_, ok2 := mArray[path]
 	return ok1 && !ok2

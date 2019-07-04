@@ -11,7 +11,6 @@ import (
 
 type (
 	Str      = w.Str
-	I32s     = w.I32s
 	DataType int
 )
 
@@ -21,14 +20,12 @@ const (
 )
 
 var (
-	pe   = u.PanicOnError
-	pe1  = u.PanicOnError1
 	ph   = u.PanicHandle
-	pc   = u.PanicOnCondition
 	must = u.Must
 	IF   = u.IF
-
-	min = w.Min
+	sJ   = strings.Join
+	fPln = fmt.Println
+	fPf  = fmt.Printf
 
 	JSONXPathValue        = gjxy.JSONXPathValue
 	JSONWrapRoot          = gjxy.JSONWrapRoot
@@ -38,7 +35,6 @@ var (
 	XMLAttributes         = gjxy.XMLAttributes
 	XMLSegPos             = gjxy.XMLSegPos
 	XMLSegsCount          = gjxy.XMLSegsCount
-	XMLFamilyTree         = gjxy.XMLFamilyTree
 	XMLCntInfo            = gjxy.XMLCntInfo
 	YAMLTag               = gjxy.YAMLTag
 	YAMLValue             = gjxy.YAMLValue
@@ -46,13 +42,6 @@ var (
 	YAMLJoinSplittedLines = gjxy.YAMLJoinSplittedLines
 	Xstr2Y                = gjxy.Xstr2Y
 	Jstr2Y                = gjxy.Jstr2Y
-
-	sJ = strings.Join
-
-	fPln = fmt.Println
-	fPf  = fmt.Printf
-	fEf  = fmt.Errorf
-	fSf  = fmt.Sprintf
 )
 
 const (
@@ -70,7 +59,5 @@ const (
 
 	QDouble = w.QDouble
 	ALL     = w.ALL
-	LAST    = w.LAST
-	BCurly  = w.BCurly
 	BLANK   = w.BLANK
 )

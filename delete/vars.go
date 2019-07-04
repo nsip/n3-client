@@ -8,16 +8,11 @@ import (
 )
 
 var (
-	pe = u.PanicOnError
-	pc = u.PanicOnCondition
-	ph = u.PanicHandle
-	IF = u.IF
-
-	fPln = fmt.Println
-	fPf  = fmt.Printf
+	pe   = u.PanicOnError
+	pc   = u.PanicOnCondition
+	ph   = u.PanicHandle
+	IF   = u.IF
 	fEf  = fmt.Errorf
-	fSf  = fmt.Sprintf
-
 	lPln = log.Println
 )
 

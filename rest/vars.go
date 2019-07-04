@@ -17,49 +17,28 @@ type (
 )
 
 var (
-	pe   = u.PanicOnError
-	pe1  = u.PanicOnError1
-	pc   = u.PanicOnCondition
-	ph   = u.PanicHandle
-	phe  = u.PanicHandleEx
-	le   = u.LogOnError
-	must = u.Must
-	IF   = u.IF
-
-	fPln = fmt.Println
-	fPf  = fmt.Printf
-	fEf  = fmt.Errorf
-	fSf  = fmt.Sprintf
-
-	lPln = log.Println
-
-	sCtns   = strings.Contains
-	sRepAll = strings.ReplaceAll
-	sJ      = strings.Join
-	sSpl    = strings.Split
-
+	pe            = u.PanicOnError
+	pc            = u.PanicOnCondition
+	phe           = u.PanicHandleEx
+	must          = u.Must
+	IF            = u.IF
+	fPln          = fmt.Println
+	fEf           = fmt.Errorf
+	fSf           = fmt.Sprintf
+	lPln          = log.Println
+	sSpl          = strings.Split
 	IArrIntersect = w.IArrIntersect
 	IArrRmRep     = w.IArrRmRep
-	ASCIIToOri    = w.ASCIIToOri
-	UTF8ToASCII   = w.UTF8ToASCII
+	IsJSON        = gjxy.IsJSON
 
-	IsJSON = gjxy.IsJSON
-	
-	ver int64 = 1
-
-	mtxQry    = &sync.Mutex{}
-	mtxPub    = &sync.Mutex{}
-	mtxDel    = &sync.Mutex{}
-	mtxID     = &sync.Mutex{}
-	mtxObj    = &sync.Mutex{}
-	mtxScm    = &sync.Mutex{}
-	mtxQryTxt = &sync.Mutex{}
+	mtxQry = &sync.Mutex{}
+	mtxPub = &sync.Mutex{}
+	mtxDel = &sync.Mutex{}
+	mtxID  = &sync.Mutex{}
+	mtxObj = &sync.Mutex{}
+	mtxScm = &sync.Mutex{}
 )
 
 const (
-	TERMMARK  = "--------------------------------------"
-	DELAY     = 2000
-	PATH_DEL  = " ~ "
-	CHILD_DEL = " + "
-	BLANK     = w.BLANK
+	BLANK = w.BLANK
 )

@@ -50,7 +50,7 @@ func JSONBuild(path string) {
 
 		} else { //                                                                          *** OBJECT ***
 
-			xpath = sRepAll(xpath, "[]", "")
+			xpath = Str(xpath).Replace("[]", "").V()
 			// fPln("<OBJECT>               --->", xpath)
 
 			if ixpaths := IPathListBymArr(xpath); len(ixpaths) > 0 { //                      *** OBJECT [ARRAY] ***
@@ -60,7 +60,7 @@ func JSONBuild(path string) {
 					if okArr, nArr, plain := isArray(ixpath); okArr && !plain {
 						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V() //                 * already has '#' *
 						for i := 1; i <= nArr; i++ {
-							sub := fSf("%s#%d", ixpath, i)							
+							sub := fSf("%s#%d", ixpath, i)
 							JSONMake(mIPathObj, ipath, tfield, sub, true)
 							mIPathSubIPaths[ixpath] = append(mIPathSubIPaths[ixpath], sub)
 						}
@@ -72,7 +72,7 @@ func JSONBuild(path string) {
 				// fPf("<OBJECT SINGLE> ---> %-30s%-30s%-30s%-30s\n", path, xpath, tfield, ipath)
 
 				if subIPathList := SubIPathListByPath(path); len(subIPathList) > 0 {
-					
+
 					for i := 0; i < len(subIPathList); i++ {
 						ipath := subIPathList[i]
 						ixpath := ipath + PATH_DEL + tfield
@@ -82,13 +82,13 @@ func JSONBuild(path string) {
 					}
 
 				} else {
-					
+
 					fs := sSpl(path, PATH_DEL)
 					is := IArrMake("Strs", len(fs), "1")
 					ipath := IArrStrJoinEx(Strs(fs), is.(Strs), "#", PATH_DEL)
 					sub := ipath + PATH_DEL + tfield + "#1"
 					JSONMake(mIPathObj, ipath, tfield, sub, false)
-					
+
 				}
 			}
 		}

@@ -13,47 +13,32 @@ import (
 type (
 	Str  = w.Str
 	Strs = w.Strs
-	I32  = w.I32
-	I32s = w.I32s
 )
 
 var (
-	pe   = u.PanicOnError
-	pe1  = u.PanicOnError1
-	pc   = u.PanicOnCondition
-	ph   = u.PanicHandle
-	phe  = u.PanicHandleEx
-	le   = u.LogOnError
-	must = u.Must
-	IF   = u.IF
-
-	Max           = w.Max
-	Min           = w.Min
-	GetMapKeys    = w.GetMapKeys
-	IArrSeqCtns   = w.IArrSeqCtns
-	IArrStrJoinEx = w.IArrStrJoinEx
-	SortIntArr2D  = w.SortIntArr2D
-	IArrMake      = w.IArrMake
-	ASCIIToOri    = w.ASCIIToOri
-
+	pe              = u.PanicOnError
+	pc              = u.PanicOnCondition
+	ph              = u.PanicHandle
+	must            = u.Must
+	IF              = u.IF
+	GetMapKeys      = w.GetMapKeys
+	IArrStrJoinEx   = w.IArrStrJoinEx
+	SortIntArr2D    = w.SortIntArr2D
+	IArrMake        = w.IArrMake
+	ASCIIToOri      = w.ASCIIToOri
 	JSONWrapRoot    = gjxy.JSONWrapRoot
 	JSONMake        = gjxy.JSONMakeIPath
 	JSONMakeRep     = gjxy.JSONMakeIPathRep
 	JSONObjectMerge = gjxy.JSONObjectMerge
 	SchemaMake      = gjxy.SchemaMake
+	fPln            = fmt.Println
+	fEf             = fmt.Errorf
+	fSf             = fmt.Sprintf
+	lPln            = log.Println
+	sSpl            = strings.Split
+	sRepAll         = strings.ReplaceAll
+	sJ              = strings.Join
 
-	fPln = fmt.Println
-	fPf  = fmt.Printf
-	fEf  = fmt.Errorf
-	fSf  = fmt.Sprintf
-
-	lPln = log.Println
-
-	sSpl    = strings.Split
-	sRepAll = strings.ReplaceAll
-	sJ      = strings.Join
-	sCnt    = strings.Count
-	
 	root            = ""
 	mStruct         = map[string]string{}
 	mValue          = map[string][]*valver{}
@@ -71,5 +56,4 @@ type valver struct {
 const (
 	PATH_DEL  = " ~ "
 	CHILD_DEL = " + "
-	BLANK     = w.BLANK
 )

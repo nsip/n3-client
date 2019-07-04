@@ -11,44 +11,22 @@ import (
 )
 
 type (
-	Str  = w.Str
-	I32s = w.I32s
+	Str = w.Str
 )
 
 var (
-	pe   = u.PanicOnError
-	pe1  = u.PanicOnError1
-	pc   = u.PanicOnCondition
-	ph   = u.PanicHandle
-	phe  = u.PanicHandleEx
-	le   = u.LogOnError
-	must = u.Must
-	IF   = u.IF
-
+	pe          = u.PanicOnError
+	pc          = u.PanicOnCondition
+	must        = u.Must
 	UTF8ToASCII = w.UTF8ToASCII
 	ASCIIToOri  = w.ASCIIToOri
-
-	XMLAttributes = gjxy.XMLAttributes
-	XMLSegPos     = gjxy.XMLSegPos
-	XMLSegsCount  = gjxy.XMLSegsCount
-	XMLFamilyTree = gjxy.XMLFamilyTree
-	XMLCntInfo    = gjxy.XMLCntInfo
-	IsJSON        = gjxy.IsJSON
-
-	fPln = fmt.Println
-	fPf  = fmt.Printf
-	fEf  = fmt.Errorf
-	fSf  = fmt.Sprintf
-
-	lPln = log.Println
-	LPln = lPln
-
-	sJ   = strings.Join
-	sCnt = strings.Count	
+	IsJSON      = gjxy.IsJSON
+	fPln        = fmt.Println
+	fEf         = fmt.Errorf
+	lPln        = log.Println
+	sCnt        = strings.Count
 )
 
 const (
-	ALL     = w.ALL
-	LAST    = w.LAST
 	QSingle = w.QSingle
 )

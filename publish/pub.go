@@ -59,7 +59,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 	prevIDv, termIDv, prevTermIDv := "", "", ""
 	verS, verA, verV := int64(1), int64(1), int64(1)
 
-	switch IF(IsJSON(str), g.JSON, g.XML).(g.SQDType) {
+	switch IF(IsJSON(str), g.JSON, g.XML).(g.DataType) {
 	case g.XML:
 		{
 			strMod := prepXML(str)

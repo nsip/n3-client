@@ -10,7 +10,6 @@ import (
 var (
 	fPln = fmt.Println
 	lPln = log.Println
-
 	pe   = u.PanicOnError
 	ph   = u.PanicHandle
 	must = u.Must
