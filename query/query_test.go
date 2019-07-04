@@ -77,7 +77,7 @@ func TestQuery2(t *testing.T) {
 		return
 	}
 
-	if rst := IArrIntersect(Strs(s1), Strs(s2)); rst != nil {
+	if rst := IArrIntersect(Ss(s1), Ss(s2)); rst != nil {
 
 		ids := rst.([]string)
 		for _, id := range ids {

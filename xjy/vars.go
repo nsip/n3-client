@@ -10,7 +10,7 @@ import (
 )
 
 type (
-	Str      = w.Str
+	S        = w.Str
 	DataType int
 )
 

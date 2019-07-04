@@ -28,7 +28,7 @@ func JSONBuild(path string) {
 				for _, ixpath := range ixpaths {
 					if okArr, nArr, plain := isArray(ixpath); okArr && plain {
 						vidx := getVIdxForIPath(ixpaths, ixpath)
-						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V() //                 * already has '#' *
+						ipath := S(ixpath).RmTailFromLast(PATH_DEL).V() //                 * already has '#' *
 						for i := vidx; i < vidx+nArr; i++ {
 							JSONMake(mIPathObj, ipath, tfield, valvers[i].value, true)
 						}
@@ -43,14 +43,14 @@ func JSONBuild(path string) {
 				} else {
 					fs := sSpl(path, PATH_DEL)
 					is := IArrMake("Strs", len(fs), "1")
-					ipath := IArrStrJoinEx(Strs(fs), is.(Strs), "#", PATH_DEL)
+					ipath := IArrStrJoinEx(Ss(fs), is.(Ss), "#", PATH_DEL)
 					JSONMake(mIPathObj, ipath, tfield, valvers[0].value, false)
 				}
 			}
 
 		} else { //                                                                          *** OBJECT ***
 
-			xpath = Str(xpath).Replace("[]", "").V()
+			xpath = S(xpath).Replace("[]", "").V()
 			// fPln("<OBJECT>               --->", xpath)
 
 			if ixpaths := IPathListBymArr(xpath); len(ixpaths) > 0 { //                      *** OBJECT [ARRAY] ***
@@ -58,7 +58,7 @@ func JSONBuild(path string) {
 
 				for _, ixpath := range ixpaths {
 					if okArr, nArr, plain := isArray(ixpath); okArr && !plain {
-						ipath := Str(ixpath).RmTailFromLast(PATH_DEL).V() //                 * already has '#' *
+						ipath := S(ixpath).RmTailFromLast(PATH_DEL).V() //                 * already has '#' *
 						for i := 1; i <= nArr; i++ {
 							sub := fSf("%s#%d", ixpath, i)
 							JSONMake(mIPathObj, ipath, tfield, sub, true)
@@ -85,7 +85,7 @@ func JSONBuild(path string) {
 
 					fs := sSpl(path, PATH_DEL)
 					is := IArrMake("Strs", len(fs), "1")
-					ipath := IArrStrJoinEx(Strs(fs), is.(Strs), "#", PATH_DEL)
+					ipath := IArrStrJoinEx(Ss(fs), is.(Ss), "#", PATH_DEL)
 					sub := ipath + PATH_DEL + tfield + "#1"
 					JSONMake(mIPathObj, ipath, tfield, sub, false)
 

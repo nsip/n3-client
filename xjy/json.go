@@ -21,7 +21,7 @@ func JSONModelInfo(jsonstr, ObjIDMark, dfltRoot, pDel string,
 	OnArrFetch func(string, string, int, bool)) (string, string) {
 
 	id, root, _, addedRoot := JSONGetObjID(jsonstr, ObjIDMark, dfltRoot, pDel) //                  *** find ID Value by ObjIDMark ***
-	id = Str(id).RmQuotes(QDouble).V()
+	id = S(id).RmQuotes(QDouble).V()
 
 	mFT, mArr := JSONArrInfo(jsonstr, IF(addedRoot, dfltRoot, "").(string), pDel, id, nil)
 	j, lFT, lArr := 0, len(*mFT), len(*mArr)

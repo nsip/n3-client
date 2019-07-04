@@ -28,7 +28,7 @@ func FmtJSONStr(json string, jqDirs ...string) string {
 	if !IsJSON(json) {
 		return ""
 	}
-	sJSON := Str(json).Replace("'", "\\'") //        *** deal with <single quote> in "echo" ***
+	sJSON := S(json).Replace("'", "\\'") //        *** deal with <single quote> in "echo" ***
 	cmdstr := "echo $" + sJSON.MkQuotes(QSingle).V() + ` | jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)
 	output := must(cmd.Output()).([]byte)

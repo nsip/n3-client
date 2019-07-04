@@ -37,7 +37,7 @@ func RequireVer(ctx, objID, verType string) (ver int64, termID string) {
 	}
 	_, p, o, _ := q.Meta(ctx, objID, verType)
 	pc(len(o) == 0, fEf("Got Version Error, Dead ObjectID: %s", objID))
-	ver, termID = Str(o[0]).ToInt64()+1, p[0]
+	ver, termID = S(o[0]).ToInt64()+1, p[0]
 	return
 }
 

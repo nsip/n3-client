@@ -54,13 +54,13 @@ func getIDList(c echo.Context) error {
 		for _, f := range must(ioutil.ReadDir(ppDir)).([]os.FileInfo) {
 			if f.Name() == object[0] {
 				data := string(must(ioutil.ReadFile(ppDir + f.Name())).([]byte))
-				mPP = Str(data).KeyValueMap('\n', ':', '#')
+				mPP = S(data).KeyValueMap('\n', ':', '#')
 				break
 			}
 		}
 		for k, v := range params {
 			if _, ok := mPP[k]; ok {
-				mPV[k] = Str(v[0]).T(BLANK).V()
+				mPV[k] = S(v[0]).T(BLANK).V()
 			}
 		}
 		all, ok := params["all"]

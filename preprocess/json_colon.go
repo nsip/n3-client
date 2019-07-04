@@ -10,7 +10,7 @@ func HasColonInValue(str string) bool {
 // RplcValueColons :
 func RplcValueColons(str string) string {
 	colonTo := "^" + strconv.FormatInt((int64)(':'), 36) + "$"
-	s := Str(str).Replace("\":", "#TAGEND#")
+	s := S(str).Replace("\":", "#TAGEND#")
 	s = s.Replace(":", colonTo)
 	s = s.Replace("#TAGEND#", "\":")
 	return s.V()

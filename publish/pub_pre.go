@@ -16,7 +16,7 @@ func prepJSON(json string) string {
 	ioutil.WriteFile("../build/debug_pub/infmt.json", []byte(json), 0666)
 
 	// *** ': null' => ': "null"' ***
-	json = Str(json).Replace(`": null`, `": "null"`).V()
+	json = S(json).Replace(`": null`, `": "null"`).V()
 
 	// *** dealing with colon ***
 	if pp.HasColonInValue(json) {

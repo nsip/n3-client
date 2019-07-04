@@ -8,7 +8,7 @@ import (
 )
 
 type (
-	Strs = w.Strs
+	Ss = w.Strs
 )
 
 var (

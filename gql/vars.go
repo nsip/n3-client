@@ -11,8 +11,8 @@ import (
 )
 
 type (
-	Str  = w.Str
-	Strs = w.Strs
+	S  = w.Str
+	Ss = w.Strs
 )
 
 var (

@@ -47,7 +47,7 @@ func queryObject(ctx, id string) {
 
 	s, p, o, v = q.Data(ctx, id, "[]") //        *** Array ***
 	for i := range s {
-		mArray[p[i]] = Str(o[i]).ToInt()
+		mArray[p[i]] = S(o[i]).ToInt()
 		// fPf("A mArray --> %-70s%-70s%10d\n", p[i], o[i], v[i])
 	}
 	mIndicesList = mkIndicesList()
@@ -70,7 +70,7 @@ func isLeafValue(path string) (bool, []*valver) {
 }
 
 func isObject(path string) bool {
-	path = Str(path).Replace("[]", "").V()
+	path = S(path).Replace("[]", "").V()
 	_, ok1 := mStruct[path]
 	_, ok2 := mArray[path]
 	return ok1 && !ok2
@@ -78,15 +78,15 @@ func isObject(path string) bool {
 
 func isArray(ipath string) (fArr bool, nArr int, plain bool) {
 	nArr, fArr = mArray[ipath]
-	s1, _ := Str(ipath).SplitEx(PATH_DEL, "#", "string", "int")
+	s1, _ := S(ipath).SplitEx(PATH_DEL, "#", "string", "int")
 	path := sJ(s1.([]string), PATH_DEL)
 	_, ok := mStruct[path]
 	return fArr, nArr, !ok
 }
 
 func isParentArray(ipath string) (fArr bool, nArr int, plain bool) {
-	ipathParent := Str(ipath).RmTailFromLast(PATH_DEL).V()
-	ipathParent = Str(ipathParent).RmTailFromLast("#").V()
+	ipathParent := S(ipath).RmTailFromLast(PATH_DEL).V()
+	ipathParent = S(ipathParent).RmTailFromLast("#").V()
 	return isArray(ipathParent)
 }
 
@@ -111,7 +111,7 @@ func mkIndicesList() (rst map[string][][]int) {
 	}
 	keys := GetMapKeys(mArray).([]string)
 	for _, k := range keys {
-		s1, i2 := Str(k).SplitEx(PATH_DEL, "#", "string", "int")
+		s1, i2 := S(k).SplitEx(PATH_DEL, "#", "string", "int")
 		rKey := sJ(s1.([]string), PATH_DEL)
 		rst[rKey] = append(rst[rKey], i2.([]int))
 	}
@@ -134,7 +134,7 @@ func IPathListBymArr(path string) (rst []string) {
 				for _, idx := range ind {
 					sind = append(sind, fSf("%d", idx))
 				}
-				rst = append(rst, IArrStrJoinEx(Strs(sSpl(path, PATH_DEL)), Strs(sind), "#", PATH_DEL))
+				rst = append(rst, IArrStrJoinEx(Ss(sSpl(path, PATH_DEL)), Ss(sind), "#", PATH_DEL))
 			}
 		}
 	}
@@ -148,7 +148,7 @@ func SubIPathListByPath(path string) (rst []string) {
 	}
 	mapKeys := GetMapKeys(mIPathSubIPaths).([]string)
 	for _, k := range mapKeys {
-		r1, _ := Str(k).SplitEx(PATH_DEL, "#", "string", "int")
+		r1, _ := S(k).SplitEx(PATH_DEL, "#", "string", "int")
 		if sJ(r1.([]string), PATH_DEL) == path {
 			ipath := k
 			if subIPaths, ok := mIPathSubIPaths[ipath]; ok {
@@ -162,7 +162,7 @@ func SubIPathListByPath(path string) (rst []string) {
 	S1 := []string{}
 	a2d := [][]int{}
 	for _, ip := range rst {
-		s1, i2 := Str(ip).SplitEx(PATH_DEL, "#", "string", "int")
+		s1, i2 := S(ip).SplitEx(PATH_DEL, "#", "string", "int")
 		a2d = append(a2d, i2.([]int))
 		S1 = s1.([]string)
 	}
@@ -174,7 +174,7 @@ func SubIPathListByPath(path string) (rst []string) {
 		for i, a := range arr {
 			sa[i] = fSf("%d", a)
 		}
-		rst = append(rst, IArrStrJoinEx(Strs(S1), Strs(sa), "#", PATH_DEL))
+		rst = append(rst, IArrStrJoinEx(Ss(S1), Ss(sa), "#", PATH_DEL))
 	}
 
 	return

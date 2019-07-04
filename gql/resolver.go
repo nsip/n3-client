@@ -15,8 +15,8 @@ func qSchemaList(qSchemaDir string) (fnames []string) {
 	files := must(ioutil.ReadDir(qSchemaDir)).([]os.FileInfo)
 	for _, file := range files {
 		fname := file.Name()
-		if !Str(fname).HP("_") {
-			fnames = append(fnames, Str(fname).RmTailFromLast(".").V())
+		if !S(fname).HP("_") {
+			fnames = append(fnames, S(fname).RmTailFromLast(".").V())
 		}
 	}
 	return

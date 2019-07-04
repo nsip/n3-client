@@ -53,7 +53,7 @@ func IDsByPO(ctx string, mParamPath map[string]string, mParamValue map[string]in
 		IDs = idsList[0]
 		for i := 1; i < idx; i++ {
 			if len(IDs) > 0 {
-				if rst := IArrIntersect(Strs(IDs), Strs(idsList[i])); rst != nil {
+				if rst := IArrIntersect(Ss(IDs), Ss(idsList[i])); rst != nil {
 					IDs = rst.([]string)
 				} else {
 					IDs = []string{}
@@ -63,7 +63,7 @@ func IDsByPO(ctx string, mParamPath map[string]string, mParamValue map[string]in
 	}
 
 	if len(IDs) > 1 {
-		IDs = IArrRmRep(Strs(IDs)).([]string)
+		IDs = IArrRmRep(Ss(IDs)).([]string)
 	}
 	return
 }

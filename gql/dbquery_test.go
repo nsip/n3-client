@@ -20,8 +20,8 @@ import (
 // }
 
 func TestStrsJoinEx(t *testing.T) {
-	fPln(IArrStrJoinEx(Strs([]string{"a", "b", "c", "d", "e"}), Strs([]string{"1", "2"}), "#", " ~ "))
-	fPln(Str("a#1 ~ b#2 ~ c#4 ~ d ~ e").SplitEx(" ~ ", "#", "string", "int"))
+	fPln(IArrStrJoinEx(Ss([]string{"a", "b", "c", "d", "e"}), Ss([]string{"1", "2"}), "#", " ~ "))
+	fPln(S("a#1 ~ b#2 ~ c#4 ~ d ~ e").SplitEx(" ~ ", "#", "string", "int"))
 }
 
 func TestAMapIndicesList(t *testing.T) {

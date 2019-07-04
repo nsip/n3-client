@@ -2,7 +2,7 @@ package xjy
 
 // XMLScanObjects is ( ONLY LIKE  <SchoolInfo RefId="D3F5B90C-D85D-4728-8C6F-0D606070606C"> )
 func XMLScanObjects(xml, idmark string) (ids, objtags []string, starts, ends []int) {
-	L := Str(xml).L()
+	L := S(xml).L()
 	nXML, pNextStart, pLastPos := XMLSegsCount(xml), 0, 0
 	for i := 1; i <= nXML; i++ {
 
@@ -11,7 +11,7 @@ func XMLScanObjects(xml, idmark string) (ids, objtags []string, starts, ends []i
 		// 	fPln("debug break", L)
 		// }
 
-		tag, thisXML, leftR, rightR := XMLSegPos(Str(xml).S(pNextStart, ALL).V(), 1, 1)
+		tag, thisXML, leftR, rightR := XMLSegPos(S(xml).S(pNextStart, ALL).V(), 1, 1)
 		objtags = append(objtags, tag)
 
 		attri, attrivalues := XMLAttributes(thisXML, "")
@@ -26,7 +26,7 @@ func XMLScanObjects(xml, idmark string) (ids, objtags []string, starts, ends []i
 		starts = append(starts, pLastPos)
 		for j := pLastPos + rightR; j >= 0; j-- {
 			j = IF(j >= L, L-1, j).(int)
-			if Str(xml).C(j) == '>' {
+			if S(xml).C(j) == '>' {
 				ends = append(ends, j)
 				break
 			}
@@ -40,7 +40,7 @@ func XMLScanObjects(xml, idmark string) (ids, objtags []string, starts, ends []i
 // XMLObjStrByID is
 func XMLObjStrByID(xml, idmark, rid string) string {
 	ids, objtags, starts, _ := XMLScanObjects(xml, idmark)
-	XML, nIDs := Str(xml), len(ids)
+	XML, nIDs := S(xml), len(ids)
 	for i, id := range ids {
 		if id == rid {
 			if i != nIDs-1 {
@@ -49,7 +49,7 @@ func XMLObjStrByID(xml, idmark, rid string) string {
 			/* last object */
 			endtag := "</" + objtags[i] + ">"
 			if end := XML.S(starts[i], ALL).Idx(endtag); end > 0 {
-				return XML.S(starts[i], starts[i]+end+Str(endtag).L()).T(BLANK).V()
+				return XML.S(starts[i], starts[i]+end+S(endtag).L()).T(BLANK).V()
 			}
 		}
 	}
@@ -66,7 +66,7 @@ func XMLInfoScan(xmlstr, objIDMark, PATHDEL string,
 
 	for i := 0; i < nObj; i++ {
 
-		id, _, xml := ids[i], objs[i], Str(xmlstr).S(starts[i], ends[i]+1).V()
+		id, _, xml := ids[i], objs[i], S(xmlstr).S(starts[i], ends[i]+1).V()
 		mFT, mArr := XMLCntInfo(xml, "", PATHDEL, id, nil)
 
 		for k, v := range *mArr { //                      *** only need >= 2 to be xml array ***

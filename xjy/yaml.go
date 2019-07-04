@@ -16,7 +16,7 @@ func YAMLScanFromXMLBat(xml, idmark string, IDs []string, OnValueFetch func(path
 	n, prevEnd := XMLSegsCount(xml), 0
 	for i := 1; i <= n; i++ {
 		nextStart := IF(i == 1, 0, prevEnd+1).(int)
-		_, thisxml, _, end := XMLSegPos(Str(xml).S(nextStart, ALL).V(), 1, 1)
+		_, thisxml, _, end := XMLSegPos(S(xml).S(nextStart, ALL).V(), 1, 1)
 		prevEnd = end + nextStart
 
 		fPf("%d SIF *****************************************************\n", i)
