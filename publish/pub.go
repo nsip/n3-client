@@ -17,6 +17,7 @@ func Junk(ctx string, n int) {
 		tuple := must(messages.NewTuple("ab", "pre", "obj")).(*pb.SPOTuple)
 		tuple.Version = int64(i)
 		pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+		pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx+"-meta"))
 	}
 }
 

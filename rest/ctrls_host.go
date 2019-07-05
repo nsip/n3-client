@@ -48,15 +48,19 @@ func getIDList(c echo.Context) error {
 	g.CurCtx = g.Cfg.RPC.CtxList[0]
 
 	params := c.QueryParams()
-	if object, ok := params["object"]; ok {
+	if object, ok := params["object"]; ok { //                             *** object Value only indicates the file to get parampath ***
 		mPP, mPV := map[string]string{}, map[string]interface{}{}
-		ppDir := g.Cfg.Query.ParamPathDir
+		ppDir, foundPPFile := g.Cfg.Query.ParamPathDir, false
 		for _, f := range must(ioutil.ReadDir(ppDir)).([]os.FileInfo) {
 			if f.Name() == object[0] {
 				data := string(must(ioutil.ReadFile(ppDir + f.Name())).([]byte))
 				mPP = S(data).KeyValueMap('\n', ':', '#')
+				foundPPFile = true
 				break
 			}
+		}
+		if !foundPPFile {
+			return c.JSON(http.StatusForbidden, "<object>'s params-path file was not found, contact n3-client admin to solve it")
 		}
 		for k, v := range params {
 			if _, ok := mPP[k]; ok {
@@ -65,7 +69,7 @@ func getIDList(c echo.Context) error {
 		}
 		all, ok := params["all"]
 		getall := IF(ok && all[0] == "true", true, false).(bool)
-		return c.JSON(http.StatusAccepted, GetIDs(g.CurCtx, mPP, mPV, getall))
+		return c.JSON(http.StatusAccepted, GetIDs(g.CurCtx, mPP, mPV, object[0], getall))
 	}
 	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }

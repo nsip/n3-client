@@ -8,17 +8,23 @@ import (
 )
 
 // GetIDs :
-func GetIDs(ctx string, mParamPath map[string]string, mParamValue map[string]interface{}, all bool) []string {
+func GetIDs(ctx string, mParamPath map[string]string, mParamValue map[string]interface{}, object string, all bool) []string {
+	mParamValueObj := map[string]interface{}{"object": object}
+	for k, v := range mParamValue {
+		mParamValueObj[k] = v
+	}
+
 	for _, qry := range g.CacheQryIDs {
-		if reflect.DeepEqual(qry.Qry, mParamValue) && qry.IDs != nil {
+		if qry.Ctx == ctx && reflect.DeepEqual(qry.Qry, mParamValueObj) && qry.IDs != nil {
 			return qry.IDs
 		}
 	}
+	
 	IDs := IDsByPO(ctx, mParamPath, mParamValue, all)
 	if len(IDs) > 0 && IDs[0] != "" {
 		g.CacheQryIDsPtr++
 		g.CacheQryIDsPtr %= g.NQryIDsCache
-		g.CacheQryIDs[g.CacheQryIDsPtr] = g.QryIDs{Ctx: g.CurCtx, Qry: mParamValue, IDs: IDs}
+		g.CacheQryIDs[g.CacheQryIDsPtr] = g.QryIDs{Ctx: ctx, Qry: mParamValueObj, IDs: IDs}
 	}
 	return IDs
 }

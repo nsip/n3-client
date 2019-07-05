@@ -31,7 +31,7 @@ func TestToNode(t *testing.T) {
 	g.CurCtx = g.Cfg.RPC.CtxList[0]
 
 	for i := 1; i <= 5; i++ {
-		file := fSf("../inbound/hsie/history/stage%d/overview.json", i) // *** change <file> ***
+		file := fSf("../inbound/hsie/geography/stage%d/overview.json", i) // *** change <file> ***
 		json := string(must(ioutil.ReadFile(file)).([]byte))
 		IDs, _, _, _, _ := Pub2Node(g.CurCtx, json, "id", "Overview") //     *** change <idmark> <dfltRoot> ***
 		time.Sleep(1 * time.Second)
