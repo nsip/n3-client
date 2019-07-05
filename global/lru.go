@@ -15,7 +15,7 @@ func RmQryIDsCache(IDs ...string) {
 	OUT:
 		for i, qry := range CacheQryIDs {
 			if qry.IDs == nil {
-				continue OUT
+				continue
 			}
 			for _, id := range qry.IDs {
 				if id == ID {

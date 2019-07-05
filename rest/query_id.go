@@ -21,7 +21,7 @@ func GetIDs(ctx string, mParamPath map[string]string, mParamValue map[string]int
 	}
 	
 	IDs := IDsByPO(ctx, mParamPath, mParamValue, all)
-	if len(IDs) > 0 && IDs[0] != "" {
+	if IDs != nil && len(IDs) > 0 && IDs[0] != "" {
 		g.CacheQryIDsPtr++
 		g.CacheQryIDsPtr %= g.NQryIDsCache
 		g.CacheQryIDs[g.CacheQryIDsPtr] = g.QryIDs{Ctx: ctx, Qry: mParamValueObj, IDs: IDs}
