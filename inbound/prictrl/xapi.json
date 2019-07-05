@@ -1,0 +1,31 @@
+{
+    "description": "<R>(read only) <W>(write only) <R/W>(read and write)",
+    "id": "4947ED1F-1E94-4850-8B8F-35C653F51E9C",
+    "actor": {
+        "name": "R/W",
+        "mbox": "R/W"
+    },
+    "verb": {
+        "id": "R/W",
+        "display": {
+            "en-US": "R/W"
+        }
+    },
+    "object": {
+        "id": "R/W",
+        "definition": {
+            "type": "R/W",
+            "name": "R/W"
+        }
+    },
+    "result": {
+        "completion": "R/W",
+        "success": "R/W",
+        "score": {
+            "scaled": "R/W",
+            "min": "R/W",
+            "max": "R/W"
+        },
+        "duration": "R/W"
+    }
+}

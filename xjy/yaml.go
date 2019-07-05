@@ -54,14 +54,12 @@ func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFet
 	}
 
 	if ok, jsonType, n, eles := IsJSONArray(json); ok {
+		
 		if jsonType == JT_OBJ {
-
 			for i := 1; i <= n; i++ {
 				thisjson := eles[i-1]
 				_, _, extjson := JSONWrapRoot(thisjson, dfltRoot)
-
 				// fPf("%d json *****************************************************\n", i)
-
 				yamlstr := Jstr2Y(extjson)
 				yamlstr = YAMLJoinSplittedLines(yamlstr)
 				info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)

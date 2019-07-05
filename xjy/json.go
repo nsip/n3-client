@@ -48,14 +48,12 @@ func JSONObjScan(json, idmark, dfltRoot string,
 		if eleType == JT_OBJ {
 			for i := 1; i <= n; i++ {
 				id, root := JSONModelInfo(eles[i-1], idmark, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
-				IDs = append(IDs, id)
-				Objs = append(Objs, root)
+				IDs, Objs = append(IDs, id), append(Objs, root)
 			}
 		}
 	} else {
 		id, root := JSONModelInfo(json, idmark, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
-		IDs = append(IDs, id)
-		Objs = append(Objs, root)
+		IDs, Objs = append(IDs, id), append(Objs, root)
 	}
 	return
 }
