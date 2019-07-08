@@ -15,6 +15,8 @@ func TestQueryMeta(t *testing.T) {
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	TestN3LoadConfig(t)
 
+	// lCtxList := len(g.Cfg.RPC.CtxList)
+	g.CurCtx = g.Cfg.RPC.CtxList[0] //
 	ctx := g.CurCtx
 
 	s, p, o, v := Meta(ctx, "738F4DF5-949F-4380-8186-8252440A6F6F", "V") //         *** n3node thinks it is claiming ticket ***
@@ -29,10 +31,11 @@ func TestQuery1(t *testing.T) {
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 	TestN3LoadConfig(t)
 
+	// lCtxList := len(g.Cfg.RPC.CtxList)
+	g.CurCtx = g.Cfg.RPC.CtxList[0] //
 	ctx := g.CurCtx
 
-	// ObjectID := "40efdee5-df52-4cd7-b70c-d457629ae32d"
-	ObjectID := "5758757f-b34b-4385-9d14-0290bc9afd07"
+	ObjectID := "4947ED1F-1E94-4850-8B8F-35C653F51E9C"
 	Object := ""
 	s, p, o, _ := Data(ctx, ObjectID, "") //      ** root **
 	fPln("Object:")
@@ -40,6 +43,8 @@ func TestQuery1(t *testing.T) {
 		Object = o[i]
 		fPf("%-40s%-10s%s\n", s[i], p[i], o[i])
 	}
+
+	// ************************* //
 
 	fPln("\nArray:")
 	s, p, o, _ = Data(ctx, ObjectID, "[]") //     ** array **
@@ -58,6 +63,15 @@ func TestQuery1(t *testing.T) {
 	for i := range s {
 		fPf("%-40s%-85s%s\n", s[i], p[i], o[i])
 	}
+
+	// ************************* //
+
+	fPln("\nContext-prictrlID:")
+	s, p, o, _ = Data("ctxid", "xapi", "comment 2") //   ** get prictrl ID **
+	for i := range s {
+		fPf("%-40s%-85s%s\n", s[i], p[i], o[i])
+	}
+
 }
 
 func TestQuery2(t *testing.T) {
@@ -82,7 +96,7 @@ func TestQuery2(t *testing.T) {
 		ids := rst.([]string)
 		for _, id := range ids {
 			fPln(id)
-		}		
+		}
 
 		fPln(" ----------------------------------------- ")
 

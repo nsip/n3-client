@@ -27,7 +27,7 @@ func query(ctx string, metaQry bool, spo []string) (s, p, o []string, v []int64)
 	case 3:
 		qTuple = &pb.SPOTuple{Subject: spo[0], Predicate: spo[1], Object: spo[2]}
 	default:
-		panic("subject & predicate must be provided to general query, empty-subject & predicate & object must be provided to id query")
+		panic("subject & predicate must be provided to general query. <empty string>-subject & predicate & object must be provided to id query")
 	}
 
 	for _, t := range g.N3clt.Query(qTuple, g.Cfg.RPC.Namespace, IF(!metaQry, ctx, ctx+"-meta").(string)) {

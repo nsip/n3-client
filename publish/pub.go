@@ -10,11 +10,23 @@ import (
 	"github.com/nsip/n3-messages/n3grpc"
 )
 
+// Send :
+func Send(ctx, subject, predicate, object string) {
+	if g.Cfg == nil || g.N3clt == nil {
+		InitClient(c.FromFile("../build/config.toml"))
+	}
+	tuple := must(messages.NewTuple(subject, predicate, object)).(*pb.SPOTuple)
+	tuple.Version = 999999999
+	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+}
+
 // Junk :
 func Junk(ctx string, n int) {
-	pc(g.Cfg == nil || g.N3clt == nil, fEf("Missing Init, do 'Init(&config) before sending'\n"))
+	if g.Cfg == nil || g.N3clt == nil {
+		InitClient(c.FromFile("../build/config.toml"))
+	}
 	for i := 0; i < n; i++ {
-		tuple := must(messages.NewTuple("ab", "pre", "obj")).(*pb.SPOTuple)
+		tuple := must(messages.NewTuple("subject", "predicate", "object")).(*pb.SPOTuple)
 		tuple.Version = int64(i)
 		pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 		pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx+"-meta"))
