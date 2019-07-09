@@ -75,6 +75,6 @@ func TestCtxidToNode(t *testing.T) {
 
 	fPln(g.CurCtx)
 
-	Send(g.CurCtx, "xapi11", "comment 22", "4947ED1F-1E94-4850-8B8F-35C653F51E9G") // *** ctx, id, comment ***
+	Send(g.CurCtx, "xapi2222", "4947ED1F-1E94-4850-8B8F-35C653F51E9G", "comment 22") // *** ctx, id, comment ***
 	time.Sleep(1 * time.Second)
 }
