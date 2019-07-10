@@ -13,3 +13,7 @@ type (
 var (
 	fPln = fmt.Println
 )
+
+const (
+	ctxid = "ctxid"
+)

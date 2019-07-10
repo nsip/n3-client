@@ -10,18 +10,14 @@ import (
 // deactivateCmd represents the deactivate command
 var deactivateCmd = &cobra.Command{
 	Use:   "deactivate",
-	Short: "Deactivate a Context's Privacy Policy File",
+	Short: "Deactivate an objectRoot in a certain Context from a Privacy Policy File",
 	Long: `
-	e.g. [usage]: privacy deactivate context-demo 'A example of how to deactivate a context privacy'
-	Use this command line to unlink a context from its privacy control file ID,	
+	e.g. [usage]: privacy deactivate 'ObjectRoot' 'Context'
+	Use this command line to unlink an objectRoot in a context from its privacy control file ID,	
 	`,
-	Args: cobra.MinimumNArgs(1),
+	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 2 {
-			rmCtxPrivid(args[0], args[1])
-		} else {
-			rmCtxPrivid(args[0])
-		}
+		rmCtxPrivid(args[0], args[1])
 	},
 }
 
@@ -30,11 +26,7 @@ func init() {
 }
 
 func rmCtxPrivid(params ...string) {
-	objRoot, cmt := params[0], time.Now().Format("2006-1-2 15:4:5.000")
-	if len(params) == 2 {
-		cmt = params[1]
-	}
-
-	pub.Send("ctxid", objRoot, "00000000-0000-0000-0000-000000000000", cmt)
+	objRoot, ctx := params[0], params[1]
+	pub.Send(ctxid, objRoot, ctx, "00000000-0000-0000-0000-000000000000")
 	time.Sleep(200 * time.Millisecond)
 }
