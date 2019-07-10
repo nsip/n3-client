@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	g "../global"
 	pub "../publish"
 	"github.com/spf13/cobra"
 )
@@ -27,6 +28,6 @@ func init() {
 
 func rmCtxPrivid(params ...string) {
 	objRoot, ctx := params[0], params[1]
-	pub.Send(ctxid, objRoot, ctx, "00000000-0000-0000-0000-000000000000")
+	pub.Send(ctxid, objRoot, ctx, g.MARKDelID)
 	time.Sleep(200 * time.Millisecond)
 }
