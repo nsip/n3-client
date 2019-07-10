@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	g "../global"
+
 	"github.com/spf13/cobra"
 )
 
 func main() {
+	g.Init()
 	Execute()
 }
 

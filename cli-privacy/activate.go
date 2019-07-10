@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	g "../global"
 	pub "../publish"
 	"github.com/spf13/cobra"
 )
@@ -28,10 +29,18 @@ func init() {
 
 func addCtxPrivid(params ...string) {
 	objRoot, ctx, priid := params[0], params[1], params[2]
+
+	// check context is a valid context in n3-transport
+	if ctx == g.Cfg.RPC.CtxPrivID || ctx == g.Cfg.RPC.CtxPrivDef {
+		fPln("error: the 2nd Param - [context] is invalid, Nothing Set")
+		return
+	}
+
+	// check privacy id
 	if !S(priid).IsUUID() {
 		fPln("error: the 3rd Param - [privacy id] is invalid UUID, Nothing Set")
 		return
 	}
-	pub.Send(ctxid, objRoot, ctx, priid)
+	pub.Send(g.Cfg.RPC.CtxPrivID, objRoot, ctx, priid)
 	time.Sleep(200 * time.Millisecond)
 }

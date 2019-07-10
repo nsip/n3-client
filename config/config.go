@@ -23,10 +23,12 @@ type rest struct {
 }
 
 type rpc struct {
-	Namespace string
-	Server    string
-	Port      int
-	CtxList   []string
+	Namespace  string
+	Server     string
+	Port       int
+	CtxList    []string
+	CtxPrivDef string
+	CtxPrivID  string
 }
 
 type query struct {

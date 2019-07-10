@@ -1,25 +1,12 @@
 package query
 
 import (
-	c "../config"
 	g "../global"
 
 	"github.com/nsip/n3-messages/messages/pb"
-	"github.com/nsip/n3-messages/n3grpc"
 )
 
-// InitClient :
-func InitClient(config *c.Config) {
-	pc(config == nil, fEf("Init Config"))
-	g.Cfg = config
-	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(g.Cfg.RPC.Server, g.Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
-}
-
 func query(ctx string, metaQry bool, spo []string) (s, p, o []string, v []int64) {
-	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("../build/config.toml"))
-	}
-
 	qTuple := &pb.SPOTuple{}
 	switch len(spo) {
 	case 2:

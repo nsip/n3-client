@@ -5,17 +5,12 @@ import (
 	"testing"
 	"time"
 
-	c "../config"
 	g "../global"
 )
 
-func TestN3LoadConfig(t *testing.T) {
-	InitClient(c.FromFile("../build/config.toml"))
-}
-
 func TestJunk(t *testing.T) {
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	TestN3LoadConfig(t)
 
 	g.CurCtx = g.Cfg.RPC.CtxList[0]
 	Junk(g.CurCtx, 3)
@@ -23,8 +18,8 @@ func TestJunk(t *testing.T) {
 }
 
 func TestToNode(t *testing.T) {
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	TestN3LoadConfig(t)
 
 	g.CurCtx = g.Cfg.RPC.CtxList[0]
 
@@ -48,8 +43,8 @@ func TestToNode(t *testing.T) {
 }
 
 func TestPrictrlToNode(t *testing.T) {
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	TestN3LoadConfig(t)
 
 	lCtxList := len(g.Cfg.RPC.CtxList)
 	g.CurCtx = g.Cfg.RPC.CtxList[lCtxList-2] //                   *** use THE LAST BUT ONE for <privacy control> measurement ***
@@ -63,12 +58,11 @@ func TestPrictrlToNode(t *testing.T) {
 	for _, id := range IDs {
 		fPln("sent:", id)
 	}
-
 }
 
 func TestCtxidToNode(t *testing.T) {
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	TestN3LoadConfig(t)
 
 	lCtxList := len(g.Cfg.RPC.CtxList)
 	g.CurCtx = g.Cfg.RPC.CtxList[lCtxList-1] //                   *** use THE LAST for <context-id> measurement ***

@@ -1,20 +1,15 @@
 package publish
 
 import (
-	c "../config"
 	g "../global"
 	q "../query"
 	xjy "../xjy"
 	"github.com/nsip/n3-messages/messages"
 	"github.com/nsip/n3-messages/messages/pb"
-	"github.com/nsip/n3-messages/n3grpc"
 )
 
 // Send :
 func Send(ctx, subject, predicate, object string) {
-	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("../build/config.toml"))
-	}
 	tuple := must(messages.NewTuple(subject, predicate, object)).(*pb.SPOTuple)
 	tuple.Version = 999999999
 	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
@@ -22,9 +17,6 @@ func Send(ctx, subject, predicate, object string) {
 
 // Junk :
 func Junk(ctx string, n int) {
-	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("../build/config.toml"))
-	}
 	for i := 0; i < n; i++ {
 		tuple := must(messages.NewTuple("subject", "predicate", "object")).(*pb.SPOTuple)
 		tuple.Version = int64(i)
@@ -35,9 +27,6 @@ func Junk(ctx string, n int) {
 
 // Terminate :
 func Terminate(ctx, objID, termID string, ver int64) {
-	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("../build/config.toml"))
-	}
 	tuple := must(messages.NewTuple(termID, g.MARKTerm, objID)).(*pb.SPOTuple)
 	tuple.Version = ver
 	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
@@ -45,9 +34,6 @@ func Terminate(ctx, objID, termID string, ver int64) {
 
 // RequireVer : verType ( "V" / "A" / "S" )
 func RequireVer(ctx, objID, verType string) (ver int64, termID string) {
-	if g.Cfg == nil || g.N3clt == nil {
-		InitClient(c.FromFile("../build/config.toml"))
-	}
 	_, p, o, _ := q.Meta(ctx, objID, verType)
 	pc(len(o) == 0, fEf("Got Version Error, Dead ObjectID: %s", objID))
 	ver, termID = S(o[0]).ToInt64()+1, p[0]
@@ -56,17 +42,8 @@ func RequireVer(ctx, objID, verType string) (ver int64, termID string) {
 
 /************************************************************/
 
-// InitClient :
-func InitClient(config *c.Config) {
-	pc(config == nil, fEf("Init Config"))
-	g.Cfg = config
-	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(g.Cfg.RPC.Server, g.Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
-}
-
 // Pub2Node :
 func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
-	pc(g.Cfg == nil || g.N3clt == nil, fEf("Missing Sending Init, do 'Init(&config) before sending'\n"))
-
 	prevIDs, termIDs := "", ""
 	prevIDa, termIDa := "", ""
 	prevIDv, termIDv, prevTermIDv := "", "", ""

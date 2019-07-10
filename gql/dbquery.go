@@ -1,18 +1,9 @@
 package gql
 
 import (
-	c "../config"
 	g "../global"
 	q "../query"
-	"github.com/nsip/n3-messages/n3grpc"
 )
-
-// Init :
-func Init(config *c.Config) {
-	pc(config == nil, fEf("Init Config"))
-	g.Cfg = config
-	g.N3clt = IF(g.N3clt == nil, n3grpc.NewClient(g.Cfg.RPC.Server, g.Cfg.RPC.Port), g.N3clt).(*n3grpc.Client)
-}
 
 func clrQueryCache() {
 	mStruct = map[string]string{}
@@ -25,8 +16,8 @@ func clrQueryCache() {
 
 // filling root, mStruct, mValue, mArray
 func queryObject(ctx, id string) {
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	Init(c.FromFile("./config.toml", "../config/config.toml"))
 
 	_, _, o, _ := q.Data(ctx, id, "") //         *** Object's Root ***
 	if len(o) > 0 {

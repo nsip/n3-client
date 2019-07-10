@@ -6,7 +6,6 @@ import (
 	"os"
 	"time"
 
-	c "../config"
 	d "../delete"
 	g "../global"
 	"../gql"
@@ -25,12 +24,6 @@ AGAIN:
 		time.Sleep(100 * time.Millisecond)
 		goto AGAIN
 	}
-}
-
-// InitClient :
-func InitClient(config *c.Config) {
-	pc(config == nil, fEf("Init Config"))
-	g.Cfg = config
 }
 
 // getIDList :

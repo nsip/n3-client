@@ -19,7 +19,9 @@ ErrLog = "./errlog.txt"
   Namespace = "gXjyJ7BuXpMtHcQskx1HGGb3muEPexZ7AcAT4Kz1HVx"
   Server = "192.168.76.37"
   Port = 5777
-  CtxList = ["demo", "demo1", "demo2", "prictrl", "ctxid"]
+  CtxList = ["demo", "demo1", "demo2"]
+  CtxPrivDef = "privctrl"
+  CtxPrivID = "ctxid"
 
 [Query]
   SchemaDir = "../gql/qSchema/"

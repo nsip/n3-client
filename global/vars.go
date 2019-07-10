@@ -53,7 +53,11 @@ const (
 var (
 	fPln = fmt.Println
 	fSf  = fmt.Sprintf
+	fEf  = fmt.Errorf
+
 	must = u.Must
+	pc   = u.PC
+	IF   = u.IF
 
 	// Cfg : Config File Struct
 	Cfg *c.Config

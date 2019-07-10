@@ -11,6 +11,8 @@ func TestLoad(t *testing.T) {
 	fPln(cfg.Filewatcher)
 	fPln(cfg.ErrLog)
 	fPln(cfg.RPC.CtxList)
+	fPln(cfg.RPC.CtxPrivDef)
+	fPln(cfg.RPC.CtxPrivID)
 	fPln(cfg.Query.ParamPathDir)
 }
 

@@ -28,6 +28,13 @@ func init() {
 
 func rmCtxPrivid(params ...string) {
 	objRoot, ctx := params[0], params[1]
-	pub.Send(ctxid, objRoot, ctx, g.MARKDelID)
+
+	// check context is a valid context in n3-transport
+	if ctx == g.Cfg.RPC.CtxPrivID || ctx == g.Cfg.RPC.CtxPrivDef {
+		fPln("error: the 2nd Param - [context] is invalid, Nothing Set")
+		return
+	}
+
+	pub.Send(g.Cfg.RPC.CtxPrivID, objRoot, ctx, g.MARKDelID)
 	time.Sleep(200 * time.Millisecond)
 }

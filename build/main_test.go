@@ -3,11 +3,8 @@ package main
 import (
 	"testing"
 
-	c "../config"
 	fw "../filewatcher"
 	g "../global"
-	pub "../publish"
-	"../query"
 	"../rest"
 	u "github.com/cdutwhu/go-util"
 )
@@ -17,11 +14,8 @@ var (
 )
 
 func TestMain(t *testing.T) {
-	g.Cfg = c.FromFile("../build/config.toml")
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	pub.InitClient(g.Cfg)
-	query.InitClient(g.Cfg)
-	rest.InitClient(g.Cfg)
 
 	done := make(chan string)
 	go rest.HostHTTPAsync()

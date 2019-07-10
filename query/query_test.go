@@ -3,17 +3,12 @@ package query
 import (
 	"testing"
 
-	c "../config"
 	g "../global"
 )
 
-func TestN3LoadConfig(t *testing.T) {
-	InitClient(c.FromFile("../build/config.toml"))
-}
-
 func TestQueryMeta(t *testing.T) {
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	TestN3LoadConfig(t)
 
 	// lCtxList := len(g.Cfg.RPC.CtxList)
 	g.CurCtx = g.Cfg.RPC.CtxList[0] //
@@ -28,8 +23,8 @@ func TestQueryMeta(t *testing.T) {
 }
 
 func TestQuery1(t *testing.T) {
+	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	TestN3LoadConfig(t)
 
 	// lCtxList := len(g.Cfg.RPC.CtxList)
 	g.CurCtx = g.Cfg.RPC.CtxList[0] //
@@ -75,8 +70,8 @@ func TestQuery1(t *testing.T) {
 }
 
 func TestQuery2(t *testing.T) {
-	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	TestN3LoadConfig(t)
+	g.Init()
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()	
 
 	ctx := g.CurCtx
 
