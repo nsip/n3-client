@@ -11,7 +11,7 @@ import (
 // Send :
 func Send(ctx, subject, predicate, object string) {
 	tuple := must(messages.NewTuple(subject, predicate, object)).(*pb.SPOTuple)
-	tuple.Version = 999999999
+	tuple.Version = 0
 	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 }
 

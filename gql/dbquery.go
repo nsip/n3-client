@@ -16,7 +16,6 @@ func clrQueryCache() {
 
 // filling root, mStruct, mValue, mArray
 func queryObject(ctx, id string) {
-	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 
 	_, _, o, _ := q.Data(ctx, id, "") //         *** Object's Root ***

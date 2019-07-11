@@ -42,16 +42,14 @@ func TestToNode(t *testing.T) {
 	}
 }
 
-func TestPrictrlToNode(t *testing.T) {
+func TestPrivctrlToNode(t *testing.T) {
 	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-
-	lCtxList := len(g.Cfg.RPC.CtxList)
-	g.CurCtx = g.Cfg.RPC.CtxList[lCtxList-2] //                   *** use THE LAST BUT ONE for <privacy control> measurement ***
-
+	
+	g.CurCtx = g.Cfg.RPC.CtxPrivDef //                   *** use THE LAST BUT ONE for <privacy control> measurement ***
 	fPln(g.CurCtx)
 
-	file := "../inbound/prictrl/xapi.json" //                     *** change <file> ***
+	file := "../inbound/privctrl/xapi.json" //                     *** change <file> ***
 	json := string(must(ioutil.ReadFile(file)).([]byte))
 	IDs, _, _, _, _ := Pub2Node(g.CurCtx, json, "id", "xapi") //  *** change <idmark> <dfltRoot> ***
 	time.Sleep(1 * time.Second)
@@ -63,10 +61,8 @@ func TestPrictrlToNode(t *testing.T) {
 func TestCtxidToNode(t *testing.T) {
 	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-
-	lCtxList := len(g.Cfg.RPC.CtxList)
-	g.CurCtx = g.Cfg.RPC.CtxList[lCtxList-1] //                   *** use THE LAST for <context-id> measurement ***
-
+	
+	g.CurCtx = g.Cfg.RPC.CtxPrivID //                   *** use THE LAST for <context-id> measurement ***
 	fPln(g.CurCtx)
 
 	Send(g.CurCtx, "xapi2222", "4947ED1F-1E94-4850-8B8F-35C653F51E9G", "comment 22") // *** ctx, id, comment ***
