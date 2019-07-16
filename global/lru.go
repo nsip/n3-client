@@ -2,7 +2,7 @@ package global
 
 // RmIDsInLRU : Remove ObjectIDs from LRU Cache
 func RmIDsInLRU(IDs ...string) {
-	for _, ID := range IDs {
+	for _, ID := range IArrRmRep(Ss(IDs)).([]string) {
 		LCSchema.Remove(ID)
 		LCJSON.Remove(ID)
 		LCRoot.Remove(ID)
@@ -11,7 +11,7 @@ func RmIDsInLRU(IDs ...string) {
 
 // RmQryIDsCache : set IDs to nil to "remove" this
 func RmQryIDsCache(IDs ...string) {
-	for _, ID := range IDs {
+	for _, ID := range IArrRmRep(Ss(IDs)).([]string) {
 	OUT:
 		for i, qry := range CacheQryIDs {
 			if qry.IDs == nil {

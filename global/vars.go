@@ -7,6 +7,7 @@ import (
 	c "../config"
 
 	u "github.com/cdutwhu/go-util"
+	w "github.com/cdutwhu/go-wrappers"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/nsip/n3-messages/n3grpc"
 )
@@ -21,6 +22,9 @@ type (
 		Qry map[string]interface{}
 		IDs []string
 	}
+
+	// Ss :
+	Ss = w.Strs
 )
 
 const (
@@ -36,7 +40,7 @@ const (
 	// DELIChild :
 	DELIChild = " + "
 	// MARKTerm :
-	MARKTerm = "--------------------------------------"
+	MARKTerm = "--------------------------------------" // len(uuid) + 2 : 38
 	// MARKDead :
 	MARKDead = "TOMBSTONE"
 	// MARKDelID :
@@ -58,6 +62,8 @@ var (
 	must = u.Must
 	pc   = u.PC
 	IF   = u.IF
+
+	IArrRmRep = w.IArrRmRep
 
 	// Cfg : Config File Struct
 	Cfg *c.Config

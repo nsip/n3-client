@@ -33,7 +33,7 @@ func TestToNode(t *testing.T) {
 	// 	}
 	// }
 
-	file := "../inbound/xapi/xapi.json" //                  *** change <file> ***
+	file := "../inbound/xapi/one.json" //                  *** change <file> ***
 	json := string(must(ioutil.ReadFile(file)).([]byte))
 	IDs, _, _, _, _ := Pub2Node(g.CurCtx, json, "id", "xapi") //      *** change <idmark> <dfltRoot> ***
 	time.Sleep(1 * time.Second)
@@ -45,11 +45,11 @@ func TestToNode(t *testing.T) {
 func TestPrivctrlToNode(t *testing.T) {
 	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	
+
 	g.CurCtx = g.Cfg.RPC.CtxPrivDef //                   *** use THE LAST BUT ONE for <privacy control> measurement ***
 	fPln(g.CurCtx)
 
-	file := "../inbound/privctrl/xapi.json" //                     *** change <file> ***
+	file := "../inbound/privctrl/xapi.json" //                    *** change <file> ***
 	json := string(must(ioutil.ReadFile(file)).([]byte))
 	IDs, _, _, _, _ := Pub2Node(g.CurCtx, json, "id", "xapi") //  *** change <idmark> <dfltRoot> ***
 	time.Sleep(1 * time.Second)
@@ -61,7 +61,7 @@ func TestPrivctrlToNode(t *testing.T) {
 func TestCtxidToNode(t *testing.T) {
 	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
-	
+
 	g.CurCtx = g.Cfg.RPC.CtxPrivID //                   *** use THE LAST for <context-id> measurement ***
 	fPln(g.CurCtx)
 

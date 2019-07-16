@@ -10,14 +10,13 @@ func TestQueryMeta(t *testing.T) {
 	g.Init()
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 
-	// lCtxList := len(g.Cfg.RPC.CtxList)
 	g.CurCtx = g.Cfg.RPC.CtxList[0] //
-	ctx := g.CurCtx
 
-	s, p, o, v := Meta(ctx, "738F4DF5-949F-4380-8186-8252440A6F6F", "V") //         *** n3node thinks it is claiming ticket ***
+	// s, p, o, v := Data(g.CurCtx, "", "xapi ~ verb ~ display ~ en-US", "completed") //   *** n3node thinks it is claiming ticket ***
+	s, p, o, v := Data(g.CurCtx, "", "ROOT", "xapi") //   *** n3node thinks it is claiming ticket ***
 	for i := range s {
 		fPln("----------------------------------------------------")
-		fPf("%d # %d: Reply: %s\n%s\n%s \n", i, v[i], s[i], p[i], o[i])
+		fPf("%d # %d: Reply:\n%s\n%s\n%s\n", i, v[i], s[i], p[i], o[i])
 	}
 	fPln()
 }
@@ -71,7 +70,7 @@ func TestQuery1(t *testing.T) {
 
 func TestQuery2(t *testing.T) {
 	g.Init()
-	defer func() { ph(recover(), g.Cfg.ErrLog) }()	
+	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 
 	ctx := g.CurCtx
 
