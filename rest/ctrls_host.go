@@ -38,8 +38,6 @@ func getIDList(c echo.Context) error {
 	OriExePathChk()
 	mtxID.Lock()
 
-	g.CurCtx = g.Cfg.RPC.CtxList[0]
-
 	params := c.QueryParams()
 	if object, ok := params["object"]; ok { //                             *** object Value only indicates the file to get parampath ***
 		mPP, mPV := map[string]string{}, map[string]interface{}{}
@@ -79,8 +77,6 @@ func delFromNode(c echo.Context) error {
 	OriExePathChk()
 	mtxDel.Lock()
 
-	g.CurCtx = g.Cfg.RPC.CtxList[0]
-
 	IDs := c.QueryParams()["id"]
 	d.DelBat(g.CurCtx, IDs...)
 	// g.RmIDsInLRU(IDs...)
@@ -99,8 +95,6 @@ func postToNode(c echo.Context) error {
 
 	OriExePathChk()
 	mtxPub.Lock()
-
-	g.CurCtx = g.Cfg.RPC.CtxList[0]
 
 	idmark, dfltRoot := c.QueryParam("idmark"), c.QueryParam("dfltRoot")
 	// fPln(idmark, ":", dfltRoot)
@@ -137,8 +131,6 @@ func postQueryGQL(c echo.Context) error {
 
 	OriExePathChk()
 	mtxQry.Lock()
-
-	g.CurCtx = g.Cfg.RPC.CtxList[0]
 
 	// ********************* POSTMAN client ********************* //
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
@@ -185,8 +177,6 @@ func getObject(c echo.Context) error {
 	OriExePathChk()
 	mtxObj.Lock()
 
-	g.CurCtx = g.Cfg.RPC.CtxList[0]
-
 	id := c.QueryParam("id")
 	return c.JSON(http.StatusAccepted, id)
 }
@@ -203,8 +193,6 @@ func getSchema(c echo.Context) error {
 	OriExePathChk()
 	mtxScm.Lock()
 
-	g.CurCtx = g.Cfg.RPC.CtxList[0]
-
 	id := c.QueryParam("id")
 	return c.JSON(http.StatusAccepted, id)
 }
@@ -218,6 +206,19 @@ func HostHTTPAsync() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+
+	// BasicAuth
+	e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		switch {
+		case username == "admin" && password == "admin":
+			g.CurCtx = g.Cfg.RPC.CtxPrivDef
+		case username == "user" && password == "user":
+			g.CurCtx = g.Cfg.RPC.CtxList[0]
+		default:
+			return false, fEf("use <user> <user> to try")
+		}
+		return true, nil
+	}))
 
 	// CORS
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
