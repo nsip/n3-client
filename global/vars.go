@@ -8,7 +8,6 @@ import (
 
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
-	lru "github.com/hashicorp/golang-lru"
 	"github.com/nsip/n3-messages/n3grpc"
 )
 
@@ -77,26 +76,30 @@ var (
 	// OriExePath : Original Running Path
 	OriExePath, _ = os.Getwd()
 
-	// LCRoot *** ID : Root *** ID query cache
-	LCRoot = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
-		fPln("Query Root onEvicted:", k, v)
-	})).(*lru.Cache)
+	// *** //
 
-	// LCSchema *** ID : Schema *** Schema query cache
-	LCSchema = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
-		fPln("Query Schema onEvicted:", k, v)
-	})).(*lru.Cache)
+	// // LCRoot *** ID : Root *** ID query cache
+	// LCRoot = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
+	// 	fPln("Query Root onEvicted:", k, v)
+	// })).(*lru.Cache)
 
-	// LCJSON *** ID : JSON *** JSON query cache
-	LCJSON = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
-		fPln("Query JSON onEvicted:", k, v)
-	})).(*lru.Cache)
+	// // LCSchema *** ID : Schema *** Schema query cache
+	// LCSchema = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
+	// 	fPln("Query Schema onEvicted:", k, v)
+	// })).(*lru.Cache)
 
-	// CacheQryIDs : Cache for ID-Query
-	CacheQryIDs = make([]QryIDs, NQryIDsCache)
+	// // LCJSON *** ID : JSON *** JSON query cache
+	// LCJSON = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
+	// 	fPln("Query JSON onEvicted:", k, v)
+	// })).(*lru.Cache)
 
-	// CacheQryIDsPtr : ID-Query Cache Current Pointer
-	CacheQryIDsPtr = -1
+	// // CacheQryIDs : Cache for ID-Query
+	// CacheQryIDs = make([]QryIDs, NQryIDsCache)
+
+	// // CacheQryIDsPtr : ID-Query Cache Current Pointer
+	// CacheQryIDsPtr = -1
+
+	// *** //
 
 	// MpQryRstRplc : Replacement Map for Query OutCome JSON
 	MpQryRstRplc = map[string]string{

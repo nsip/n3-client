@@ -107,7 +107,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 				})
 			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object values terminator ***
 
-			postpXML(str, IDs, Objs)
+			postpXML(ctx, str, IDs, Objs)
 
 		} // XML
 
@@ -166,7 +166,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 				})
 			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object terminator ***
 
-			postpJSON(str, IDs, Objs)
+			postpJSON(ctx, str, IDs, Objs)
 
 		} // JSON
 

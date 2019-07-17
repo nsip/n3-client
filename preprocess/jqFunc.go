@@ -22,7 +22,7 @@ func prepareJQ(jqDirs ...string) {
 }
 
 // FmtJSONStr : <json string> must not have single quote <'>
-func FmtJSONStr(json string, jqDirs ...string) string {	
+func FmtJSONStr(json string, jqDirs ...string) string {
 	defer func() { pe(os.Chdir(g.OriExePath)) }()
 	prepareJQ(jqDirs...)
 	if !IsJSON(json) {
@@ -36,7 +36,7 @@ func FmtJSONStr(json string, jqDirs ...string) string {
 }
 
 // FmtJSONFile : <file> is the <relative path> to <jq>
-func FmtJSONFile(file string, jqDirs ...string) string {	
+func FmtJSONFile(file string, jqDirs ...string) string {
 	defer func() { pe(os.Chdir(g.OriExePath)) }()
 	prepareJQ(jqDirs...)
 	cmdstr := "cat " + file + ` | jq .`

@@ -40,14 +40,14 @@ func GetInfoFromID(ctx, infoType, objID string) string {
 			schema := SchemaBuild("", root)
 			schema = sRepAll(schema, "\t-", "\t")
 			schema = sRepAll(schema, "\t#", "\t")
-			g.LCSchema.Add(objID, schema) //           *** LRU ***
+			// g.LCSchema.Add(objID, schema) //           *** LRU ***
 			return schema
 		}
 	case "JSON":
 		{
 			JSONBuild(root)
 			_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, g.DELIPath), root)
-			g.LCJSON.Add(objID, json) //               *** LRU ***
+			// g.LCJSON.Add(objID, json) //               *** LRU ***
 			return json
 		}
 	default:
@@ -62,24 +62,25 @@ func GetDataFromID(ctx string, objIDs []string) (mSchema, mJSON map[string]strin
 
 	for _, objID := range objIDs {
 
-		okS, okJ, okR := false, false, false
-		if schema, ok := g.LCSchema.Get(objID); ok {
-			mSchema[objID], okS = schema.(string), ok
-		}
-		if json, ok := g.LCJSON.Get(objID); ok {
-			mJSON[objID], okJ = json.(string), ok
-		}
-		if rt, ok := g.LCRoot.Get(objID); ok {
-			root, okR = rt.(string), ok
-		}
-		if okS && okJ && okR {
-			continue
-		}
+		// okS, okJ, okR := false, false, false
+		// if schema, ok := g.LCSchema.Get(objID); ok {
+		// 	mSchema[objID], okS = schema.(string), ok
+		// }
+		// if json, ok := g.LCJSON.Get(objID); ok {
+		// 	mJSON[objID], okJ = json.(string), ok
+		// }
+		// if rt, ok := g.LCRoot.Get(objID); ok {
+		// 	root, okR = rt.(string), ok
+		// }
+		// if okS && okJ && okR {
+		// 	continue
+		// }
 
 		// ********************************************************************* //
 
+		// g.RmIDsInLRU(objID) //   *** LRU remove here, add later ***
+
 		clrQueryCache()
-		g.RmIDsInLRU(objID) //   *** LRU remove here, add later ***
 
 		if objID == "" {
 			mSchema[objID], mJSON[objID] = "", ""
@@ -97,14 +98,14 @@ func GetDataFromID(ctx string, objIDs []string) (mSchema, mJSON map[string]strin
 		schema = sRepAll(schema, "\t-", "\t")
 		schema = sRepAll(schema, "\t#", "\t")
 		mSchema[objID] = schema
-		g.LCSchema.Add(objID, schema) //      *** LRU ***
+		// g.LCSchema.Add(objID, schema) //      *** LRU ***
 
 		JSONBuild(root)
 		_, _, json := JSONWrapRoot(JSONMakeRep(mIPathObj, g.DELIPath), root)
 		mJSON[objID] = json
-		g.LCJSON.Add(objID, json) //          *** LRU ***
+		// g.LCJSON.Add(objID, json) //          *** LRU ***
 
-		g.LCRoot.Add(objID, root) //          *** LRU ***
+		// g.LCRoot.Add(objID, root) //          *** LRU ***
 	}
 
 	return

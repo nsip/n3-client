@@ -1,6 +1,6 @@
 {
     "description": "<R>(read only) <W>(write only) <R/W>(read and write)",
-    "id": "4947ED1F-1E94-4850-8B8F-35C653F51680",
+    "id": "4947ED1F-1E94-4850-8B8F-35C653F51683",
     "forcontext": "demo",
     "actor": {
         "name": "R/W",
@@ -13,10 +13,10 @@
         }
     },
     "object": {
-        "id": "W",
+        "id": "R/W",
         "definition": {
-            "type": "R",
-            "name": "W"
+            "type": "R/W",
+            "name": "R/W"
         }
     },
     "result": {

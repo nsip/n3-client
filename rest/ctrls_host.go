@@ -67,7 +67,7 @@ func getIDList(c echo.Context) error {
 	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }
 
-// delFromNode :
+// delFromNode : this func can only delete normal data. IF delete privacy control, use cli-privacy
 func delFromNode(c echo.Context) error {
 	defer func() {
 		mtxDel.Unlock()
@@ -81,11 +81,11 @@ func delFromNode(c echo.Context) error {
 
 	g.CurCtx = g.Cfg.RPC.CtxList[0]
 
-	idList := c.QueryParams()["id"]
-	d.DelBat(g.CurCtx, idList...)
-	g.RmIDsInLRU(idList...)
-	g.RmQryIDsCache(idList...)
-	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(idList)))
+	IDs := c.QueryParams()["id"]
+	d.DelBat(g.CurCtx, IDs...)
+	// g.RmIDsInLRU(IDs...)
+	// g.RmQryIDsCache(IDs...)
+	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(IDs)))
 }
 
 // postToNode : Publish Data to N3-Transport
