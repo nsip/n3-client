@@ -11,19 +11,18 @@ import (
 
 func TestXMLScanObjects(t *testing.T) {
 	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)
-	ids, objtags, starts, ends := XMLScanObjects(string(sifbytes), "RefId")
+	objtags, ids, idtags, starts, ends := XMLScanObjects(string(sifbytes))
 	fPln(len(objtags))
 	for i := range ids {
-		fPf("%25s -- %s -- %6d -- %6d\n", objtags[i], ids[i], starts[i], ends[i])
+		fPf("%25s -- %s -- %s -- %6d -- %6d\n", objtags[i], ids[i], idtags[i], starts[i], ends[i])
 	}
 }
 
 func TestXMLObjStrByID(t *testing.T) {
 	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)
-	xmlobj := XMLObjStrByID(string(sifbytes), "RefId", "1822AF7A-F9CB-4F0D-96EA-9280DD0B6AB2")
+	xmlobj := XMLObjStrByID(string(sifbytes), "1822AF7A-F9CB-4F0D-96EA-9280DD0B6AB2")
 	fPln(xmlobj)
 	fPln()
-
 	fPln(XMLAttributes(xmlobj, "-"))
 }
 
@@ -32,7 +31,7 @@ func TestXMLInfoScan(t *testing.T) {
 	defer func() { ph(recover(), cfg.ErrLog) }()
 
 	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)
-	XMLInfoScan(string(sifbytes), "RefId", g.DELIPath,
+	XMLInfoScan(string(sifbytes), g.DELIPath,
 		func(p, id string, v []string, lastOne bool) {
 			fPln("S --->>> ", p, " : ", v)
 		},

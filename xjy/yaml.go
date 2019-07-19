@@ -3,29 +3,32 @@ package xjy
 import g "../global"
 
 // YAMLScan :
-func YAMLScan(data, idmark, dfltRoot string, IDs []string, dt g.DataType, OnValueFetch func(path, value, id string)) {
+func YAMLScan(data, dfltRoot, pDeli string, IDs []string, dt g.DataType, OnValueFetch func(path, value, id string)) {
 	switch dt {
 	case g.XML:
-		YAMLScanFromXMLBat(data, idmark, IDs, OnValueFetch)
+		YAMLScanFromXMLBat(data, pDeli, IDs, OnValueFetch)
 	case g.JSON:
-		YAMLScanFromJSONBat(data, idmark, dfltRoot, IDs, OnValueFetch)
+		YAMLScanFromJSONBat(data, dfltRoot, pDeli, IDs, OnValueFetch)
 	}
 }
 
 // YAMLScanFromXMLBat :
-func YAMLScanFromXMLBat(xml, idmark string, IDs []string, OnValueFetch func(path, value, id string)) {
-	
+func YAMLScanFromXMLBat(xml, pDeli string, IDs []string, OnValueFetch func(path, value, id string)) {
+
 	n, prevEnd := XMLSegsCount(xml), 0
 	for i := 1; i <= n; i++ {
 		nextStart := IF(i == 1, 0, prevEnd+1).(int)
 		_, thisxml, _, end := XMLSegPos(S(xml).S(nextStart, ALL).V(), 1, 1)
 		prevEnd = end + nextStart
 
-		fPf("%d SIF *****************************************************\n", i)
+		// fPf("%d SIF *****************************************************\n", i)
 
-		yamlstr := Xstr2Y(thisxml)
-		yamlstr = YAMLJoinSplittedLines(yamlstr)
-		info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
+		_, _, idtags, _, _ := XMLScanObjects(thisxml)
+		idmark := idtags[0]
+
+		yaml := Xstr2Y(thisxml)
+		yaml = YAMLJoinSplittedLines(yaml)
+		info := YAMLInfo(yaml, idmark, pDeli, true)
 		for _, item := range *info {
 			ID := item.ID
 			if IDs != nil && len(IDs) > 0 {
@@ -37,12 +40,14 @@ func YAMLScanFromXMLBat(xml, idmark string, IDs []string, OnValueFetch func(path
 }
 
 // YAMLScanFromJSONBat :
-func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFetch func(path, value, id string)) {
-	
+func YAMLScanFromJSONBat(json, dfltRoot, pDeli string, IDs []string, OnValueFetch func(path, value, id string)) {
+
 	if ok, _ := IsJSONSingle(json); ok {
-		yamlstr := Jstr2Y(json)
-		yamlstr = YAMLJoinSplittedLines(yamlstr)
-		info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
+
+		IDTag, _, _, _, _, _ := JSONObjInfo(json, dfltRoot, pDeli)
+		yaml := Jstr2Y(json)
+		yaml = YAMLJoinSplittedLines(yaml)
+		info := YAMLInfo(yaml, IDTag, pDeli, true)
 		for _, item := range *info {
 			ID := item.ID
 			if IDs != nil && len(IDs) > 0 {
@@ -54,15 +59,16 @@ func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFet
 	}
 
 	if ok, jsonType, n, eles := IsJSONArray(json); ok {
-		
+
 		if jsonType == JT_OBJ {
 			for i := 1; i <= n; i++ {
 				thisjson := eles[i-1]
-				_, _, extjson := JSONWrapRoot(thisjson, dfltRoot)
+
+				IDTag, _, _, _, _, extjson := JSONObjInfo(thisjson, dfltRoot, pDeli)
 				// fPf("%d json *****************************************************\n", i)
-				yamlstr := Jstr2Y(extjson)
-				yamlstr = YAMLJoinSplittedLines(yamlstr)
-				info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
+				yaml := Jstr2Y(extjson)
+				yaml = YAMLJoinSplittedLines(yaml)
+				info := YAMLInfo(yaml, IDTag, pDeli, true)
 				for _, item := range *info {
 					ID := item.ID
 					if IDs != nil && len(IDs) > 0 {
@@ -75,13 +81,12 @@ func YAMLScanFromJSONBat(json, idmark, dfltRoot string, IDs []string, OnValueFet
 
 	} else {
 
-		_, _, extjson := JSONWrapRoot(json, dfltRoot)
-		yamlstr := Jstr2Y(extjson)
-		yamlstr = YAMLJoinSplittedLines(yamlstr)
-		
-		// ioutil.WriteFile("tempyaml.yaml", []byte(yamlstr), 0666 )
+		IDTag, _, _, _, _, extjson := JSONObjInfo(json, dfltRoot, pDeli)
+		yaml := Jstr2Y(extjson)
+		yaml = YAMLJoinSplittedLines(yaml)
+		// ioutil.WriteFile("tempyaml.yaml", []byte(yaml), 0666 )
 
-		info := YAMLInfo(yamlstr, idmark, g.DELIPath, true)
+		info := YAMLInfo(yaml, IDTag, pDeli, true)
 		for _, item := range *info {
 			ID := item.ID
 			if IDs != nil && len(IDs) > 0 {

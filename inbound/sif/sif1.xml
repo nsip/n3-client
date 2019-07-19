@@ -1,0 +1,43 @@
+<SchoolInfo RefId="738F4DF5-949F-4380-8186-8252440A6F6F">
+    <LocalId>01011234</LocalId>
+    <StateProvinceId>01011234</StateProvinceId>
+    <CommonwealthId>012345</CommonwealthId>
+    <SchoolName>Lincoln Secondary College</SchoolName>
+    <SchoolDistrict> Southern Metropolitan Region TEST ***</SchoolDistrict>
+    <SchoolType>Pri/Sec</SchoolType>    
+    <SchoolFocusList>        
+        <SchoolFocus>03</SchoolFocus>
+        <SchoolFocus>05</SchoolFocus>  
+        <SchoolFocus>055</SchoolFocus> 
+        <SchoolFocus>033</SchoolFocus>         
+    </SchoolFocusList>
+    <SchoolURL>http://www.lincolnsc.edu.vic.au</SchoolURL>
+    <SchoolSector>Gov</SchoolSector>
+    <SchoolSector1>Gov1</SchoolSector1>
+</SchoolInfo>
+
+<SchoolCourseInfo RefId="A759FF45-4ABD-4A59-B31B-BB0D3CA66ADC">
+    <SchoolInfoRefId>738F4DF5-949F-4380-8186-8252440A6F6F</SchoolInfoRefId>
+    <SchoolYear>2018</SchoolYear>
+    <CourseCode>Mathematics 701</CourseCode>
+    <SubjectAreaList>
+        <SubjectArea>
+            <Code>Mathematics</Code>
+        </SubjectArea>
+    </SubjectAreaList>
+    <CourseTitle>Mathematics 7</CourseTitle>
+    <CourseCredits>2</CourseCredits>
+</SchoolCourseInfo>
+    
+<SchoolCourseInfo RefId="46F3503C-C6D5-4BE8-ABB8-D3B5FE853948">
+    <SchoolInfoRefId>738F4DF5-949F-4380-8186-8252440A6F6F</SchoolInfoRefId>
+    <SchoolYear>2018</SchoolYear>
+    <CourseCode>Mathematics 801</CourseCode>
+    <SubjectAreaList>
+        <SubjectArea>
+            <Code>Mathematics</Code>
+        </SubjectArea>
+    </SubjectAreaList>
+    <CourseTitle>Mathematics 8</CourseTitle>
+    <CourseCredits>2</CourseCredits>
+</SchoolCourseInfo>

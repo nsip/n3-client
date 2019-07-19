@@ -96,11 +96,8 @@ func postToNode(c echo.Context) error {
 	OriExePathChk()
 	mtxPub.Lock()
 
-	idmark, dfltRoot := c.QueryParam("idmark"), c.QueryParam("dfltRoot")
-	// fPln(idmark, ":", dfltRoot)
-	if idmark == "" {
-		return c.JSON(http.StatusBadRequest, "<idmark> must be provided")
-	}
+	dfltRoot := c.QueryParam("dfltRoot")
+	// fPln(dfltRoot)
 	if dfltRoot == "" {
 		return c.JSON(http.StatusBadRequest, "<dfltRoot> must be provided")
 	}
@@ -110,7 +107,7 @@ func postToNode(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
 	}
 
-	_, _, nV, nS, nA := pub.Pub2Node(g.CurCtx, data, idmark, dfltRoot) //             *** preprocess, postprocess included ***
+	_, _, nV, nS, nA := pub.Pub2Node(g.CurCtx, data, dfltRoot) //             *** preprocess, postprocess included ***
 	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
@@ -214,6 +211,8 @@ func HostHTTPAsync() {
 			g.CurCtx = g.Cfg.RPC.CtxPrivDef
 		case username == "user" && password == "user":
 			g.CurCtx = g.Cfg.RPC.CtxList[0]
+		case username == "user1" && password == "user1":
+			g.CurCtx = g.Cfg.RPC.CtxList[1]
 		default:
 			return false, fEf("use <user> <user> to try")
 		}
@@ -227,6 +226,7 @@ func HostHTTPAsync() {
 	}))
 
 	// Route
+	e.GET("/filetest", func(c echo.Context) error { return c.File("/home/qing/Desktop/small.webm") })
 	e.GET(g.Cfg.Rest.PathTest, func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
 	e.GET(g.Cfg.Rest.PathID, getIDList)
 	e.GET(g.Cfg.Rest.PathObj, getObject)

@@ -38,7 +38,7 @@ func StartFileWatcherAsync() {
 					goto READ_AGAIN
 				}
 
-				IDs, _, _, _, _ := pub.Pub2Node(g.CurCtx, string(bytes), "id", "xapi")
+				IDs, _, _, _, _ := pub.Pub2Node(g.CurCtx, string(bytes), "xapi")
 				for _, id := range IDs {
 					fPln(id, "is sent")
 				}

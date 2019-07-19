@@ -8,12 +8,24 @@ import (
 	g "../global"
 )
 
+func TestJSONObjChildren(t *testing.T) {
+	cfg := c.FromFile("../build/config.toml")
+	defer func() { ph(recover(), cfg.ErrLog) }()
+	jsonbytes := must(ioutil.ReadFile("./files/sample.json")).([]byte)
+	fPln(JSONObjChildren(string(jsonbytes)))
+}
+
 func TestJSONGetObjID(t *testing.T) {
 	cfg := c.FromFile("../build/config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 	jsonbytes := must(ioutil.ReadFile("./files/sample.json")).([]byte)
-	id, root, autoID, addRoot := JSONGetObjID(string(jsonbytes), "id", "DefaultRoot", g.DELIPath)
-	fPln(id, root, autoID, addRoot)
+	idTag, id, root, autoID, addRoot, jsonObj := JSONObjInfo(string(jsonbytes), "DefaultRoot", g.DELIPath)
+	fPln("ID Tag:    ", idTag)
+	fPf("%s:         %s\n", idTag, id)
+	fPln("root:      ", root)
+	fPln("autoID:    ", autoID)
+	fPln("added Root:", addRoot)
+	fPln(jsonObj)
 }
 
 func TestJSONScanObjects(t *testing.T) {
@@ -23,7 +35,7 @@ func TestJSONScanObjects(t *testing.T) {
 	data := string(must(ioutil.ReadFile("./files/content.json")).([]byte))
 	mStructRecord := map[string][]string{}
 	procIdx := 1
-	JSONObjScan(data, "id", "ROOT",
+	JSONObjScan(data, "ROOT",
 		func(p, id string, v []string, lastObjTuple bool) {
 			if _, ok := mStructRecord[p]; !ok {
 				mStructRecord[p] = v

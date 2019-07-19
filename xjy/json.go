@@ -5,26 +5,44 @@ import (
 	"github.com/google/uuid"
 )
 
-// JSONGetObjID : (must have TOP-LEVEL "id" like `"id": "6690e6c9-3ef0-4ed3-8b37-7f3964730bee",` )
-func JSONGetObjID(jsonstr, idmark, dfltRoot, pDel string) (id, root string, autoID, addedRoot bool) {
-	root, addedRoot, newJSON := JSONWrapRoot(jsonstr, dfltRoot)
-	jsonstr = IF(addedRoot, newJSON, jsonstr).(string)
-	id, _ = JSONXPathValue(jsonstr, root+pDel+idmark, pDel, []int{1, 1}...)
-	if id == "" {
-		autoID, id = true, uuid.New().String()
+// JSONObjInfo : (must have TOP-LEVEL "ID" like `"ID": "6690e6c9-3ef0-4ed3-8b37-7f3964730bee",` )
+func JSONObjInfo(json, dfltRoot, pDel string) (IDTag, ID, root string, autoID, addedRoot bool, jsonObj string) {
+	root, addedRoot, newJSON := JSONWrapRoot(json, dfltRoot)
+	jsonObj = IF(addedRoot, newJSON, json).(string)
+
+	jsonContent, _ := JSONChildValue(jsonObj, root)
+	mMarkUUID := make(map[string]string)
+	sidtag := "I will be the shortest length ID mark, the shortest ID Mark is what we wanted"
+	for _, child := range JSONObjChildren(jsonContent) {
+		Child := S(child)
+		if !Child.HP("[]") && (Child.HS("id") || Child.HS("ID") || Child.HS("Id")) {
+			id, _ := JSONXPathValue(jsonObj, root+pDel+child, pDel, []int{1, 1}...)
+			if S(id).IsUUID() {
+				mMarkUUID[child] = id
+				sidtag = IF(len(child) < len(sidtag), child, sidtag).(string)
+			}
+		}
 	}
+	if id, ok := mMarkUUID[sidtag]; ok && id != "" {
+		IDTag, ID, autoID = sidtag, id, false
+	} else {
+		IDTag, ID, autoID = "AutoID", uuid.New().String(), true
+	}
+
+	// fPln(IDTag, ID, autoID)
+
 	return
 }
 
 // JSONModelInfo :
-func JSONModelInfo(jsonstr, ObjIDMark, dfltRoot, pDel string,
+func JSONModelInfo(json, dfltRoot, pDel string,
 	OnStruFetch func(string, string, []string, bool),
 	OnArrFetch func(string, string, int, bool)) (string, string) {
 
-	id, root, _, addedRoot := JSONGetObjID(jsonstr, ObjIDMark, dfltRoot, pDel) //                  *** find ID Value by ObjIDMark ***
+	_, id, root, _, addedRoot, _ := JSONObjInfo(json, dfltRoot, pDel) //   *** find ID Value ***
 	id = S(id).RmQuotes(QDouble).V()
 
-	mFT, mArr := JSONArrInfo(jsonstr, IF(addedRoot, dfltRoot, "").(string), pDel, id, nil)
+	mFT, mArr := JSONArrInfo(json, IF(addedRoot, dfltRoot, "").(string), pDel, id, nil)
 	j, lFT, lArr := 0, len(*mFT), len(*mArr)
 	for k, v := range *mFT {
 		j++
@@ -40,19 +58,19 @@ func JSONModelInfo(jsonstr, ObjIDMark, dfltRoot, pDel string,
 }
 
 // JSONObjScan :
-func JSONObjScan(json, idmark, dfltRoot string,
+func JSONObjScan(json, dfltRoot string,
 	OnStruFetch func(string, string, []string, bool),
 	OnArrFetch func(string, string, int, bool)) (IDs, Objs []string) {
 
 	if ok, eleType, n, eles := IsJSONArray(json); ok {
 		if eleType == JT_OBJ {
 			for i := 1; i <= n; i++ {
-				id, root := JSONModelInfo(eles[i-1], idmark, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
+				id, root := JSONModelInfo(eles[i-1], dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
 				IDs, Objs = append(IDs, id), append(Objs, root)
 			}
 		}
 	} else {
-		id, root := JSONModelInfo(json, idmark, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
+		id, root := JSONModelInfo(json, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
 		IDs, Objs = append(IDs, id), append(Objs, root)
 	}
 	return

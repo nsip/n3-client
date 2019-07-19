@@ -43,7 +43,7 @@ func RequireVer(ctx, objID, verType string) (ver int64, termID string) {
 /************************************************************/
 
 // Pub2Node :
-func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
+func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 	prevIDs, termIDs := "", ""
 	prevIDa, termIDa := "", ""
 	prevIDv, termIDv, prevTermIDv := "", "", ""
@@ -54,7 +54,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 		{
 			strMod := prepXML(str)
 
-			IDs, Objs = xjy.XMLInfoScan(strMod, idmark, g.DELIPath,
+			IDs, Objs = xjy.XMLInfoScan(strMod, g.DELIPath,
 				func(p, id string, v []string, lastObjTuple bool) {
 					// fPln("S ---> ", p, "::", v)
 					id = "::" + id
@@ -87,7 +87,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 				},
 			)
 
-			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, g.XML,
+			xjy.YAMLScan(strMod, dfltRoot, g.DELIPath, IDs, g.XML,
 				func(p, v, id string) {
 					defer func() { verV, nV, prevIDv, prevTermIDv = verV+1, nV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)
@@ -115,7 +115,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 		{
 			strMod := prepJSON(str)
 
-			IDs, Objs = xjy.JSONObjScan(strMod, idmark, dfltRoot,
+			IDs, Objs = xjy.JSONObjScan(strMod, dfltRoot,
 				func(p, id string, v []string, lastObjTuple bool) {
 					id = "::" + id
 					defer func() { verS, nS, prevIDs = verS+1, nS+1, id }()
@@ -146,7 +146,7 @@ func Pub2Node(ctx, str, idmark, dfltRoot string) (IDs, Objs []string, nV, nS, nA
 				},
 			)
 
-			xjy.YAMLScan(strMod, idmark, dfltRoot, IDs, g.JSON,
+			xjy.YAMLScan(strMod, dfltRoot, g.DELIPath, IDs, g.JSON,
 				func(p, v, id string) {
 					defer func() { verV, nV, prevIDv, prevTermIDv = verV+1, nV+1, id, termIDv }()
 					// fPf("V ---> %-70s : %-36s : %-36s\n", p, v, id)

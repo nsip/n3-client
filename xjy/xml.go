@@ -1,26 +1,34 @@
 package xjy
 
+import "github.com/google/uuid"
+
 // XMLScanObjects is ( ONLY LIKE  <SchoolInfo RefId="D3F5B90C-D85D-4728-8C6F-0D606070606C"> )
-func XMLScanObjects(xml, idmark string) (ids, objtags []string, starts, ends []int) {
+func XMLScanObjects(xml string) (objtags, ids, idtags []string, starts, ends []int) {
 	L := S(xml).L()
 	nXML, pNextStart, pLastPos := XMLSegsCount(xml), 0, 0
 	for i := 1; i <= nXML; i++ {
 
-		// fPln(i)
-		// if i == 2 {
-		// 	fPln("debug break", L)
-		// }
-
 		tag, thisXML, leftR, rightR := XMLSegPos(S(xml).S(pNextStart, ALL).V(), 1, 1)
 		objtags = append(objtags, tag)
-
 		attri, attrivalues := XMLAttributes(thisXML, "")
+
+		// DONE:
+		mMarkUUID := make(map[string]string)
+		sidtag := "I will be the shortest length ID mark, the shortest ID Mark is what we wanted"
 		for j := 0; j < len(attri); j++ {
-			if attri[j] == idmark {
-				ids = append(ids, attrivalues[j])
-				break
+			Attri, AttriV := S(attri[j]), S(attrivalues[j])
+			if (Attri.HS("ID") || Attri.HS("id") || Attri.HS("Id")) && AttriV.IsUUID() {
+				idtag := Attri.V()
+				mMarkUUID[idtag] = AttriV.V()
+				sidtag = IF(len(idtag) < len(sidtag), idtag, sidtag).(string)
 			}
 		}
+		if id, ok := mMarkUUID[sidtag]; ok && id != "" {
+			idtags, ids = append(idtags, sidtag), append(ids, id)
+		} else {
+			idtags, ids = append(idtags, "AutoID"), append(ids, uuid.New().String())
+		}
+		//
 
 		pLastPos = pNextStart + leftR
 		starts = append(starts, pLastPos)
@@ -38,8 +46,8 @@ func XMLScanObjects(xml, idmark string) (ids, objtags []string, starts, ends []i
 }
 
 // XMLObjStrByID is
-func XMLObjStrByID(xml, idmark, rid string) string {
-	ids, objtags, starts, _ := XMLScanObjects(xml, idmark)
+func XMLObjStrByID(xml, rid string) string {
+	objtags, ids, _, starts, _ := XMLScanObjects(xml)
 	XML, nIDs := S(xml), len(ids)
 	for i, id := range ids {
 		if id == rid {
@@ -57,11 +65,11 @@ func XMLObjStrByID(xml, idmark, rid string) string {
 }
 
 // XMLInfoScan :
-func XMLInfoScan(xmlstr, objIDMark, PATHDEL string,
+func XMLInfoScan(xmlstr, PATHDEL string,
 	OnStructFetch func(string, string, []string, bool),
 	OnArrFetch func(string, string, int, bool)) ([]string, []string) {
 
-	ids, objs, starts, ends := XMLScanObjects(xmlstr, objIDMark)
+	objs, ids, _, starts, ends := XMLScanObjects(xmlstr)
 	nObj := len(ids)
 
 	for i := 0; i < nObj; i++ {

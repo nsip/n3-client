@@ -14,16 +14,20 @@ type (
 )
 
 var (
-	ph   = u.PanicHandle
-	must = u.Must
-	IF   = u.IF
 	sJ   = strings.Join
 	fPln = fmt.Println
 	fPf  = fmt.Printf
 
+	ph         = u.PanicHandle
+	must       = u.Must
+	IF         = u.IF
+	getMapKeys = w.GetMapKeys
+
+	JSONChildValue        = gjxy.JSONChildValue
 	JSONXPathValue        = gjxy.JSONXPathValue
 	JSONWrapRoot          = gjxy.JSONWrapRoot
 	JSONArrInfo           = gjxy.JSONArrInfo
+	JSONObjChildren       = gjxy.JSONObjChildren
 	IsJSONArray           = gjxy.IsJSONArray
 	IsJSONSingle          = gjxy.IsJSONSingle
 	XMLAttributes         = gjxy.XMLAttributes
