@@ -1,6 +1,8 @@
 package publish
 
 import (
+	"time"
+
 	g "../global"
 	q "../query"
 	xjy "../xjy"
@@ -172,5 +174,22 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 
 	} // case
 
+	// TODO: DB Storing Check
+	nStored := 0
+	ticker := time.NewTicker(2000 * time.Millisecond)
+	for range ticker.C {
+		for _, ID := range IDs {
+			if termIDList, _, _, _ := q.Data(ctx, "", g.MARKTerm, ID); termIDList != nil && len(termIDList) > 0 {
+				nStored++
+			}
+		}
+		if nStored == len(IDs) {
+			fPln("All sent and stored")
+			goto STORED
+		}
+	}
+
+STORED:
+	ticker.Stop()
 	return
 }

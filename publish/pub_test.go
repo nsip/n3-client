@@ -24,13 +24,13 @@ func TestToNode(t *testing.T) {
 
 	CurCtx := g.Cfg.RPC.CtxList[0]
 
-	// file := "../inbound/sif/sif.json" //                  *** change <file> ***
-	// sif := string(must(ioutil.ReadFile(file)).([]byte))
-	// IDs, _, _, _, _ := Pub2Node(CurCtx, sif, "sif") //      *** change <dfltRoot> ***
+	file := "../inbound/sif/sif.json" //                  *** change <file> ***
+	sif := string(must(ioutil.ReadFile(file)).([]byte))
+	IDs, _, _, _, _ := Pub2Node(CurCtx, sif, "sif") //      *** change <dfltRoot> ***
 	// time.Sleep(1 * time.Second)
-	// for _, id := range IDs {
-	// 	fPln("sent:", id)
-	// }
+	for _, id := range IDs {
+		fPln("sent & stored:", id)
+	}
 
 	// for i := 1; i <= 5; i++ {
 	// 	file := fSf("../inbound/hsie/history/stage%d/overview.json", i) // *** change <file> ***
@@ -42,13 +42,13 @@ func TestToNode(t *testing.T) {
 	// 	}
 	// }
 
-	file := "../inbound/xapi/xapi.json" //                  *** change <file> ***
-	json := string(must(ioutil.ReadFile(file)).([]byte))
-	IDs, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //      *** change <dfltRoot> ***
-	time.Sleep(1 * time.Second)
-	for _, id := range IDs {
-		fPln("sent:", id)
-	}
+	// file := "../inbound/xapi/xapi.json" //                  *** change <file> ***
+	// json := string(must(ioutil.ReadFile(file)).([]byte))
+	// IDs, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //      *** change <dfltRoot> ***
+	// time.Sleep(1 * time.Second)
+	// for _, id := range IDs {
+	// 	fPln("sent:", id)
+	// }
 }
 
 func TestPrivctrlToNode(t *testing.T) {
