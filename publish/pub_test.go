@@ -24,7 +24,7 @@ func TestToNode(t *testing.T) {
 
 	CurCtx := g.Cfg.RPC.CtxList[0]
 
-	// file := "../inbound/sif/sif1.xml" //                  *** change <file> ***
+	// file := "../inbound/sif/sif.json" //                  *** change <file> ***
 	// sif := string(must(ioutil.ReadFile(file)).([]byte))
 	// IDs, _, _, _, _ := Pub2Node(CurCtx, sif, "sif") //      *** change <dfltRoot> ***
 	// time.Sleep(1 * time.Second)

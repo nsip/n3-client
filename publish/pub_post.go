@@ -5,7 +5,6 @@ import (
 	"os"
 
 	g "../global"
-	pp "../preprocess"
 )
 
 // mkSchemaQueryHead :
@@ -33,12 +32,12 @@ func postpJSON(ctx, json string, IDs, Objs []string) {
 	// }
 
 	// *** save original object JSON, only for 1 object file *** //
-	if len(IDs) == 1 {
-		ID, root := IDs[0], Objs[0]
-		_, _, json = JSONWrapRoot(json, root)
-		json = pp.FmtJSONStr(json, "../preprocess/util/", "./preprocess/util/", "./")
-		ioutil.WriteFile(fSf("../build/debug_pub/%s.json", ID), []byte(json), 0666)
-	}
+	// if len(IDs) == 1 {
+	// 	ID, root := IDs[0], Objs[0]
+	// 	_, _, json = JSONWrapRoot(json, root)
+	// 	json = pp.FmtJSONStr(json, "../preprocess/util/", "./preprocess/util/", "./")
+	// 	ioutil.WriteFile(fSf("../build/debug_pub/%s.json", ID), []byte(json), 0666)
+	// }
 
 	mkSchemaQueryHead(g.Cfg.Query.SchemaDir, Objs...) // *** create gql schema query header ***
 }

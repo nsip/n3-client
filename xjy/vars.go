@@ -10,7 +10,8 @@ import (
 )
 
 type (
-	S = w.Str
+	S  = w.Str
+	Ss = w.Strs
 )
 
 var (
@@ -18,10 +19,12 @@ var (
 	fPln = fmt.Println
 	fPf  = fmt.Printf
 
-	ph         = u.PanicHandle
-	must       = u.Must
-	IF         = u.IF
+	ph   = u.PanicHandle
+	must = u.Must
+	IF   = u.IF
+
 	getMapKeys = w.GetMapKeys
+	IArrEleIn  = w.IArrEleIn
 
 	JSONChildValue        = gjxy.JSONChildValue
 	JSONXPathValue        = gjxy.JSONXPathValue

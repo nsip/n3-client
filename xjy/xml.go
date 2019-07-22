@@ -10,13 +10,20 @@ func XMLScanObjects(xml string) (objtags, ids, idtags []string, starts, ends []i
 
 		tag, thisXML, leftR, rightR := XMLSegPos(S(xml).S(pNextStart, ALL).V(), 1, 1)
 		objtags = append(objtags, tag)
-		attri, attrivalues := XMLAttributes(thisXML, "")
+		attri, attrivalues := XMLAttributes(thisXML)
 
 		// DONE:
 		mMarkUUID := make(map[string]string)
 		sidtag := "I will be the shortest length ID mark, the shortest ID Mark is what we wanted"
 		for j := 0; j < len(attri); j++ {
 			Attri, AttriV := S(attri[j]), S(attrivalues[j])
+			if IArrEleIn(Attri, Ss([]string{"id", "ID", "Id"})) || (Attri.ToLower() == S(tag).ToLower()+"id") {
+				if AttriV.IsUUID() {
+					sidtag = Attri.V()
+					mMarkUUID[Attri.V()] = AttriV.V()
+					break
+				}
+			}
 			if (Attri.HS("ID") || Attri.HS("id") || Attri.HS("Id")) && AttriV.IsUUID() {
 				idtag := Attri.V()
 				mMarkUUID[idtag] = AttriV.V()

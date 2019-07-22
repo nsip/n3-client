@@ -1,0 +1,55 @@
+[
+    {
+        "SchoolInfo": {
+            "RefId": "738F4DF5-949F-4380-8186-8252440A6F6F",
+            "LocalId": "01011234",
+            "StateProvinceId": "01011234",
+            "CommonwealthId": "012345",
+            "SchoolName": "Lincoln Secondary College",
+            "SchoolDistrict": " Southern Metropolitan Region",
+            "SchoolType": "Pri/Sec",
+            "SchoolFocusList": {
+                "SchoolFocus": [
+                    "01",
+                    "03"
+                ]
+            },
+            "SchoolURL": "http://www.lincolnsc.edu.vic.au",
+            "SchoolSector": "Gov"
+        }
+    },
+    {
+        "SchoolCourseInfo": {
+            "RefId": "A759FF45-4ABD-4A59-B31B-BB0D3CA66ADC",
+            "SchoolInfoRefId": "738F4DF5-949F-4380-8186-8252440A6F6F",
+            "SchoolYear": "2018",
+            "CourseCode": "Mathematics 701",
+            "SubjectAreaList": {
+                "SubjectArea": [
+                    {
+                        "Code": "Mathematics"
+                    }
+                ]
+            },
+            "CourseTitle": "Mathematics 7",
+            "CourseCredits": "2"
+        }
+    },
+    {
+        "SchoolCourseInfo": {
+            "RefId": "46F3503C-C6D5-4BE8-ABB8-D3B5FE853948",
+            "SchoolInfoRefId": "738F4DF5-949F-4380-8186-8252440A6F6F",
+            "SchoolYear": "2018",
+            "CourseCode": "Mathematics 801",
+            "SubjectAreaList": {
+                "SubjectArea": [
+                    {
+                        "Code": "Mathematics"
+                    }
+                ]
+            },
+            "CourseTitle": "Mathematics 8",
+            "CourseCredits": "2"
+        }
+    }
+]
