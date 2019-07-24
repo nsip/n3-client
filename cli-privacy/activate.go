@@ -41,6 +41,6 @@ func addCtxPrivid(params ...string) {
 		fPln("error: the 3rd Param - [privacy id] is invalid UUID, Nothing Set")
 		return
 	}
-	pub.Send(g.Cfg.RPC.CtxPrivID, objRoot, ctx, priid)
+	pub.Send(g.Cfg.RPC.CtxPrivID, objRoot, ctx, priid, 1)
 	time.Sleep(200 * time.Millisecond)
 }

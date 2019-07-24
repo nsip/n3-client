@@ -35,6 +35,6 @@ func rmCtxPrivid(params ...string) {
 		return
 	}
 
-	pub.Send(g.Cfg.RPC.CtxPrivID, objRoot, ctx, g.MARKDelID)
+	pub.Send(g.Cfg.RPC.CtxPrivID, objRoot, ctx, g.MARKDelID, 0)
 	time.Sleep(200 * time.Millisecond)
 }

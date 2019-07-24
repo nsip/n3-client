@@ -1,6 +1,8 @@
 package publish
 
 import (
+	"time"
+
 	g "../global"
 	q "../query"
 	xjy "../xjy"
@@ -166,12 +168,12 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 	} // case
 
 	// DOING: DB Storing Check
-	nCheck := 0
+	// nCheck := 0
 	otstdTermIDvList := []string{} // append(termIDvList[:0:0], termIDvList...)
 AGAIN:
-	pc(nCheck >= 3, fEf("publish error"))
-	fPln("checking...")
-	nCheck++
+	// pc(nCheck >= 3, fEf("publish error"))
+	// fPln("checking...")
+	// nCheck++
 	for _, termID := range termIDvList {
 		if objIDList, _, _, _ := q.Data(ctx, termID, g.MARKTerm); objIDList == nil || len(objIDList) == 0 {
 			otstdTermIDvList = append(otstdTermIDvList, termID)
@@ -180,6 +182,7 @@ AGAIN:
 	if len(otstdTermIDvList) > 0 {
 		termIDvList = otstdTermIDvList
 		otstdTermIDvList = []string{}
+		time.Sleep(200 * time.Millisecond)
 		goto AGAIN
 	}
 
