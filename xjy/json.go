@@ -1,7 +1,10 @@
 package xjy
 
 import (
+	"io/ioutil"
+
 	g "../global"
+	pp "../preprocess"
 	"github.com/google/uuid"
 )
 
@@ -15,7 +18,7 @@ func JSONObjInfo(json, dfltRoot, pDel string) (IDTag, ID, root string, autoID, a
 	sidtag := "I will be the shortest length ID mark, the shortest ID Mark is what we wanted"
 	for _, child := range JSONObjChildren(jsonContent) {
 		Child := S(child)
-		if IArrEleIn(child, Ss([]string{"id", "ID", "Id"})) || (Child.ToLower() == S(dfltRoot).ToLower()+"id") {
+		if IArrEleIn(child, Ss{"id", "ID", "Id"}) || (Child.ToLower() == S(dfltRoot).ToLower()+"id") {
 			if id, _ := JSONXPathValue(jsonObj, root+pDel+child, pDel, []int{1, 1}...); S(id).IsUUID() {
 				sidtag = child
 				mMarkUUID[child] = id
@@ -80,4 +83,71 @@ func JSONObjScan(json, dfltRoot string,
 		IDs, Objs = append(IDs, id), append(Objs, root)
 	}
 	return
+}
+
+// JSONArrDiv :
+func JSONArrDiv(json string, nDiv int) (jsonarrs []string, rem bool) {
+	if ok, eleType, n, eles := IsJSONArray(json); ok {
+		if eleType == JT_OBJ {
+			nPer, nRem := n/nDiv, n%nDiv
+
+			var lows, highs []int
+			if nRem != 0 {
+				lows, highs = make([]int, nDiv+1), make([]int, nDiv+1)
+				for i := 0; i < nDiv; i++ {
+					lows[i] = nPer * i
+					highs[i] = nPer*(i+1) - 1
+				}
+				lows[nDiv] = highs[nDiv-1] + 1
+				highs[nDiv] = n - 1
+			} else {
+				lows, highs = make([]int, nDiv), make([]int, nDiv)
+				for i := 0; i < nDiv; i++ {
+					lows[i] = nPer * i
+					highs[i] = nPer*(i+1) - 1
+				}
+			}
+
+			nPart := IF(nRem == 0, nDiv, nDiv+1).(int)
+			for i := 0; i < nPart; i++ {
+				l, h := lows[i], highs[i]
+				jsonarr := ""
+				for j := l; j <= h; j++ {
+					jsonarr += eles[j] + ",\n"
+				}
+				jsonarr = "[" + jsonarr[:len(jsonarr)-2] + "]"
+				pc(!IsJSON(jsonarr), fEf("JSONArrDiv result error"))
+				jsonarr = prepJSON(jsonarr)
+				jsonarrs = append(jsonarrs, jsonarr)
+			}
+
+			rem = nRem != 0
+		}
+	}
+	return
+}
+
+func prepJSON(json string) string {
+
+	// *** format json ***
+
+	// json = pp.FmtJSONStr(json, "../preprocess/util/", "./")
+	ioutil.WriteFile("../build/debug_pub/in.json", []byte(json), 0666)
+	json = pp.FmtJSONFile("../../build/debug_pub/in.json", "../preprocess/util/", "./")
+	ioutil.WriteFile("../build/debug_pub/infmt.json", []byte(json), 0666)
+
+	// *** ': null' => ': "null"' ***
+	json = S(json).Replace(`": null`, `": "null"`).V()
+
+	// *** dealing with colon ***
+	if pp.HasColonInValue(json) {
+		json = pp.RplcValueColons(json)
+	}
+
+	// *** convert to ASCII ***
+	if ascii, ajson := UTF8ToASCII(json); !ascii {
+		fPln("is utf8")
+		return ajson
+	}
+	return json
 }

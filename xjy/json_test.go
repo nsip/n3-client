@@ -49,3 +49,9 @@ func TestJSONScanObjects(t *testing.T) {
 		},
 	)
 }
+
+func TestJSONArrDiv(t *testing.T) {
+	data := string(must(ioutil.ReadFile("./files/xapi10.json")).([]byte))
+	arrs, rem := JSONArrDiv(string(data), 3)
+	fPln(arrs[0], rem)
+}

@@ -15,16 +15,20 @@ type (
 )
 
 var (
-	sJ   = strings.Join
+	sJ = strings.Join
+
 	fPln = fmt.Println
 	fPf  = fmt.Printf
+	fEf  = fmt.Errorf
 
 	ph   = u.PanicHandle
+	pc   = u.PanicOnCondition
 	must = u.Must
 	IF   = u.IF
 
-	getMapKeys = w.GetMapKeys
-	IArrEleIn  = w.IArrEleIn
+	getMapKeys  = w.GetMapKeys
+	IArrEleIn   = w.IArrEleIn
+	UTF8ToASCII = w.UTF8ToASCII
 
 	JSONChildValue        = gjxy.JSONChildValue
 	JSONXPathValue        = gjxy.JSONXPathValue
@@ -33,6 +37,7 @@ var (
 	JSONObjChildren       = gjxy.JSONObjChildren
 	IsJSONArray           = gjxy.IsJSONArray
 	IsJSONSingle          = gjxy.IsJSONSingle
+	IsJSON                = gjxy.IsJSON
 	XMLAttributes         = gjxy.XMLAttributes
 	XMLSegPos             = gjxy.XMLSegPos
 	XMLSegsCount          = gjxy.XMLSegsCount

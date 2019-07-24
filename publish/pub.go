@@ -1,8 +1,6 @@
 package publish
 
 import (
-	"time"
-
 	g "../global"
 	q "../query"
 	xjy "../xjy"
@@ -11,9 +9,9 @@ import (
 )
 
 // Send :
-func Send(ctx, subject, predicate, object string) {
+func Send(ctx, subject, predicate, object string, ver int64) {
 	tuple := must(messages.NewTuple(subject, predicate, object)).(*pb.SPOTuple)
-	tuple.Version = 0
+	tuple.Version = ver
 	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
 }
 
@@ -50,6 +48,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 	prevIDa, termIDa := "", ""
 	prevIDv, termIDv, prevTermIDv := "", "", ""
 	verS, verA, verV := int64(1), int64(1), int64(1)
+	termIDvList := []string{}
 
 	switch IF(IsJSON(str), g.JSON, g.XML).(g.DataType) {
 	case g.XML:
@@ -65,9 +64,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := must(messages.NewTuple(p, id, sJ(v, g.DELIChild))).(*pb.SPOTuple)
-					tuple.Version = verS
-					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+					Send(ctx, p, id, sJ(v, g.DELIChild), verS)
 					if lastObjTuple {
 						Terminate(ctx, id, termIDs, verS+1) //                 *** object struct terminator ***
 					}
@@ -80,9 +77,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verA, termIDa = RequireVer(ctx, id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
 					}
-					tuple := must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
-					tuple.Version = verA
-					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+					Send(ctx, p, id, fSf("%d", n), verA)
 					if lastObjTuple {
 						Terminate(ctx, id, termIDa, verA+1) //                 *** object array terminator ***
 					}
@@ -99,15 +94,15 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						}
 						verV, termIDv = RequireVer(ctx, id, "V")
 						// fPln("Got Ver V:", verV, termIDv)
+						termIDvList = append(termIDvList, termIDv)
 					}
 					if l := len(v); l > 2 && v[0] == '\'' && v[l-1] == '\'' {
 						v = v[1 : l-1]
 					}
-					tuple := must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
-					tuple.Version = verV
-					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+					Send(ctx, id, p, v, verV)
 				})
 			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object values terminator ***
+			termIDvList = append(termIDvList, prevTermIDv)
 
 			postpXML(ctx, str, IDs, Objs)
 
@@ -125,9 +120,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					tuple := must(messages.NewTuple(p, id, sJ(v, g.DELIChild))).(*pb.SPOTuple)
-					tuple.Version = verS
-					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+					Send(ctx, p, id, sJ(v, g.DELIChild), verS)
 					if lastObjTuple {
 						Terminate(ctx, id, termIDs, verS+1)
 					}
@@ -139,9 +132,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verA, termIDa = RequireVer(ctx, id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
 					}
-					tuple := must(messages.NewTuple(p, id, fSf("%d", n))).(*pb.SPOTuple)
-					tuple.Version = verA
-					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+					Send(ctx, p, id, fSf("%d", n), verA)
 					if lastObjTuple {
 						Terminate(ctx, id, termIDa, verA+1)
 					}
@@ -158,15 +149,15 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						}
 						verV, termIDv = RequireVer(ctx, id, "V")
 						// fPln("Got Ver V:", verV, termIDv)
+						termIDvList = append(termIDvList, termIDv)
 					}
 					if l := len(v); l > 2 && v[0] == '\'' && v[l-1] == '\'' {
 						v = v[1 : l-1]
 					}
-					tuple := must(messages.NewTuple(id, p, v)).(*pb.SPOTuple)
-					tuple.Version = verV
-					pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+					Send(ctx, id, p, v, verV)
 				})
 			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object terminator ***
+			termIDvList = append(termIDvList, prevTermIDv)
 
 			postpJSON(ctx, str, IDs, Objs)
 
@@ -174,22 +165,33 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 
 	} // case
 
-	// TODO: DB Storing Check
-	nStored := 0
-	ticker := time.NewTicker(2000 * time.Millisecond)
-	for range ticker.C {
-		for _, ID := range IDs {
-			if termIDList, _, _, _ := q.Data(ctx, "", g.MARKTerm, ID); termIDList != nil && len(termIDList) > 0 {
-				nStored++
-			}
-		}
-		if nStored == len(IDs) {
-			fPln("All sent and stored")
-			goto STORED
+	// DOING: DB Storing Check
+	nCheck := 0
+	otstdTermIDvList := []string{} // append(termIDvList[:0:0], termIDvList...)
+AGAIN:
+	pc(nCheck >= 3, fEf("publish error"))
+	fPln("checking...")
+	nCheck++
+	for _, termID := range termIDvList {
+		if objIDList, _, _, _ := q.Data(ctx, termID, g.MARKTerm); objIDList == nil || len(objIDList) == 0 {
+			otstdTermIDvList = append(otstdTermIDvList, termID)
 		}
 	}
+	if len(otstdTermIDvList) > 0 {
+		termIDvList = otstdTermIDvList
+		otstdTermIDvList = []string{}
+		goto AGAIN
+	}
 
-STORED:
-	ticker.Stop()
 	return
+}
+
+// Pub2NodeAsyn :
+func Pub2NodeAsyn(ctx, str, dfltRoot string, IDs, Objs chan []string, nV, nS, nA chan int) {
+	ids, objs, nv, ns, na := Pub2Node(ctx, str, dfltRoot)
+	IDs <- ids
+	Objs <- objs
+	nV <- nv
+	nS <- ns
+	nA <- na
 }

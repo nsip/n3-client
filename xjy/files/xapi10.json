@@ -1,0 +1,302 @@
+[
+    {
+        "id": "4947ED1F-1E94-4850-8B8F-35C653F51E9C",
+        "actor": {
+            "name": "Marjorie Amaya",
+            "mbox": "marjorie45@trashymail.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 55,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT209M"
+        }
+    },
+    {
+        "id": "0E97E476-8ED5-4601-A795-6A0CE3F0F40A",
+        "actor": {
+            "name": "Daniel Moffit",
+            "mbox": "daniel46@pookmail.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 57,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT188M"
+        }
+    },
+    {
+        "id": "2C05C276-39C7-4C43-8313-DDF747D1E491",
+        "actor": {
+            "name": "Tom Gregory",
+            "mbox": "tom47@dodgit.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 77,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT103M"
+        }
+    },
+    {
+        "id": "158DA911-C32C-4160-98AE-F07253A30E61",
+        "actor": {
+            "name": "Rozella Tillman",
+            "mbox": "rozella48@spambob.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 62,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT77M"
+        }
+    },
+    {
+        "id": "C8D3A5FA-D1A3-4A1B-A558-5CD05F5F8FCE",
+        "actor": {
+            "name": "Luana Sanders",
+            "mbox": "luana49@spambob.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 90,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT65M"
+        }
+    },
+    {
+        "id": "32675374-7C49-4F22-8476-75BD6E9ED7D9",
+        "actor": {
+            "name": "Shawn Motley",
+            "mbox": "shawn50@trashymail.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 59,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT94M"
+        }
+    },
+    {
+        "id": "696A4A75-EA72-4E7D-9AC6-C9D802A44C96",
+        "actor": {
+            "name": "Fairy Rivera",
+            "mbox": "fairy51@pookmail.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 99,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT119M"
+        }
+    },
+    {
+        "id": "0DC149C7-29D7-4ACC-B032-201D9CB02127",
+        "actor": {
+            "name": "Sandy Bennett",
+            "mbox": "sandy52@trashymail.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 73,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT94M"
+        }
+    },
+    {
+        "id": "A2DEF863-C74C-44C7-9BBB-8FB610FC6600",
+        "actor": {
+            "name": "Nellie Harris",
+            "mbox": "nellie53@pookmail.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "true",
+            "score": {
+                "scaled": 87,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT145M"
+        }
+    },
+    {
+        "id": "AC65B94F-1E3A-4BCD-94E9-BF458DF3A753",
+        "actor": {
+            "name": "Albert Lombardi",
+            "mbox": "albert54@mailinator.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "id": "http://example.com/assignments/English-8-1-A:1",
+            "definition": {
+                "type": "http://adlnet.gov/expapi/activities/assessment",
+                "name": "English-8-1-A:1"
+            }
+        },
+        "result": {
+            "completion": "true",
+            "success": "false",
+            "score": {
+                "scaled": 29,
+                "min": 0,
+                "max": 100
+            },
+            "duration": "PT145M"
+        }
+    }
+]

@@ -23,7 +23,7 @@ func TestXMLObjStrByID(t *testing.T) {
 	xmlobj := XMLObjStrByID(string(sifbytes), "1822AF7A-F9CB-4F0D-96EA-9280DD0B6AB2")
 	fPln(xmlobj)
 	fPln()
-	fPln(XMLAttributes(xmlobj, "-"))
+	fPln(XMLAttributes(xmlobj))
 }
 
 func TestXMLInfoScan(t *testing.T) {

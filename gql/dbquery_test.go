@@ -20,7 +20,7 @@ import (
 // }
 
 func TestStrsJoinEx(t *testing.T) {
-	fPln(IArrStrJoinEx(Ss([]string{"a", "b", "c", "d", "e"}), Ss([]string{"1", "2"}), "#", " ~ "))
+	fPln(IArrStrJoinEx(Ss{"a", "b", "c", "d", "e"}, Ss{"1", "2"}, "#", " ~ "))
 	fPln(S("a#1 ~ b#2 ~ c#4 ~ d ~ e").SplitEx(" ~ ", "#", "string", "int"))
 }
 

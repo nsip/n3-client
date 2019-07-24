@@ -18,6 +18,13 @@ func TestQueryMeta(t *testing.T) {
 		fPln("----------------------------------------------------")
 		fPf("%d # %d: Reply:\n%s\n%s\n%s\n", i, v[i], s[i], p[i], o[i])
 	}
+	fPln(" **************************** ")
+
+	s, p, o, v = Data(g.CurCtx, "644153cf-02c2-4670-810b-534ac148c011", g.MARKTerm)
+	for i := range s {
+		fPln("----------------------------------------------------")
+		fPf("%d # %d: Reply:\n%s\n%s\n%s\n", i, v[i], s[i], p[i], o[i])
+	}
 	fPln()
 }
 
