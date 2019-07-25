@@ -66,9 +66,9 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					Send(ctx, p, id, sJ(v, g.DELIChild), verS)
+					Send(ctx, id, p, sJ(v, g.DELIChild), verS)
 					if lastObjTuple {
-						Terminate(ctx, id, termIDs, verS+1) //                 *** object struct terminator ***
+						Terminate(ctx, id, termIDs, verS+1) //                 *** STRUCT terminator ***
 					}
 				},
 				func(p, id string, n int, lastObjTuple bool) {
@@ -79,9 +79,9 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verA, termIDa = RequireVer(ctx, id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
 					}
-					Send(ctx, p, id, fSf("%d", n), verA)
+					Send(ctx, id, p, fSf("%d", n), verA)
 					if lastObjTuple {
-						Terminate(ctx, id, termIDa, verA+1) //                 *** object array terminator ***
+						Terminate(ctx, id, termIDa, verA+1) //                 *** ARRAY terminator ***
 					}
 				},
 			)
@@ -103,7 +103,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 					}
 					Send(ctx, id, p, v, verV)
 				})
-			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object values terminator ***
+			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** VALUES terminator ***
 			termIDvList = append(termIDvList, prevTermIDv)
 
 			postpXML(ctx, str, IDs, Objs)
@@ -122,7 +122,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verS, termIDs = RequireVer(ctx, id, "S")
 						// fPln("Got Ver S:", verS, termIDs)
 					}
-					Send(ctx, p, id, sJ(v, g.DELIChild), verS)
+					Send(ctx, id, p, sJ(v, g.DELIChild), verS)
 					if lastObjTuple {
 						Terminate(ctx, id, termIDs, verS+1)
 					}
@@ -134,7 +134,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 						verA, termIDa = RequireVer(ctx, id, "A")
 						// fPln("Got Ver A:", verA, termIDa)
 					}
-					Send(ctx, p, id, fSf("%d", n), verA)
+					Send(ctx, id, p, fSf("%d", n), verA)
 					if lastObjTuple {
 						Terminate(ctx, id, termIDa, verA+1)
 					}
@@ -158,7 +158,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 					}
 					Send(ctx, id, p, v, verV)
 				})
-			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** object terminator ***
+			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** OBJECT terminator ***
 			termIDvList = append(termIDvList, prevTermIDv)
 
 			postpJSON(ctx, str, IDs, Objs)
@@ -168,12 +168,9 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int) {
 	} // case
 
 	// DOING: DB Storing Check
-	// nCheck := 0
-	otstdTermIDvList := []string{} // append(termIDvList[:0:0], termIDvList...)
+	otstdTermIDvList := []string{}
 AGAIN:
-	// pc(nCheck >= 3, fEf("publish error"))
-	// fPln("checking...")
-	// nCheck++
+	fPln("checking...")
 	for _, termID := range termIDvList {
 		if objIDList, _, _, _ := q.Data(ctx, termID, g.MARKTerm); objIDList == nil || len(objIDList) == 0 {
 			otstdTermIDvList = append(otstdTermIDvList, termID)

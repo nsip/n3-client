@@ -24,26 +24,26 @@ func TestToNode(t *testing.T) {
 
 	CurCtx := g.Cfg.RPC.CtxList[0]
 
-	// file := "../inbound/sif/sif.json" //                  *** change <file> ***
-	// sif := string(must(ioutil.ReadFile(file)).([]byte))
+	file := "../inbound/sif/sif.json" //                  *** change <file> ***
+	sif := string(must(ioutil.ReadFile(file)).([]byte))
 
-	// // Pub2Node(CurCtx, sif, "sif") //      *** change <dfltRoot> ***
+	// Pub2Node(CurCtx, sif, "sif") //      *** change <dfltRoot> ***
 
-	// IDs0, Objs0, nV0, nS0, nA0 := make(chan []string), make(chan []string), make(chan int), make(chan int), make(chan int)
-	// go Pub2NodeAsyn(CurCtx, sif, "sif", IDs0, Objs0, nV0, nS0, nA0)
-	// select {
-	// case ids := <-IDs0:
-	// 	fPln("sent & stored:", 0, len(ids))
-	// case <-time.After(60 * time.Second):
-	// 	fPln("timeout:")
-	// }
+	IDs0, Objs0, nV0, nS0, nA0 := make(chan []string), make(chan []string), make(chan int), make(chan int), make(chan int)
+	go Pub2NodeAsyn(CurCtx, sif, "sif", IDs0, Objs0, nV0, nS0, nA0)
+	select {
+	case ids := <-IDs0:
+		fPln("sent & stored:", 0, len(ids))
+	case <-time.After(60 * time.Second):
+		fPln("timeout:")
+	}
 
 	/*****************************/
 
 	// for i := 1; i <= 5; i++ {
-	// 	file := fSf("../inbound/hsie/history/stage%d/overview.json", i) // *** change <file> ***
+	// 	file := fSf("../inbound/hsie/history/stage%d/content.json", i) // *** change <file> ***
 	// 	json := string(must(ioutil.ReadFile(file)).([]byte))
-	// 	IDs, _, _, _, _ := Pub2Node(CurCtx, json, "Overview") //     *** change <dfltRoot> ***
+	// 	IDs, _, _, _, _ := Pub2Node(CurCtx, json, "Content") //     *** change <dfltRoot> ***
 	// 	for _, id := range IDs {
 	// 		fPln("sent:", id)
 	// 	}
@@ -51,12 +51,12 @@ func TestToNode(t *testing.T) {
 
 	/*****************************/
 
-	file := "../inbound/xapi/xapi.json" //                  *** change <file> ***
-	json := string(must(ioutil.ReadFile(file)).([]byte))
-	IDs, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //      *** change <dfltRoot> ***
-	for i, id := range IDs {
-		fPln("sent:", i, id)
-	}
+	// file := "../inbound/xapi/one.json" //                  *** change <file> ***
+	// json := string(must(ioutil.ReadFile(file)).([]byte))
+	// IDs, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //      *** change <dfltRoot> ***
+	// for i, id := range IDs {
+	// 	fPln("sent:", i, id)
+	// }
 }
 
 func TestPrivctrlToNode(t *testing.T) {

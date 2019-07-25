@@ -13,7 +13,7 @@ func TestQueryMeta(t *testing.T) {
 	g.CurCtx = g.Cfg.RPC.CtxList[0] //
 
 	// s, p, o, v := Data(g.CurCtx, "", "xapi ~ verb ~ display ~ en-US", "completed") //   *** n3node thinks it is claiming ticket ***
-	s, p, o, v := Data(g.CurCtx, "", g.MARKTerm, "1822AF7A-F9CB-4F0D-96EA-9280DD0B6AB2") //   *** n3node thinks it is claiming ticket ***
+	s, p, o, v := Data(g.CurCtx, "", g.MARKTerm, "4947ED1F-1E94-4850-8B8F-35C653F51E8C") //   *** n3node thinks it is claiming ticket ***
 	for i := range s {
 		fPln("----------------------------------------------------")
 		fPf("%d # %d: Reply:\n%s\n%s\n%s\n", i, v[i], s[i], p[i], o[i])
@@ -36,7 +36,7 @@ func TestQuery1(t *testing.T) {
 	g.CurCtx = g.Cfg.RPC.CtxList[0] //
 	ctx := g.CurCtx
 
-	ObjectID := "4947ED1F-1E94-4850-8B8F-35C653F51E9C"
+	ObjectID := "5e8d383b-13d2-481f-8db5-c16376279566"
 	Object := ""
 	s, p, o, _ := Data(ctx, ObjectID, "") //      ** root **
 	fPln("Object:")
