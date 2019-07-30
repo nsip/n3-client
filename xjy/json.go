@@ -3,8 +3,8 @@ package xjy
 import (
 	"io/ioutil"
 
-	g "../global"
-	pp "../preprocess"
+	g "github.com/nsip/n3-client/global"
+	pp "github.com/nsip/n3-client/preprocess"
 	"github.com/google/uuid"
 )
 

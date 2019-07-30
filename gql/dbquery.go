@@ -1,8 +1,8 @@
 package gql
 
 import (
-	g "../global"
-	q "../query"
+	g "github.com/nsip/n3-client/global"
+	q "github.com/nsip/n3-client/query"
 )
 
 func clrQueryCache() {

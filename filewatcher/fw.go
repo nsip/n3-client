@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"time"
 
-	g "../global"
-	pub "../publish"
+	g "github.com/nsip/n3-client/global"
+	pub "github.com/nsip/n3-client/publish"
 	w "github.com/cdutwhu/go-wrappers"
 	"github.com/fsnotify/fsnotify"
 )

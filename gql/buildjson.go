@@ -1,6 +1,6 @@
 package gql
 
-import g "../global"
+import g "github.com/nsip/n3-client/global"
 
 // JSONBuild : Need global vars
 func JSONBuild(path string) {

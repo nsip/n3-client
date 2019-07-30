@@ -1,6 +1,6 @@
 package gql
 
-import g "../global"
+import g "github.com/nsip/n3-client/global"
 
 // SchemaBuild : init path is root
 func SchemaBuild(gql, path string) string {

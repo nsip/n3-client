@@ -1,6 +1,6 @@
 package xjy
 
-import g "../global"
+import g "github.com/nsip/n3-client/global"
 
 // YAMLScan :
 func YAMLScan(data, dfltRoot, pDeli string, IDs []string, dt g.DataType, OnValueFetch func(path, value, id string)) {

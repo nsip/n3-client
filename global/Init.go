@@ -1,7 +1,7 @@
 package global
 
 import (
-	c "../config"
+	c "github.com/nsip/n3-client/config"
 	"github.com/nsip/n3-messages/n3grpc"
 )
 

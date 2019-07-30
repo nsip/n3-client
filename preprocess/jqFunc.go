@@ -4,7 +4,7 @@ import (
 	"os"
 	"os/exec"
 
-	g "../global"
+	g "github.com/nsip/n3-client/global"
 )
 
 func prepareJQ(jqDirs ...string) {
