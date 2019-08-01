@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>N3 Publish Page</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="./get_greeting.js?ver=2"></script>
+    <script type="text/javascript" src="./post_pub.js?ver=7"></script>
+</head>
+
+<body>
+    <div>
+        <br>
+        <code>username: </code><input id="uname0" type="text" value=""><br>
+        <code>password: </code><input id="pwd0" type="text" value=""><br>
+        <input onclick="greeting();" type="button" value="Greeting" /><br><br>
+        <code>username: </code><input id="uname1" type="text" value=""><br>
+        <code>password: </code><input id="pwd1" type="text" value=""><br>
+        <code>default : </code><input id="dflt1" type="text" name="Default Name" value=""><br>
+        <input id="fileupload" type="file" value="Select" /><br>
+        <output id="file"></output>
+        <input id="pub" onclick="pub();" type="button" value="Publish" disabled />
+    </div>
+</body>
+
+</html>

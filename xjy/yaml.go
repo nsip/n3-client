@@ -1,19 +1,24 @@
 package xjy
 
-import g "../global"
+import (
+	"errors"
+
+	g "../global"
+)
 
 // YAMLScan :
-func YAMLScan(data, dfltRoot, pDeli string, IDs []string, dt g.DataType, OnValueFetch func(path, value, id string)) {
+func YAMLScan(data, dfltRoot, pDeli string, IDs []string, dt g.DataType, OnValueFetch func(path, value, id string) error) error {
 	switch dt {
 	case g.XML:
-		YAMLScanFromXMLBat(data, pDeli, IDs, OnValueFetch)
+		return YAMLScanFromXMLBat(data, pDeli, IDs, OnValueFetch)
 	case g.JSON:
-		YAMLScanFromJSONBat(data, dfltRoot, pDeli, IDs, OnValueFetch)
+		return YAMLScanFromJSONBat(data, dfltRoot, pDeli, IDs, OnValueFetch)
 	}
+	return errors.New("Data Type Input Error")
 }
 
 // YAMLScanFromXMLBat :
-func YAMLScanFromXMLBat(xml, pDeli string, IDs []string, OnValueFetch func(path, value, id string)) {
+func YAMLScanFromXMLBat(xml, pDeli string, IDs []string, OnValueFetch func(path, value, id string) error) error {
 
 	n, prevEnd := XMLSegsCount(xml), 0
 	for i := 1; i <= n; i++ {
@@ -34,16 +39,18 @@ func YAMLScanFromXMLBat(xml, pDeli string, IDs []string, OnValueFetch func(path,
 			if IDs != nil && len(IDs) > 0 {
 				ID = IDs[i-1]
 			}
-			OnValueFetch(item.Path, item.Value, ID)
+			if e := OnValueFetch(item.Path, item.Value, ID); e != nil {
+				return e
+			}
 		}
 	}
+	return nil
 }
 
 // YAMLScanFromJSONBat :
-func YAMLScanFromJSONBat(json, dfltRoot, pDeli string, IDs []string, OnValueFetch func(path, value, id string)) {
+func YAMLScanFromJSONBat(json, dfltRoot, pDeli string, IDs []string, OnValueFetch func(path, value, id string) error) error {
 
 	if ok, _ := IsJSONSingle(json); ok {
-
 		IDTag, _, _, _, _, _ := JSONObjInfo(json, dfltRoot, pDeli)
 		yaml := Jstr2Y(json)
 		yaml = YAMLJoinSplittedLines(yaml)
@@ -53,9 +60,11 @@ func YAMLScanFromJSONBat(json, dfltRoot, pDeli string, IDs []string, OnValueFetc
 			if IDs != nil && len(IDs) > 0 {
 				ID = IDs[0]
 			}
-			OnValueFetch(item.Path, item.Value, ID)
+			if e := OnValueFetch(item.Path, item.Value, ID); e != nil {
+				return e
+			}
 		}
-		return
+		return nil
 	}
 
 	if ok, jsonType, n, eles := IsJSONArray(json); ok {
@@ -74,7 +83,9 @@ func YAMLScanFromJSONBat(json, dfltRoot, pDeli string, IDs []string, OnValueFetc
 					if IDs != nil && len(IDs) > 0 {
 						ID = IDs[i-1]
 					}
-					OnValueFetch(item.Path, item.Value, ID)
+					if e := OnValueFetch(item.Path, item.Value, ID); e != nil {
+						return e
+					}
 				}
 			}
 		}
@@ -92,7 +103,11 @@ func YAMLScanFromJSONBat(json, dfltRoot, pDeli string, IDs []string, OnValueFetc
 			if IDs != nil && len(IDs) > 0 {
 				ID = IDs[0]
 			}
-			OnValueFetch(item.Path, item.Value, ID)
+			if e := OnValueFetch(item.Path, item.Value, ID); e != nil {
+				return e
+			}
 		}
 	}
+
+	return nil
 }

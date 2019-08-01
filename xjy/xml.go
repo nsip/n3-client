@@ -73,18 +73,17 @@ func XMLObjStrByID(xml, rid string) string {
 
 // XMLInfoScan :
 func XMLInfoScan(xmlstr, PATHDEL string,
-	OnStructFetch func(string, string, []string, bool),
-	OnArrFetch func(string, string, int, bool)) ([]string, []string) {
+	OnStructFetch func(string, string, []string, bool) error,
+	OnArrayFetch func(string, string, int, bool) error) ([]string, []string, error) {
 
 	objs, ids, _, starts, ends := XMLScanObjects(xmlstr)
 	nObj := len(ids)
 
 	for i := 0; i < nObj; i++ {
-
 		id, _, xml := ids[i], objs[i], S(xmlstr).S(starts[i], ends[i]+1).V()
 		mFT, mArr := XMLCntInfo(xml, "", PATHDEL, id, nil)
 
-		for k, v := range *mArr { //                      *** only need >= 2 to be xml array ***
+		for k, v := range *mArr { //                        *** only need >= 2 to be xml array ***
 			if v.Count <= 1 {
 				delete(*mArr, k)
 			}
@@ -93,14 +92,18 @@ func XMLInfoScan(xmlstr, PATHDEL string,
 		j, lFT, lArr := 0, len(*mFT), len(*mArr)
 		for k, v := range *mFT {
 			j++
-			OnStructFetch(k, id, v, (j == lFT)) //        *** last tuple flag ***
+			if e := OnStructFetch(k, id, v, (j == lFT)); e != nil { //          *** last tuple flag ***
+				return nil, nil, e
+			}
 		}
 
 		j = 0
 		for k, v := range *mArr {
 			j++
-			OnArrFetch(k, v.ID, v.Count, (j == lArr)) //  *** last tuple flag ***
+			if e := OnArrayFetch(k, v.ID, v.Count, (j == lArr)); e != nil { //  *** last tuple flag ***
+				return nil, nil, e
+			}
 		}
 	}
-	return ids, objs
+	return ids, objs, nil
 }

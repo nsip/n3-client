@@ -15,6 +15,10 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+func cdUL(dir string) string {
+	return S(dir).RmTailFromLast("/").V()
+}
+
 // **************************** controllers **************************** //
 
 // OriExePathChk :
@@ -28,12 +32,7 @@ AGAIN:
 
 // getIDList :
 func getIDList(c echo.Context) error {
-	defer func() {
-		mtxID.Unlock()
-		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
-			c.JSON(http.StatusBadRequest, msg)
-		})
-	}()
+	defer func() { mtxID.Unlock() }()
 
 	OriExePathChk()
 	mtxID.Lock()
@@ -67,12 +66,7 @@ func getIDList(c echo.Context) error {
 
 // delFromNode : this func can only delete normal data. IF delete privacy control, use cli-privacy
 func delFromNode(c echo.Context) error {
-	defer func() {
-		mtxDel.Unlock()
-		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
-			c.JSON(http.StatusBadRequest, msg)
-		})
-	}()
+	defer func() { mtxDel.Unlock() }()
 
 	OriExePathChk()
 	mtxDel.Lock()
@@ -86,12 +80,7 @@ func delFromNode(c echo.Context) error {
 
 // postToNode : Publish Data to N3-Transport
 func postToNode(c echo.Context) error {
-	defer func() {
-		mtxPub.Unlock()
-		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
-			c.JSON(http.StatusBadRequest, msg)
-		})
-	}()
+	defer func() { mtxPub.Unlock() }()
 
 	OriExePathChk()
 	mtxPub.Lock()
@@ -99,16 +88,19 @@ func postToNode(c echo.Context) error {
 	dfltRoot := c.QueryParam("dfltRoot")
 	// fPln(dfltRoot)
 	if dfltRoot == "" {
-		return c.JSON(http.StatusBadRequest, "<dfltRoot> must be provided")
+		return c.String(http.StatusBadRequest, "<dfltRoot> must be provided")
 	}
 
 	data := string(must(ioutil.ReadAll(c.Request().Body)).([]byte))
 	if data == "" {
-		return c.JSON(http.StatusBadRequest, "Nothing to be sent as POST BODY is empty")
+		return c.String(http.StatusBadRequest, "Nothing to be sent as BODY is empty")
 	}
 
-	_, _, nV, nS, nA := pub.Pub2Node(g.CurCtx, data, dfltRoot) //             *** preprocess, postprocess included ***
-	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
+	if _, _, nV, nS, nA, e := pub.Pub2Node(g.CurCtx, data, dfltRoot); e != nil { //             *** preprocess, postprocess included ***
+		return c.String(http.StatusBadRequest, e.Error())
+	} else {
+		return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
+	}
 }
 
 // Request : wrapper type to capture GQL input
@@ -119,12 +111,7 @@ type Request struct {
 
 // postQueryGQL :
 func postQueryGQL(c echo.Context) error {
-	defer func() {
-		mtxQry.Unlock()
-		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
-			c.JSON(http.StatusBadRequest, msg)
-		})
-	}()
+	defer func() { mtxQry.Unlock() }()
 
 	OriExePathChk()
 	mtxQry.Lock()
@@ -164,12 +151,7 @@ func postQueryGQL(c echo.Context) error {
 
 // getObject :
 func getObject(c echo.Context) error {
-	defer func() {
-		mtxObj.Unlock()
-		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
-			c.JSON(http.StatusBadRequest, msg)
-		})
-	}()
+	defer func() { mtxObj.Unlock() }()
 
 	OriExePathChk()
 	mtxObj.Lock()
@@ -180,12 +162,7 @@ func getObject(c echo.Context) error {
 
 // getSchema :
 func getSchema(c echo.Context) error {
-	defer func() {
-		mtxScm.Unlock()
-		phe(recover(), g.Cfg.ErrLog, func(msg string, others ...interface{}) {
-			c.JSON(http.StatusBadRequest, msg)
-		})
-	}()
+	defer func() { mtxScm.Unlock() }()
 
 	OriExePathChk()
 	mtxScm.Lock()
@@ -204,8 +181,21 @@ func HostHTTPAsync() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	// CORS
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{echo.GET, echo.POST, echo.DELETE},
+		AllowCredentials: true,
+	}))
+
+	webloc := g.Cfg.Group.APP + g.Cfg.Route.Pub
+	e.File(webloc, "../www/service.html")
+	e.Static(cdUL(webloc), "../www/") //             "/" is html - ele - <src>'s path
+
 	// BasicAuth
-	e.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+	api := e.Group(g.Cfg.Group.API)
+	api.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		fPln("---------------------in basicAuth-----------------------------", username, password)
 		switch {
 		case username == "admin" && password == "admin":
 			g.CurCtx = g.Cfg.RPC.CtxPrivDef
@@ -219,22 +209,18 @@ func HostHTTPAsync() {
 		return true, nil
 	}))
 
-	// CORS
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{echo.GET, echo.POST, echo.DELETE},
-	}))
-
 	// Route
-	e.GET("/filetest", func(c echo.Context) error { return c.File("/home/qing/Desktop/small.webm") })
-	e.GET(g.Cfg.Rest.PathTest, func(c echo.Context) error { return c.String(http.StatusOK, "n3client is running\n") })
-	e.GET(g.Cfg.Rest.PathID, getIDList)
-	e.GET(g.Cfg.Rest.PathObj, getObject)
-	e.GET(g.Cfg.Rest.PathScm, getSchema)
-	e.POST(g.Cfg.Rest.PathPub, postToNode)
-	e.POST(g.Cfg.Rest.PathGQL, postQueryGQL)
-	e.DELETE(g.Cfg.Rest.PathDel, delFromNode)
+	// api.GET("/filetest", func(c echo.Context) error { return c.File("/home/qing/Desktop/index.html") })
+	api.GET(g.Cfg.Route.Greeting, func(c echo.Context) error {
+		return c.JSON(http.StatusOK, "hello, n3client is running @ "+time.Now().Format("2006-01-02 15:04:05.000"))
+	})
+	api.GET(g.Cfg.Route.ID, getIDList)
+	api.GET(g.Cfg.Route.Obj, getObject)
+	api.GET(g.Cfg.Route.Scm, getSchema)
+	api.POST(g.Cfg.Route.Pub, postToNode)
+	api.POST(g.Cfg.Route.GQL, postQueryGQL)
+	api.DELETE(g.Cfg.Route.Del, delFromNode)
 
 	// Server
-	e.Start(fSf(":%d", g.Cfg.Rest.Port))
+	e.Start(fSf(":%d", g.Cfg.WebService.Port))
 }

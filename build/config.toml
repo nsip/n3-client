@@ -1,19 +1,27 @@
 Path = "../build/config.toml"
 ErrLog = "./errlog.txt"
 
-[Filewatcher]
+[FileWatcher]
   Dir = "../inbound/"
 
-[Rest]
+[WebService]
   Port = 1323
-  PathTest = "/"
-  PathID = "/id"
-  PathPub = "/pub"
-  PathGQL = "/gql"
-  PathDel = "/del"
-  PathObj = "/obj"
-  PathScm = "/scm"
-  PathGQLTxt = "/qrytxt"
+  VerAPP = 0
+  VerAPI = 0
+
+[Group]
+  APP = "/app"
+  API = "/api"
+
+[Route]
+  Greeting = "/v#/greeting"
+  ID = "/v#/id"
+  Pub = "/v#/pub"
+  GQL = "/v#/gql"
+  Del = "/v#/del"
+  Obj = "/v#/obj"
+  Scm = "/v#/scm"
+  GQLTxt = "/v#/qrytxt"
 
 [RPC]
   Namespace = "gXjyJ7BuXpMtHcQskx1HGGb3muEPexZ7AcAT4Kz1HVx"

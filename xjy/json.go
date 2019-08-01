@@ -45,8 +45,8 @@ func JSONObjInfo(json, dfltRoot, pDel string) (IDTag, ID, root string, autoID, a
 
 // JSONModelInfo :
 func JSONModelInfo(json, dfltRoot, pDel string,
-	OnStruFetch func(string, string, []string, bool),
-	OnArrFetch func(string, string, int, bool)) (string, string) {
+	OnStructFetch func(string, string, []string, bool) error,
+	OnArrayFetch func(string, string, int, bool) error) (string, string, error) {
 
 	_, id, root, _, addedRoot, _ := JSONObjInfo(json, dfltRoot, pDel) //   *** find ID Value ***
 	id = S(id).RmQuotes(QDouble).V()
@@ -55,34 +55,44 @@ func JSONModelInfo(json, dfltRoot, pDel string,
 	j, lFT, lArr := 0, len(*mFT), len(*mArr)
 	for k, v := range *mFT {
 		j++
-		OnStruFetch(k, id, v, (j == lFT))
+		if e := OnStructFetch(k, id, v, (j == lFT)); e != nil {
+			return "", "", e
+		}
 	}
 
 	j = 0
 	for k, v := range *mArr {
 		j++
-		OnArrFetch(k, v.ID, v.Count, (j == lArr))
+		if e := OnArrayFetch(k, v.ID, v.Count, (j == lArr)); e != nil {
+			return "", "", e
+		}
 	}
-	return id, root
+	return id, root, nil
 }
 
 // JSONObjScan :
 func JSONObjScan(json, dfltRoot string,
-	OnStruFetch func(string, string, []string, bool),
-	OnArrFetch func(string, string, int, bool)) (IDs, Objs []string) {
+	OnStructFetch func(string, string, []string, bool) error,
+	OnArrayFetch func(string, string, int, bool) error) (IDs, Objs []string, err error) {
 
 	if ok, eleType, n, eles := IsJSONArray(json); ok {
 		if eleType == JT_OBJ {
 			for i := 1; i <= n; i++ {
-				id, root := JSONModelInfo(eles[i-1], dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
-				IDs, Objs = append(IDs, id), append(Objs, root)
+				if id, root, e := JSONModelInfo(eles[i-1], dfltRoot, g.DELIPath, OnStructFetch, OnArrayFetch); e != nil {
+					return nil, nil, e
+				} else {
+					IDs, Objs = append(IDs, id), append(Objs, root)
+				}
 			}
 		}
 	} else {
-		id, root := JSONModelInfo(json, dfltRoot, g.DELIPath, OnStruFetch, OnArrFetch)
-		IDs, Objs = append(IDs, id), append(Objs, root)
+		if id, root, e := JSONModelInfo(json, dfltRoot, g.DELIPath, OnStructFetch, OnArrayFetch); e != nil {
+			return nil, nil, e
+		} else {
+			IDs, Objs = append(IDs, id), append(Objs, root)
+		}
 	}
-	return
+	return IDs, Objs, nil
 }
 
 // JSONArrDiv :
