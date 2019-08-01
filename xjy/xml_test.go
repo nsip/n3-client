@@ -4,9 +4,9 @@ import (
 	"io/ioutil"
 	"testing"
 
-	c "../config"
-	g "../global"
 	"github.com/cdutwhu/go-gjxy"
+	c "github.com/nsip/n3-client/config"
+	g "github.com/nsip/n3-client/global"
 )
 
 func TestXMLScanObjects(t *testing.T) {

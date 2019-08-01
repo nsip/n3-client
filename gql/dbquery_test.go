@@ -1,10 +1,10 @@
 package gql
 
 import (
+	g "github.com/nsip/n3-client/global"
 	"io/ioutil"
 	"testing"
 	"time"
-	g "../global"
 )
 
 // func TestPermu(t *testing.T) {

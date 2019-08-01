@@ -1,7 +1,7 @@
 package rest
 
 import "testing"
-import g "../global"
+import g "github.com/nsip/n3-client/global"
 
 func TestQueryIDs(t *testing.T) {
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	g "../global"
+	g "github.com/nsip/n3-client/global"
 
 	"github.com/spf13/cobra"
 )
