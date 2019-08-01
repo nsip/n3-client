@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	g "../global"
-	pub "../publish"
+	g "github.com/nsip/n3-client/global"
+	pub "github.com/nsip/n3-client/publish"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +14,7 @@ var deactivateCmd = &cobra.Command{
 	Short: "Deactivate an objectRoot in a certain Context from a Privacy Policy File",
 	Long: `
 	e.g. [usage]: privacy deactivate 'ObjectRoot' 'Context'
-	Use this command line to unlink an objectRoot in a context from its privacy control file ID,	
+	Use this command line to unlink an objectRoot in a context from its privacy control file ID,
 	`,
 	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
