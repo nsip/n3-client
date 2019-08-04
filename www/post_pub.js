@@ -66,8 +66,9 @@ function pub() {
         var mydata = event.target.result;
         console.log(mydata);
 
+        var ip = location.host;
         $.ajax({
-            url: 'http://192.168.76.37:1323/api/v0/pub?dfltRoot=' + dfltRoot,
+            url: 'http://' + ip + '/api/v0/pub?dfltRoot=' + dfltRoot,
             username: user,
             password: pwd,
             type: 'POST',

@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -73,8 +75,6 @@ func delFromNode(c echo.Context) error {
 
 	IDs := c.QueryParams()["id"]
 	d.DelBat(g.CurCtx, IDs...)
-	// g.RmIDsInLRU(IDs...)
-	// g.RmQryIDsCache(IDs...)
 	return c.JSON(http.StatusAccepted, fSf("%d objects have been deleted", len(IDs)))
 }
 
@@ -101,6 +101,47 @@ func postToNode(c echo.Context) error {
 	} else {
 		return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 	}
+}
+
+// postFileToNode :
+func postFileToNode(c echo.Context) error {
+
+	// Read form fields
+	name := c.FormValue("name")
+	email := c.FormValue("email")
+
+	//-----------
+	// Read file
+	//-----------
+
+	// Source
+	file, err := c.FormFile("file")
+	if err != nil {
+		return err
+	}
+	src, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	b1 := make([]byte, 5000000)
+	src.Read(b1)
+	fPln(string(b1))
+
+	// Destination
+	dst, err := os.Create(file.Filename)
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	// Copy
+	if _, err = io.Copy(dst, src); err != nil {
+		return err
+	}
+
+	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully with fields name=%s and email=%s.</p>", file.Filename, name, email))
 }
 
 // Request : wrapper type to capture GQL input
@@ -196,6 +237,7 @@ func HostHTTPAsync() {
 	api := e.Group(g.Cfg.Group.API)
 	api.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		fPln("---------------------in basicAuth-----------------------------", username, password)
+
 		switch {
 		case username == "admin" && password == "admin":
 			g.CurCtx = g.Cfg.RPC.CtxPrivDef
@@ -220,6 +262,7 @@ func HostHTTPAsync() {
 	api.POST(g.Cfg.Route.Pub, postToNode)
 	api.POST(g.Cfg.Route.GQL, postQueryGQL)
 	api.DELETE(g.Cfg.Route.Del, delFromNode)
+	api.POST("/upload", postFileToNode)
 
 	// Server
 	e.Start(fSf(":%d", g.Cfg.WebService.Port))

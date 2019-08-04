@@ -5,8 +5,8 @@
     <title>N3 Publish Page</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="./get_greeting.js?ver=2"></script>
-    <script type="text/javascript" src="./post_pub.js?ver=7"></script>
+    <script type="text/javascript" src="./get_greeting.js?ver=1"></script>
+    <script type="text/javascript" src="./post_pub.js?ver=1"></script>
 </head>
 
 <body>
@@ -22,6 +22,12 @@
         <output id="file"></output>
         <input id="pub" onclick="pub();" type="button" value="Publish" disabled />
     </div>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <code>Name : </code><input type="text" name="name"><br>
+        <code>Email: </code><input type="email" name="email"><br>
+        <code>Files: </code><input type="file" name="file"><br><br>
+        <input type="submit" value="Submit">
+    </form>
 </body>
 
 </html>

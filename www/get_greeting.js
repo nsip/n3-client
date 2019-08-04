@@ -8,8 +8,9 @@ function greeting() {
     var user = $('#uname0').val() === "" ? "null" : $('#uname0').val();
     var pwd = $('#pwd0').val() === "" ? "null" : $('#pwd0').val();
 
+    var ip = location.host;
     $.ajax({
-        url: 'http://192.168.76.37:1323/api/v0/greeting',
+        url: 'http://' + ip + '/api/v0/greeting',
         username: user,
         password: pwd,
         type: 'GET',
@@ -18,7 +19,7 @@ function greeting() {
         dataType: 'json',
         crossDomain: true,
         success: function (data) {
-            console.log(data);            
+            console.log(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR.responseText);

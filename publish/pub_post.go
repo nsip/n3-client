@@ -24,13 +24,6 @@ func mkSchemaQueryHead(qSchemaDir string, objects ...string) {
 
 func postpJSON(ctx, json string, IDs, Objs []string) {
 
-	// if ctx == "privctrl" {
-	// 	g.ClrAllIDsInLRU()
-	// } else {
-	// 	g.RmIDsInLRU(IDs...) // *** remove id from lru cache ***
-	// 	g.RmQryIDsCache(IDs...)
-	// }
-
 	// *** save original object JSON, only for 1 object file *** //
 	// if len(IDs) == 1 {
 	// 	ID, root := IDs[0], Objs[0]
@@ -43,13 +36,5 @@ func postpJSON(ctx, json string, IDs, Objs []string) {
 }
 
 func postpXML(ctx, xml string, IDs, Objs []string) {
-
-	// if ctx == "privctrl" {
-	// 	g.ClrAllIDsInLRU()
-	// } else {
-	// 	g.RmIDsInLRU(IDs...) // *** remove id from lru cache ***
-	// 	g.RmQryIDsCache(IDs...)
-	// }
-
 	mkSchemaQueryHead(g.Cfg.Query.SchemaDir, Objs...) // *** create gql schema query header ***
 }

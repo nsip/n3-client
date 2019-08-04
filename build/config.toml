@@ -24,8 +24,8 @@ ErrLog = "./errlog.txt"
   GQLTxt = "/v#/qrytxt"
 
 [RPC]
-  Namespace = "gXjyJ7BuXpMtHcQskx1HGGb3muEPexZ7AcAT4Kz1HVx"
-  Server = "192.168.76.37"
+  Namespace = "HbdfTHJYZePmWYX7vEut5YKPqjPiZG2DtY4UuGi28akn"
+  Server = "192.168.245.128"
   Port = 5777
   CtxList = ["demo", "demo1", "demo2"]
   CtxPrivDef = "privctrl"

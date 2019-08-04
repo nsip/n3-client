@@ -46,14 +46,6 @@ func StartFileWatcherAsync() {
 						fPln(id, "is sent")
 					}
 				}
-
-				// if g.CurCtx == "privctrl" {
-				// 	g.ClrAllIDsInLRU()
-				// } else {
-				// 	g.RmIDsInLRU(IDs...)
-				// 	g.RmQryIDsCache(IDs...)
-				// }
-
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {
