@@ -7,13 +7,63 @@
 //     alert('The File APIs are not fully supported in this browser.');
 // }
 
+$(document).ready(function () {
+
+    $("#upload").on('submit', function (e) {
+        e.preventDefault();  // avoid to execute the actual submit of the form
+    });
+
+    $("#upload").submit(function () { // intercepts the submit event
+
+        var user = $('#uname').val() === "" ? "null" : $('#uname').val();
+        var pwd = $('#pwd').val() === "" ? "null" : $('#pwd').val();
+        if ($('#root').val() === "") {
+            alert('input default data object root name')
+            return
+        }
+        var dfltRoot = $('#root').val()
+
+        var data = new FormData();
+        data.append('username', user);
+        data.append('password', pwd);
+        data.append('root', dfltRoot);
+        jQuery.each(jQuery('#fileupload')[0].files, function (i, file) {
+            data.append('file', file);
+        });
+
+        var ip = location.host;
+        $.ajax({ // make an AJAX request
+            type: "POST",
+            method: "POST",
+            url: 'http://' + ip + '/upload/v0',
+            username: user,
+            password: pwd,
+            contentType: false,
+            data: data, // $("#upload").serialize(), // serializes the form's elements
+            cache: false,
+            processData: false,
+            //dataType: 'json',
+            //traditional: true,
+            crossDomain: true,
+            success: function (data) {
+                // show the data you got from B in result div
+                // $("#result").html(data);
+                console.log(data);
+                $('#file').html('<ul>' + data + '</ul>');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            },
+        });
+    });
+});
+
 window.onload = function () {
     // document.getElementById('fileupload').addEventListener('change', handleFileSelect, false);
     $('#fileupload').change(handleFileSelect);
 }
 
 var filename = "";
-var F;
 
 function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object    
@@ -30,8 +80,6 @@ function handleFileSelect(evt) {
     // document.getElementById('file').innerHTML = '<ul>' + output.join('') + '</ul>';
     $('#file').html('<ul>' + output.join('') + '</ul>');
 
-    F = files[0];
-
     filename = $('#fileupload').val();
     if (!filename || !(filename.endsWith('.xml') || filename.endsWith('.json'))) {
         $('#pub').prop('disabled', true);
@@ -40,61 +88,62 @@ function handleFileSelect(evt) {
     }
 }
 
-function pub() {
 
-    var user = $('#uname1').val() === "" ? "null" : $('#uname1').val();
-    var pwd = $('#pwd1').val() === "" ? "null" : $('#pwd1').val();
-    if ($('#dflt1').val() === "") {
-        alert('input default data object root name')
-        return
-    }
-    var dfltRoot = $('#dflt1').val()
+// function pub() {
 
-    var formdata = {
-        "ID": "e56dc44f-9080-41a5-82d0-a323472016c0",
-        "actId": "actId",
-        "proId": "proId",
-        "channel_price": "channel_price",
-        "sale_num": "sale_num",
-        "restrict_num": "restrict_num"
-    };
+//     var user = $('#uname1').val() === "" ? "null" : $('#uname1').val();
+//     var pwd = $('#pwd1').val() === "" ? "null" : $('#pwd1').val();
+//     if ($('#dflt1').val() === "") {
+//         alert('input default data object root name')
+//         return
+//     }
+//     var dfltRoot = $('#dflt1').val()
 
-    var reader = new FileReader();
-    reader.readAsText(F, 'UTF-8');
-    reader.onload = shipOff;
-    function shipOff(event) {
-        var mydata = event.target.result;
-        console.log(mydata);
+//     var formdata = {
+//         "ID": "e56dc44f-9080-41a5-82d0-a323472016c0",
+//         "actId": "actId",
+//         "proId": "proId",
+//         "channel_price": "channel_price",
+//         "sale_num": "sale_num",
+//         "restrict_num": "restrict_num"
+//     };
 
-        var ip = location.host;
-        $.ajax({
-            url: 'http://' + ip + '/api/v0/pub?dfltRoot=' + dfltRoot,
-            username: user,
-            password: pwd,
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            data: mydata, //JSON.stringify(formdata),
-            cache: false,
-            dataType: 'json',
-            traditional: true,
-            crossDomain: true,
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
-                // $('#result').html('<p>status code: ' + jqXHR.status + '</p><p>errorThrown: ' + errorThrown + '</p><p>jqXHR.responseText:</p><div>' + jqXHR.responseText + '</div>');
-                // console.log('jqXHR:');
-                console.log(jqXHR.responseText);
-                // console.log('textStatus:');
-                // console.log(textStatus);
-                // console.log('errorThrown:');
-                // console.log(errorThrown);
-            },
-            complete: function () {
-                // Handle the complete event
-                // alert("ajax completed");
-            }
-        });
-    }
-}
+//     var reader = new FileReader();
+//     reader.readAsText(F, 'UTF-8');
+//     reader.onload = shipOff;
+//     function shipOff(event) {
+//         var mydata = event.target.result;
+//         console.log(mydata);
+
+//         var ip = location.host;
+//         $.ajax({
+//             url: 'http://' + ip + '/api/v0/pub?dfltRoot=' + dfltRoot,
+//             username: user,
+//             password: pwd,
+//             type: 'POST',
+//             contentType: "application/json; charset=utf-8",
+//             data: mydata, //JSON.stringify(formdata),
+//             cache: false,
+//             dataType: 'json',
+//             traditional: true,
+//             crossDomain: true,
+//             success: function (data) {
+//                 console.log(data);
+//             },
+//             error: function (jqXHR, textStatus, errorThrown) {
+//                 // alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+//                 // $('#result').html('<p>status code: ' + jqXHR.status + '</p><p>errorThrown: ' + errorThrown + '</p><p>jqXHR.responseText:</p><div>' + jqXHR.responseText + '</div>');
+//                 // console.log('jqXHR:');
+//                 console.log(jqXHR.responseText);
+//                 // console.log('textStatus:');
+//                 // console.log(textStatus);
+//                 // console.log('errorThrown:');
+//                 // console.log(errorThrown);
+//             },
+//             complete: function () {
+//                 // Handle the complete event
+//                 // alert("ajax completed");
+//             }
+//         });
+//     }
+// }

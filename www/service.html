@@ -10,23 +10,20 @@
 </head>
 
 <body>
-    <div>
+    <form>
         <br>
-        <code>username: </code><input id="uname0" type="text" value=""><br>
-        <code>password: </code><input id="pwd0" type="text" value=""><br>
-        <input onclick="greeting();" type="button" value="Greeting" /><br><br>
-        <code>username: </code><input id="uname1" type="text" value=""><br>
-        <code>password: </code><input id="pwd1" type="text" value=""><br>
-        <code>default : </code><input id="dflt1" type="text" name="Default Name" value=""><br>
-        <input id="fileupload" type="file" value="Select" /><br>
+        <code>username: </code><input id="uname0" type="text" value="" autocomplete="username"><br>
+        <code>password: </code><input id="pwd0" type="password" value="" autocomplete="current-password"><br>
+        <input onclick="greeting();" type="button" value="Greeting" /><br>
+    </form>
+    <br>
+    <form id="upload">
+        <code>username: </code><input id="uname" type="text" name="username" autocomplete="username"><br>
+        <code>password: </code><input id="pwd" type="password" name="password" autocomplete="current-password"><br>
+        <code>default root:&nbsp;</code><input id="root" type="text" name="root"><br>
+        <code>Files: </code><input id="fileupload" type="file" name="file"><br>
         <output id="file"></output>
-        <input id="pub" onclick="pub();" type="button" value="Publish" disabled />
-    </div>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <code>Name : </code><input type="text" name="name"><br>
-        <code>Email: </code><input type="email" name="email"><br>
-        <code>Files: </code><input type="file" name="file"><br><br>
-        <input type="submit" value="Submit">
+        <input id="pub" type="submit" value="Upload" disabled />
     </form>
 </body>
 

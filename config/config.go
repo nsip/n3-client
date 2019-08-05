@@ -31,6 +31,7 @@ type route struct {
 	Obj      string
 	Scm      string
 	GQLTxt   string
+	FilePub  string
 }
 
 type rpc struct {

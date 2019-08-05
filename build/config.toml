@@ -22,10 +22,11 @@ ErrLog = "./errlog.txt"
   Obj = "/v#/obj"
   Scm = "/v#/scm"
   GQLTxt = "/v#/qrytxt"
+  FilePub = "/upload/v#"
 
 [RPC]
-  Namespace = "HbdfTHJYZePmWYX7vEut5YKPqjPiZG2DtY4UuGi28akn"
-  Server = "192.168.245.128"
+  Namespace = "gXjyJ7BuXpMtHcQskx1HGGb3muEPexZ7AcAT4Kz1HVx"
+  Server = "192.168.76.37"
   Port = 5777
   CtxList = ["demo", "demo1", "demo2"]
   CtxPrivDef = "privctrl"

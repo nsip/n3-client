@@ -2,7 +2,6 @@ package rest
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -35,7 +34,6 @@ AGAIN:
 // getIDList :
 func getIDList(c echo.Context) error {
 	defer func() { mtxID.Unlock() }()
-
 	OriExePathChk()
 	mtxID.Lock()
 
@@ -69,7 +67,6 @@ func getIDList(c echo.Context) error {
 // delFromNode : this func can only delete normal data. IF delete privacy control, use cli-privacy
 func delFromNode(c echo.Context) error {
 	defer func() { mtxDel.Unlock() }()
-
 	OriExePathChk()
 	mtxDel.Lock()
 
@@ -81,13 +78,12 @@ func delFromNode(c echo.Context) error {
 // postToNode : Publish Data to N3-Transport
 func postToNode(c echo.Context) error {
 	defer func() { mtxPub.Unlock() }()
-
 	OriExePathChk()
 	mtxPub.Lock()
 
-	dfltRoot := c.QueryParam("dfltRoot")
+	root := c.QueryParam("dfltRoot")
 	// fPln(dfltRoot)
-	if dfltRoot == "" {
+	if root == "" {
 		return c.String(http.StatusBadRequest, "<dfltRoot> must be provided")
 	}
 
@@ -96,8 +92,8 @@ func postToNode(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "Nothing to be sent as BODY is empty")
 	}
 
-	if _, _, nV, nS, nA, e := pub.Pub2Node(g.CurCtx, data, dfltRoot); e != nil { //             *** preprocess, postprocess included ***
-		return c.String(http.StatusBadRequest, e.Error())
+	if _, _, nV, nS, nA, e := pub.Pub2Node(g.CurCtx, data, root); e != nil { //    *** preprocess, postprocess included ***
+		return e
 	} else {
 		return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 	}
@@ -105,14 +101,17 @@ func postToNode(c echo.Context) error {
 
 // postFileToNode :
 func postFileToNode(c echo.Context) error {
+	defer func() { mtxPub.Unlock() }()
+	OriExePathChk()
+	mtxPub.Lock()
 
-	// Read form fields
-	name := c.FormValue("name")
-	email := c.FormValue("email")
+	name, pwd, root := c.FormValue("username"), c.FormValue("password"), c.FormValue("root")
+	fPln(name, pwd, root)
+	if !((name == "user" && pwd == "user") || (name == "admin" && pwd == "admin")) {
+		return c.String(http.StatusUnauthorized, "Wrong username or password")
+	}
 
-	//-----------
-	// Read file
-	//-----------
+	g.CurCtx = mAssign(name, "user", "admin", g.Cfg.RPC.CtxList[0], g.Cfg.RPC.CtxPrivDef).(string)
 
 	// Source
 	file, err := c.FormFile("file")
@@ -125,23 +124,19 @@ func postFileToNode(c echo.Context) error {
 	}
 	defer src.Close()
 
-	b1 := make([]byte, 5000000)
-	src.Read(b1)
-	fPln(string(b1))
-
-	// Destination
-	dst, err := os.Create(file.Filename)
-	if err != nil {
-		return err
-	}
-	defer dst.Close()
-
-	// Copy
-	if _, err = io.Copy(dst, src); err != nil {
-		return err
+	buffer := make([]byte, file.Size)
+	src.Read(buffer)
+	data := string(buffer)
+	if !IsJSON(data) {
+		ioutil.WriteFile("not acceptable file.txt", buffer, 0666)
+		return c.String(http.StatusBadRequest, "NOT JSON, CANNOT SEND")
 	}
 
-	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully with fields name=%s and email=%s.</p>", file.Filename, name, email))
+	if _, _, _, _, _, e := pub.Pub2Node(g.CurCtx, data, root); e != nil { //             *** preprocess, postprocess included ***
+		return e
+	}
+
+	return c.String(http.StatusOK, fmt.Sprintf("%s uploaded successfully", file.Filename))
 }
 
 // Request : wrapper type to capture GQL input
@@ -221,6 +216,7 @@ func HostHTTPAsync() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(middleware.BodyLimit("2G"))
 
 	// CORS
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -233,11 +229,18 @@ func HostHTTPAsync() {
 	e.File(webloc, "../www/service.html")
 	e.Static(cdUL(webloc), "../www/") //             "/" is html - ele - <src>'s path
 
-	// BasicAuth
+	// Maybe Auth middleware dislike long request body ? manually check
+	e.POST(g.Cfg.Route.FilePub, postFileToNode)
+
+	// Group
 	api := e.Group(g.Cfg.Group.API)
+	api.Use(middleware.Logger())
+	api.Use(middleware.Recover())
+	api.Use(middleware.BodyLimit("2G"))
+
+	// BasicAuth ( Big Body has ERR_CONNECTION_RESET in this )
 	api.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		fPln("---------------------in basicAuth-----------------------------", username, password)
-
 		switch {
 		case username == "admin" && password == "admin":
 			g.CurCtx = g.Cfg.RPC.CtxPrivDef
@@ -246,12 +249,12 @@ func HostHTTPAsync() {
 		case username == "user1" && password == "user1":
 			g.CurCtx = g.Cfg.RPC.CtxList[1]
 		default:
-			return false, fEf("use <user> <user> to try")
+			return false, c.String(http.StatusUnauthorized, "Wrong username or password")
 		}
 		return true, nil
 	}))
 
-	// Route
+	// api Route
 	// api.GET("/filetest", func(c echo.Context) error { return c.File("/home/qing/Desktop/index.html") })
 	api.GET(g.Cfg.Route.Greeting, func(c echo.Context) error {
 		return c.JSON(http.StatusOK, "hello, n3client is running @ "+time.Now().Format("2006-01-02 15:04:05.000"))
@@ -262,7 +265,6 @@ func HostHTTPAsync() {
 	api.POST(g.Cfg.Route.Pub, postToNode)
 	api.POST(g.Cfg.Route.GQL, postQueryGQL)
 	api.DELETE(g.Cfg.Route.Del, delFromNode)
-	api.POST("/upload", postFileToNode)
 
 	// Server
 	e.Start(fSf(":%d", g.Cfg.WebService.Port))
