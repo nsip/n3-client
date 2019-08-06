@@ -235,6 +235,9 @@ func HostHTTPAsync() {
 	e.POST(g.Cfg.Rest.PathGQL, postQueryGQL)
 	e.DELETE(g.Cfg.Rest.PathDel, delFromNode)
 
+	// Static pages
+	e.Static("/", "www")
+
 	// Server
 	e.Start(fSf(":%d", g.Cfg.Rest.Port))
 }
