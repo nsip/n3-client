@@ -1,3 +1,0 @@
-type QueryRoot {
-	user111: user111
-}

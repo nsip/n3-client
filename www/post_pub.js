@@ -7,29 +7,69 @@
 //     alert('The File APIs are not fully supported in this browser.');
 // }
 
-$(document).ready(function () {
+window.onload = function () {
 
-    $("#upload").on('submit', function (e) {
-        e.preventDefault();  // avoid to execute the actual submit of the form
+    var user, pwd, formdata, approval, info, filename, root;
+
+    // document.getElementById('selectfile').addEventListener('change', handleFileSelect, false);
+    $('#selectfile').change(function (evt) {
+        var files = evt.target.files; // files is a FileList of File objects. List some properties.
+
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+            output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                f.size, ' bytes, last modified: ',
+                f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                '</li>');
+        }
+        // document.getElementById('info').innerHTML = '<ul>' + output.join('') + '</ul>';
+        $('#info').html('<ul>' + output.join('') + '</ul>');
+
+        filename = $('#selectfile').val();
+        var nopub = (!filename || !(filename.endsWith('.xml') || filename.endsWith('.json')) || $('#root').val() === "")
+        $('#pub').prop('disabled', nopub);
     });
 
-    $("#upload").submit(function () { // intercepts the submit event
+    $('#root').on('input', function (e) {
+        filename = $('#selectfile').val();
+        var nopub = (!filename || !(filename.endsWith('.xml') || filename.endsWith('.json')) || $('#root').val() === "")
+        $('#pub').prop('disabled', nopub);
+    });
 
-        var user = $('#uname').val() === "" ? "null" : $('#uname').val();
-        var pwd = $('#pwd').val() === "" ? "null" : $('#pwd').val();
-        if ($('#root').val() === "") {
-            alert('input default data object root name')
-            return
-        }
-        var dfltRoot = $('#root').val()
+    $("#uploadform").on('submit', function (e) {
+        e.preventDefault();  // avoid to execute the actual submit of the form
 
-        var data = new FormData();
-        data.append('username', user);
-        data.append('password', pwd);
-        data.append('root', dfltRoot);
-        jQuery.each(jQuery('#fileupload')[0].files, function (i, file) {
-            data.append('file', file);
+        user = $('#uname').val() === "" ? "null" : $('#uname').val();
+        pwd = $('#pwd').val() === "" ? "null" : $('#pwd').val();
+        root = $('#root').val();
+
+        formdata = new FormData();
+        formdata.append('username', user);
+        formdata.append('password', pwd);
+        formdata.append('root', root);
+        jQuery.each(jQuery('#selectfile')[0].files, function (i, file) {
+            formdata.append('file', file);
         });
+
+        approval = confirm('Upload [' + filename + '] as object [' + root + '] to NIAS3?');
+        if (!approval) {
+            info = 'upload canceled';
+            return;
+        }
+    });
+
+    $("#uploadform").submit(function () { // intercepts the submit event
+
+        if (!approval) {
+            $('#info').html('<ul> ' + info + ' </ul>');
+            return;
+        }
+
+        // ***
+        $('#selectfile').prop('disabled', true);
+        $('#pub').prop('disabled', true);
+        $('#uploadwaiting').show();
+        // ***
 
         var ip = location.host;
         $.ajax({ // make an AJAX request
@@ -39,55 +79,27 @@ $(document).ready(function () {
             username: user,
             password: pwd,
             contentType: false,
-            data: data, // $("#upload").serialize(), // serializes the form's elements
+            data: formdata, // $("#uploadform").serialize(), // serializes the form's elements
             cache: false,
             processData: false,
-            //dataType: 'json',
-            //traditional: true,
             crossDomain: true,
             success: function (data) {
-                // show the data you got from B in result div
-                // $("#result").html(data);
                 console.log(data);
-                $('#file').html('<ul>' + data + '</ul>');
+                $('#info').html('<ul>' + data + '</ul>');
+                $('#root').val('');
+                $('#selectfile').val('');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
+                $('#info').html('<ul>' + jqXHR.responseText + '</ul>');
             },
+            complete: function () {
+                $('#selectfile').prop('disabled', false);
+                $('#uploadwaiting').hide();
+            }
         });
     });
-});
-
-window.onload = function () {
-    // document.getElementById('fileupload').addEventListener('change', handleFileSelect, false);
-    $('#fileupload').change(handleFileSelect);
 }
-
-var filename = "";
-
-function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object    
-    // files is a FileList of File objects. List some properties.
-
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-            f.size, ' bytes, last modified: ',
-            f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-            '</li>');
-
-    }
-    // document.getElementById('file').innerHTML = '<ul>' + output.join('') + '</ul>';
-    $('#file').html('<ul>' + output.join('') + '</ul>');
-
-    filename = $('#fileupload').val();
-    if (!filename || !(filename.endsWith('.xml') || filename.endsWith('.json'))) {
-        $('#pub').prop('disabled', true);
-    } else {
-        $('#pub').prop('disabled', false);
-    }
-}
-
 
 // function pub() {
 

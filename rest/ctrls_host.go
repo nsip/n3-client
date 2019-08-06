@@ -107,11 +107,10 @@ func postFileToNode(c echo.Context) error {
 
 	name, pwd, root := c.FormValue("username"), c.FormValue("password"), c.FormValue("root")
 	fPln(name, pwd, root)
-	if !((name == "user" && pwd == "user") || (name == "admin" && pwd == "admin")) {
-		return c.String(http.StatusUnauthorized, "Wrong username or password")
-	}
 
-	g.CurCtx = mAssign(name, "user", "admin", g.Cfg.RPC.CtxList[0], g.Cfg.RPC.CtxPrivDef).(string)
+	if g.CurCtx = ctxFromCredential(name, pwd); g.CurCtx == "" {
+		return c.String(http.StatusUnauthorized, "wrong username or password")
+	}
 
 	// Source
 	file, err := c.FormFile("file")
@@ -238,26 +237,21 @@ func HostHTTPAsync() {
 	api.Use(middleware.Recover())
 	api.Use(middleware.BodyLimit("2G"))
 
+	uname := ""
 	// BasicAuth ( Big Body has ERR_CONNECTION_RESET in this )
 	api.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		fPln("---------------------in basicAuth-----------------------------", username, password)
-		switch {
-		case username == "admin" && password == "admin":
-			g.CurCtx = g.Cfg.RPC.CtxPrivDef
-		case username == "user" && password == "user":
-			g.CurCtx = g.Cfg.RPC.CtxList[0]
-		case username == "user1" && password == "user1":
-			g.CurCtx = g.Cfg.RPC.CtxList[1]
-		default:
-			return false, c.String(http.StatusUnauthorized, "Wrong username or password")
+		if g.CurCtx = ctxFromCredential(username, password); g.CurCtx == "" {
+			return false, c.String(http.StatusUnauthorized, "wrong username or password")
 		}
+		uname = username
 		return true, nil
 	}))
 
 	// api Route
 	// api.GET("/filetest", func(c echo.Context) error { return c.File("/home/qing/Desktop/index.html") })
 	api.GET(g.Cfg.Route.Greeting, func(c echo.Context) error {
-		return c.JSON(http.StatusOK, "hello, n3client is running @ "+time.Now().Format("2006-01-02 15:04:05.000"))
+		return c.JSON(http.StatusOK, "Hello, "+uname+". n3client is running @ "+time.Now().Format("2006-01-02 15:04:05.000"))
 	})
 	api.GET(g.Cfg.Route.ID, getIDList)
 	api.GET(g.Cfg.Route.Obj, getObject)
@@ -268,4 +262,17 @@ func HostHTTPAsync() {
 
 	// Server
 	e.Start(fSf(":%d", g.Cfg.WebService.Port))
+}
+
+func ctxFromCredential(uname, pwd string) string {
+	switch {
+	case uname == "admin" && pwd == "admin":
+		return g.Cfg.RPC.CtxPrivDef
+	case uname == "user" && pwd == "user":
+		return g.Cfg.RPC.CtxList[0]
+	case uname == "user1" && pwd == "user1":
+		return g.Cfg.RPC.CtxList[1]
+	default:
+		return ""
+	}
 }

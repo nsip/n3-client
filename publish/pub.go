@@ -192,6 +192,7 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int, er
 					Send(ctx, id, p, v, verV)
 					return nil
 				})
+
 			Terminate(ctx, prevIDv, prevTermIDv, verV) //                      *** OBJECT terminator ***
 			termIDvList = append(termIDvList, prevTermIDv)
 
@@ -204,6 +205,8 @@ func Pub2Node(ctx, str, dfltRoot string) (IDs, Objs []string, nV, nS, nA int, er
 		} // JSON
 
 	} // case
+
+	return
 
 	// DOING: DB Storing Check
 	otstdTermIDvList := []string{}
