@@ -1,8 +1,7 @@
 package query
 
 import (
-	g "../global"
-
+	g "github.com/nsip/n3-client/global"
 	"github.com/nsip/n3-messages/messages/pb"
 )
 

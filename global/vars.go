@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	c "../config"
-
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
+	c "github.com/nsip/n3-client/config"
 	"github.com/nsip/n3-messages/n3grpc"
 )
 

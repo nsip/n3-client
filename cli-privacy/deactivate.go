@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	g "../global"
-	pub "../publish"
+	g "github.com/nsip/n3-client/global"
+	pub "github.com/nsip/n3-client/publish"
 	"github.com/spf13/cobra"
 )
 

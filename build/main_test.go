@@ -3,10 +3,10 @@ package main
 import (
 	"testing"
 
-	fw "../filewatcher"
-	g "../global"
-	"../rest"
 	u "github.com/cdutwhu/go-util"
+	fw "github.com/nsip/n3-client/filewatcher"
+	g "github.com/nsip/n3-client/global"
+	"github.com/nsip/n3-client/rest"
 )
 
 var (

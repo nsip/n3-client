@@ -7,13 +7,13 @@ import (
 	"os"
 	"time"
 
-	d "../delete"
-	g "../global"
-	"../gql"
-	pub "../publish"
-	q "../query"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	d "github.com/nsip/n3-client/delete"
+	g "github.com/nsip/n3-client/global"
+	"github.com/nsip/n3-client/gql"
+	pub "github.com/nsip/n3-client/publish"
+	q "github.com/nsip/n3-client/query"
 )
 
 func cdUL(dir string) string {

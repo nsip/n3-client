@@ -3,7 +3,7 @@ package publish
 import (
 	"io/ioutil"
 
-	pp "../preprocess"
+	pp "github.com/nsip/n3-client/preprocess"
 )
 
 func prepJSON(json string) string {

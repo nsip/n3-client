@@ -1,7 +1,7 @@
 package rest
 
 import (
-	q "../query"
+	q "github.com/nsip/n3-client/query"
 )
 
 // GetIDs :

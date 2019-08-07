@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	g "../global"
+	g "github.com/nsip/n3-client/global"
 )
 
 var ID = "1b0cea1c-1b25-4765-9666-b6414bc07c34"

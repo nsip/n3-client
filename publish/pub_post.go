@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	g "../global"
+	g "github.com/nsip/n3-client/global"
 )
 
 // mkSchemaQueryHead :

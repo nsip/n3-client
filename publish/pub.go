@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
-	g "../global"
-	q "../query"
-	xjy "../xjy"
+	g "github.com/nsip/n3-client/global"
+	q "github.com/nsip/n3-client/query"
+	xjy "github.com/nsip/n3-client/xjy"
 	"github.com/nsip/n3-messages/messages"
 	"github.com/nsip/n3-messages/messages/pb"
 )

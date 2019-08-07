@@ -3,9 +3,9 @@ package xjy
 import (
 	"io/ioutil"
 
-	g "../global"
-	pp "../preprocess"
 	"github.com/google/uuid"
+	g "github.com/nsip/n3-client/global"
+	pp "github.com/nsip/n3-client/preprocess"
 )
 
 // JSONObjInfo : (must have TOP-LEVEL "ID" like `"ID": "6690e6c9-3ef0-4ed3-8b37-7f3964730bee",` )

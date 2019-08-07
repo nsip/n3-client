@@ -1,9 +1,9 @@
 package main
 
 import (
-	fw "./filewatcher"
-	g "./global"
-	"./rest"
+	fw "github.com/nsip/n3-client/filewatcher"
+	g "github.com/nsip/n3-client/global"
+	"github.com/nsip/n3-client/rest"
 
 	u "github.com/cdutwhu/go-util"
 )

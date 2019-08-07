@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	g "../global"
+	g "github.com/nsip/n3-client/global"
 )
 
 // func TestPermu(t *testing.T) {

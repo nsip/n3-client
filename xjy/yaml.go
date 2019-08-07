@@ -3,7 +3,7 @@ package xjy
 import (
 	"errors"
 
-	g "../global"
+	g "github.com/nsip/n3-client/global"
 )
 
 // YAMLScan :

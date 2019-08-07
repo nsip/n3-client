@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	c "../config"
-	g "../global"
+	c "github.com/nsip/n3-client/config"
+	g "github.com/nsip/n3-client/global"
 )
 
 func TestYAMLScan(t *testing.T) {

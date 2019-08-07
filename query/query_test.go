@@ -3,7 +3,7 @@ package query
 import (
 	"testing"
 
-	g "../global"
+	g "github.com/nsip/n3-client/global"
 )
 
 func TestQueryMeta(t *testing.T) {
