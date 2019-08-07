@@ -92,6 +92,7 @@ window.onload = function () {
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
                 $('#info').html('<ul>' + jqXHR.responseText + '</ul>');
+                $('#pub').prop('disabled', false);
             },
             complete: function () {
                 $('#selectfile').prop('disabled', false);
