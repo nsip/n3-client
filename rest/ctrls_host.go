@@ -169,7 +169,7 @@ func postQueryGQL(c echo.Context) error {
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
 	if id, ok := mPV["objid"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
 		IDs = append(IDs, id.(string))
-		if _, _, o, _ := q.Data(g.CurCtx, id.(string), ""); len(o) == 0 || o[0] == "" {
+		if _, _, o, _ := q.Data(g.CurCtx, id.(string), ""); o == nil || len(o) == 0 || o[0] == "" {
 			return c.JSON(http.StatusAccepted, "id provided is not in db")
 		}
 	} else {

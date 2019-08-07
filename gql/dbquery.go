@@ -19,8 +19,9 @@ func queryObject(ctx, id string) {
 	defer func() { ph(recover(), g.Cfg.ErrLog) }()
 
 	_, _, o, _ := q.Data(ctx, id, "") //         *** Object's Root ***
-	if len(o) > 0 {
+	if o != nil && len(o) > 0 {
 		root = o[0]
+		// fPf("Root --> %s\n", o[0])
 	} else {
 		return
 	}
@@ -28,26 +29,32 @@ func queryObject(ctx, id string) {
 	fPln(" ---------------------------------------------- ")
 
 	s, p, o, v := q.Data(ctx, id, "::") //       *** Struct ***
-	for i := range s {
-		mStruct[p[i]] = o[i]
-		// fPf("S mStruct --> %-70s%-70s%10d\n", p[i], o[i], v[i])
+	if s != nil {
+		for i := range s {
+			mStruct[p[i]] = o[i]
+			// fPf("S mStruct --> %-70s%-70s%10d\n", p[i], o[i], v[i])
+		}
 	}
 
 	fPln(" ---------------------------------------------- ")
 
 	s, p, o, v = q.Data(ctx, id, "[]") //        *** Array ***
-	for i := range s {
-		mArray[p[i]] = S(o[i]).ToInt()
-		// fPf("A mArray --> %-70s%-70s%10d\n", p[i], o[i], v[i])
+	if s != nil {
+		for i := range s {
+			mArray[p[i]] = S(o[i]).ToInt()
+			// fPf("A mArray --> %-70s%-70s%10d\n", p[i], o[i], v[i])
+		}
+		mIndicesList = mkIndicesList()
 	}
-	mIndicesList = mkIndicesList()
 
 	fPln(" ---------------------------------------------- ")
 
 	s, p, o, v = q.Data(ctx, id, root) //        *** Values ***
-	for i := range s {
-		mValue[p[i]] = append(mValue[p[i]], &valver{value: o[i], ver: v[i]})
-		// fPf("V mValue --> %-70s%-70s%10d\n", p[i], o[i], v[i])
+	if s != nil {
+		for i := range s {
+			mValue[p[i]] = append(mValue[p[i]], &valver{value: o[i], ver: v[i]})
+			// fPf("V mValue --> %-70s%-70s%10d\n", p[i], o[i], v[i])
+		}
 	}
 
 	return

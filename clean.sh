@@ -5,3 +5,5 @@ rm -f ./build/*.json
 rm -f ./build/n3-client
 rm -f ./build/privacy
 rm -f ./*/errlog.txt
+rm -f ./*/temp.*
+rm -f ./temp.*
