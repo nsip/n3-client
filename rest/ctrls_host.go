@@ -7,14 +7,6 @@ import (
 	"os"
 	"time"
 
-<<<<<<< HEAD
-	d "github.com/nsip/n3-client/delete"
-	g "github.com/nsip/n3-client/global"
-	"github.com/nsip/n3-client/gql"
-	pub "github.com/nsip/n3-client/publish"
-	q "github.com/nsip/n3-client/query"
-=======
->>>>>>> privacy-dev
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	d "github.com/nsip/n3-client/delete"
