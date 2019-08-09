@@ -32,6 +32,7 @@ var (
 	JSONObjectMerge = gjxy.JSONObjectMerge
 	SchemaMake      = gjxy.SchemaMake
 	fPln            = fmt.Println
+	fPf             = fmt.Printf
 	fEf             = fmt.Errorf
 	fSf             = fmt.Sprintf
 	lPln            = log.Println
@@ -46,6 +47,10 @@ var (
 	mIndicesList    = map[string][][]int{}  // *** FOR JSONBuilld ***
 	mIPathObj       = map[string]string{}   // *** FOR JSONBuilld ***
 	mIPathSubIPaths = map[string][]string{} // *** FOR JSONBuilld ***
+)
+
+const (
+	DELIPath = " ~ "
 )
 
 type valver struct {

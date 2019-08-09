@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	c "github.com/nsip/n3-client/config"
-
 	u "github.com/cdutwhu/go-util"
 	w "github.com/cdutwhu/go-wrappers"
+	c "github.com/nsip/n3-client/config"
 	"github.com/nsip/n3-messages/n3grpc"
 )
 
@@ -46,13 +45,6 @@ const (
 	MARKDelID = "00000000-0000-0000-0000-000000000000"
 )
 
-const (
-	// NLRU : LRU Cache Capacity
-	NLRU = 8192
-	// NQryIDsCache : ID-Query Cache Capacity
-	NQryIDsCache = 524288
-)
-
 var (
 	fPln = fmt.Println
 	fSf  = fmt.Sprintf
@@ -75,31 +67,6 @@ var (
 
 	// OriExePath : Original Running Path
 	OriExePath, _ = os.Getwd()
-
-	// *** //
-
-	// // LCRoot *** ID : Root *** ID query cache
-	// LCRoot = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
-	// 	fPln("Query Root onEvicted:", k, v)
-	// })).(*lru.Cache)
-
-	// // LCSchema *** ID : Schema *** Schema query cache
-	// LCSchema = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
-	// 	fPln("Query Schema onEvicted:", k, v)
-	// })).(*lru.Cache)
-
-	// // LCJSON *** ID : JSON *** JSON query cache
-	// LCJSON = must(lru.NewWithEvict(NLRU, func(k, v interface{}) {
-	// 	fPln("Query JSON onEvicted:", k, v)
-	// })).(*lru.Cache)
-
-	// // CacheQryIDs : Cache for ID-Query
-	// CacheQryIDs = make([]QryIDs, NQryIDsCache)
-
-	// // CacheQryIDsPtr : ID-Query Cache Current Pointer
-	// CacheQryIDsPtr = -1
-
-	// *** //
 
 	// MpQryRstRplc : Replacement Map for Query OutCome JSON
 	MpQryRstRplc = map[string]string{

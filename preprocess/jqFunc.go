@@ -29,7 +29,7 @@ func FmtJSONStr(json string, jqDirs ...string) string {
 		return ""
 	}
 	sJSON := S(json).Replace("'", "\\'") //        *** deal with <single quote> in "echo" ***
-	cmdstr := "echo $" + sJSON.MkQuotes(QSingle).V() + ` | jq .`
+	cmdstr := "echo $" + sJSON.MkQuotes(QSingle).V() + ` | ./jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)
 	output := must(cmd.Output()).([]byte)
 	return string(output)
@@ -39,7 +39,7 @@ func FmtJSONStr(json string, jqDirs ...string) string {
 func FmtJSONFile(file string, jqDirs ...string) string {
 	defer func() { pe(os.Chdir(g.OriExePath)) }()
 	prepareJQ(jqDirs...)
-	cmdstr := "cat " + file + ` | jq .`
+	cmdstr := "cat " + file + ` | ./jq .`
 	cmd := exec.Command("bash", "-c", cmdstr)
 	output := must(cmd.Output()).([]byte)
 	return string(output)

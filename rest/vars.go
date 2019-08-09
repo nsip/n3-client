@@ -22,6 +22,7 @@ var (
 	phe           = u.PanicHandleEx
 	must          = u.Must
 	IF            = u.IF
+	mAssign       = u.MatchAssign
 	fPln          = fmt.Println
 	fEf           = fmt.Errorf
 	fSf           = fmt.Sprintf

@@ -6,14 +6,14 @@ import (
 
 func TestLoad(t *testing.T) {
 	cfg := FromFile("../build/config.toml")
-	fPln(cfg.Rest.PathGQL)
-	fPln(cfg.RPC)
-	fPln(cfg.Filewatcher)
+	fPln(cfg.Path)
 	fPln(cfg.ErrLog)
-	fPln(cfg.RPC.CtxList)
-	fPln(cfg.RPC.CtxPrivDef)
-	fPln(cfg.RPC.CtxPrivID)
-	fPln(cfg.Query.ParamPathDir)
+	fPln(cfg.FileWatcher)
+	fPln(cfg.WebService)
+	fPln(cfg.Group)
+	fPln(cfg.Route)
+	fPln(cfg.RPC)
+	fPln(cfg.Query)
 }
 
 func TestSave(t *testing.T) {
@@ -22,5 +22,5 @@ func TestSave(t *testing.T) {
 
 	cfg1 := FromFile("../build/config.toml")
 	fPln(cfg1.RPC)
-	fPln(cfg1.Filewatcher)
+	fPln(cfg1.FileWatcher)
 }

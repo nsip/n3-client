@@ -4,6 +4,11 @@ import (
 	"fmt"
 
 	u "github.com/cdutwhu/go-util"
+	w "github.com/cdutwhu/go-wrappers"
+)
+
+type (
+	S = w.Str
 )
 
 var (
@@ -11,4 +16,5 @@ var (
 	ph   = u.PanicHandle
 	must = u.Must
 	fPln = fmt.Println
+	fSf  = fmt.Sprintf
 )

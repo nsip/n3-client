@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"reflect"
 
 	"github.com/burntsushi/toml"
 )
@@ -10,16 +11,27 @@ type filewatcher struct {
 	Dir string
 }
 
-type rest struct {
-	Port       int
-	PathTest   string
-	PathID     string
-	PathPub    string
-	PathGQL    string
-	PathDel    string
-	PathObj    string
-	PathScm    string
-	PathGQLTxt string
+type webservice struct {
+	Port   int
+	VerAPP int
+	VerAPI int
+}
+
+type group struct {
+	APP string
+	API string
+}
+
+type route struct {
+	Greeting string
+	ID       string
+	Pub      string
+	GQL      string
+	Del      string
+	Obj      string
+	Scm      string
+	GQLTxt   string
+	FilePub  string
 }
 
 type rpc struct {
@@ -37,12 +49,16 @@ type query struct {
 	ParamPathDir string
 }
 
+// ********************************************** //
+
 // Config is toml
 type Config struct {
 	Path        string
 	ErrLog      string
-	Filewatcher filewatcher
-	Rest        rest
+	FileWatcher filewatcher
+	WebService  webservice
+	Group       group
+	Route       route
 	RPC         rpc
 	Query       query
 }
@@ -64,7 +80,7 @@ func (cfg *Config) set() *Config {
 	path := cfg.Path /* make a copy of original path for restoring */
 	must(toml.DecodeFile(cfg.Path, cfg))
 	cfg.Path = path
-	return cfg
+	return cfg.modCfg()
 }
 
 // Save is
@@ -73,4 +89,16 @@ func (cfg *Config) Save() {
 	f := must(os.OpenFile(cfg.Path, os.O_WRONLY|os.O_TRUNC, 0666)).(*os.File)
 	defer f.Close()
 	pe(toml.NewEncoder(f).Encode(cfg))
+}
+
+func (cfg *Config) modCfg() *Config {
+
+	// *** replace version ***
+	ver := fSf("v%d", cfg.WebService.VerAPI)
+	v := reflect.ValueOf(cfg.Route)
+	for i := 0; i < v.NumField(); i++ {
+		vv := S(v.Field(i).Interface().(string)).Replace("v#", ver).V()
+		reflect.ValueOf(&cfg.Route).Elem().Field(i).SetString(vv)
+	}
+	return cfg
 }

@@ -2,7 +2,6 @@ package query
 
 import (
 	g "github.com/nsip/n3-client/global"
-
 	"github.com/nsip/n3-messages/messages/pb"
 )
 

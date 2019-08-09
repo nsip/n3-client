@@ -17,7 +17,7 @@ func StartFileWatcherAsync() {
 	watcher := must(fsnotify.NewWatcher()).(*fsnotify.Watcher)
 
 	defer watcher.Close()
-	pe(watcher.Add(g.Cfg.Filewatcher.Dir))
+	pe(watcher.Add(g.Cfg.FileWatcher.Dir))
 
 	for {
 		select {
@@ -38,18 +38,14 @@ func StartFileWatcherAsync() {
 					goto READ_AGAIN
 				}
 
-				IDs, _, _, _, _ := pub.Pub2Node(g.CurCtx, string(bytes), "xapi")
-				for _, id := range IDs {
-					fPln(id, "is sent")
+				if IDs, _, _, _, _, e := pub.Pub2Node(g.CurCtx, string(bytes), "xapi"); e != nil {
+					fPln(e)
+					return
+				} else {
+					for _, id := range IDs {
+						fPln(id, "is sent")
+					}
 				}
-
-				// if g.CurCtx == "privctrl" {
-				// 	g.ClrAllIDsInLRU()
-				// } else {
-				// 	g.RmIDsInLRU(IDs...)
-				// 	g.RmQryIDsCache(IDs...)
-				// }
-
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {

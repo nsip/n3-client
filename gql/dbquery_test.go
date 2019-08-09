@@ -1,10 +1,11 @@
 package gql
 
 import (
-	g "github.com/nsip/n3-client/global"
 	"io/ioutil"
 	"testing"
 	"time"
+
+	g "github.com/nsip/n3-client/global"
 )
 
 // func TestPermu(t *testing.T) {
@@ -25,8 +26,10 @@ func TestStrsJoinEx(t *testing.T) {
 }
 
 func TestAMapIndicesList(t *testing.T) {
-	objID := "d6971037-e2ff-4db6-a669-ba5fbab0d318"
-	queryObject(g.CurCtx, objID) //                                 *** get root, mapStruct, mapValue ***
+	g.Init()
+	
+	objID := "d99702d1-c079-44f9-a5cb-27fc0cd87e34"
+	queryObject(g.Cfg.RPC.CtxList[0], objID) //                                 *** get root, mapStruct, mapValue ***
 
 	fPln()
 
@@ -43,13 +46,14 @@ func TestAMapIndicesList(t *testing.T) {
 }
 
 func TestQueryObject(t *testing.T) {
+	g.Init()
 
-	objID := "c58f2f19-32ed-4258-a71b-6506b2a2f33b"
-	queryObject(g.CurCtx, objID) //                                 *** get root, mapStruct, mapValue ***
+	objID := "d99702d1-c079-44f9-a5cb-27fc0cd87e34"
+	queryObject(g.Cfg.RPC.CtxList[0], objID) //                                 *** get root, mapStruct, mapValue ***
 
 	fPln(root)
 	fPln("<-------------------------------------------------------------------------------------------------------------->")
-
+	
 	// mIPathObj := map[string]string{} //                                                *** in vars.go ***
 
 	// JSONMake(mIPathObj, "xapi", "learning_area", "HSIE")

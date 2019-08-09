@@ -40,23 +40,23 @@ func TestToNode(t *testing.T) {
 
 	/*****************************/
 
-	// for i := 1; i <= 5; i++ {
-	// 	file := fSf("../inbound/hsie/history/stage%d/overview.json", i) // *** change <file> ***
-	// 	json := string(must(ioutil.ReadFile(file)).([]byte))
-	// 	IDs, _, _, _, _ := Pub2Node(CurCtx, json, "Overview") //     *** change <dfltRoot> ***
-	// 	for _, id := range IDs {
-	// 		fPln("sent:", id)
-	// 	}
-	// }
+	for i := 1; i <= 5; i++ {
+		file := fSf("../inbound/hsie/geography/stage%d/content.json", i) // *** change <file> ***
+		json := string(must(ioutil.ReadFile(file)).([]byte))
+		IDs, _, _, _, _, _ := Pub2Node(CurCtx, json, "Content") //     *** change <dfltRoot> ***
+		for _, id := range IDs {
+			fPln("sent:", id)
+		}
+	}
 
 	/*****************************/
 
-	file := "../inbound/xapi/xapi.json" //                  *** change <file> ***
-	json := string(must(ioutil.ReadFile(file)).([]byte))
-	IDs, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //      *** change <dfltRoot> ***
-	for i, id := range IDs {
-		fPln("sent:", i, id)
-	}
+	// file := "../inbound/xapi/one.json" //                  *** change <file> ***
+	// json := string(must(ioutil.ReadFile(file)).([]byte))
+	// IDs, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //      *** change <dfltRoot> ***
+	// for i, id := range IDs {
+	// 	fPln("sent:", i, id)
+	// }
 }
 
 func TestPrivctrlToNode(t *testing.T) {
@@ -68,7 +68,7 @@ func TestPrivctrlToNode(t *testing.T) {
 
 	file := "../inbound/privctrl/xapi.json" //                    *** change <file> ***
 	json := string(must(ioutil.ReadFile(file)).([]byte))
-	IDs, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //  *** change <idmark> <dfltRoot> ***
+	IDs, _, _, _, _, _ := Pub2Node(CurCtx, json, "xapi") //  *** change <idmark> <dfltRoot> ***
 	time.Sleep(1 * time.Second)
 	for _, id := range IDs {
 		fPln("sent:", id)

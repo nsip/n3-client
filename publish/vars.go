@@ -17,6 +17,7 @@ var (
 	pe           = u.PanicOnError
 	pc           = u.PanicOnCondition
 	ph           = u.PanicHandle
+	phe          = u.PanicHandleEx
 	must         = u.Must
 	IF           = u.IF
 	UTF8ToASCII  = w.UTF8ToASCII
