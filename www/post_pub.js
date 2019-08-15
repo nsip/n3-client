@@ -21,8 +21,7 @@ window.onload = function () {
                 f.size, ' bytes, last modified: ',
                 f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
                 '</li>');
-        }
-        // document.getElementById('info').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }        
         $('#info').html('<ul>' + output.join('') + '</ul>');
 
         filename = $('#selectfile').val();

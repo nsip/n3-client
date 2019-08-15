@@ -155,7 +155,7 @@ func postQueryGQL(c echo.Context) error {
 	// fname, gname := c.QueryParam("fname"), c.QueryParam("gname")
 	// qTxt := string(Must(ioutil.ReadAll(c.Request().Body)).([]byte))
 
-	fPln(":::queryGQL:::", c.QueryParam("objid"))
+	fPln(":::queryGQL:::", c.QueryParam("id"))
 
 	// ********************* GRAPHIQL client ********************* //
 	req := new(Request) //
@@ -167,13 +167,13 @@ func postQueryGQL(c echo.Context) error {
 
 	IDs := []string{}
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
-	if id, ok := mPV["objid"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
+	if id, ok := mPV["id"]; ok { //                              *** if param is given at runtime, GraphiQL cannot show Schema-Doc ***
 		IDs = append(IDs, id.(string))
 		if _, _, o, _ := q.Data(g.CurCtx, id.(string), ""); o == nil || len(o) == 0 || o[0] == "" {
 			return c.JSON(http.StatusAccepted, "id provided is not in db")
 		}
 	} else {
-		return c.JSON(http.StatusAccepted, "<objid> is missing")
+		return c.JSON(http.StatusAccepted, "<id> is missing")
 	}
 
 	if len(IDs) >= 1 {
@@ -192,7 +192,7 @@ func getObject(c echo.Context) error {
 	mtxObj.Lock()
 
 	id := c.QueryParam("id")
-	return c.JSON(http.StatusAccepted, id)
+	return c.JSON(http.StatusAccepted, id+" | this api is not implemented")
 }
 
 // getSchema :
@@ -203,7 +203,7 @@ func getSchema(c echo.Context) error {
 	mtxScm.Lock()
 
 	id := c.QueryParam("id")
-	return c.JSON(http.StatusAccepted, id)
+	return c.JSON(http.StatusAccepted, id+" | this api is not implemented")
 }
 
 // ************************************************ HOST ************************************************ //
@@ -228,7 +228,7 @@ func HostHTTPAsync() {
 	e.File(webloc, "../www/service.html")
 	e.Static(cdUL(webloc), "../www/") //             "/" is html - ele - <src>'s path
 
-	// Maybe Auth middleware dislike long request body ? manually check
+	// Maybe Auth middleware dislikes long request body ? manually check
 	e.POST(g.Cfg.Route.FilePub, postFileToNode)
 
 	// Group
@@ -259,6 +259,20 @@ func HostHTTPAsync() {
 	api.POST(g.Cfg.Route.Pub, postToNode)
 	api.POST(g.Cfg.Route.GQL, postQueryGQL)
 	api.DELETE(g.Cfg.Route.Del, delFromNode)
+
+	// *** List all API ***
+	e.GET("/api", func(c echo.Context) error {
+		grp, route := g.Cfg.Group, g.Cfg.Route
+		ipport := LocalIP() + fSf(":%d", g.Cfg.WebService.Port)
+		return c.String(http.StatusOK,
+			fSf("%-40s -> %s\n", ipport+grp.API+route.Greeting, "for n3client running test")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.ID, "looking for object ID. (object*, and other params set in [/rest/parampath])")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.Obj, "(id*) [not implemented]")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.Scm, "(id*) [not implemented]")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.Pub, "publish  (dfltRoot*) put JSON or XML in request header")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.GQL, "(id*)")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.Del, "(id*)"))
+	})
 
 	// Server
 	e.Start(fSf(":%d", g.Cfg.WebService.Port))
