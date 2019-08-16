@@ -37,6 +37,6 @@ ErrLog = "./errlog.txt"
   ParamPathDir = "../rest/parampath/"
 
 [Debug]
-  TrialPub = true
-  TrialQry = true
+  TrialPub = false
+  TrialQry = false
 

@@ -32,20 +32,22 @@ func TestJSONScanObjects(t *testing.T) {
 	cfg := c.FromFile("../build/config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 
-	data := string(must(ioutil.ReadFile("./files/content.json")).([]byte))
+	data := string(must(ioutil.ReadFile("./files/xapi.json")).([]byte))
 	mStructRecord := map[string][]string{}
 	procIdx := 1
 	JSONObjScan(data, "ROOT",
-		func(p, id string, v []string, lastObjTuple bool) {
+		func(p, id string, v []string, lastObjTuple bool) error {
 			if _, ok := mStructRecord[p]; !ok {
 				mStructRecord[p] = v
 				fPf("S%3d ---> %-70s:: %s\n", procIdx, p, sJ(v, g.DELIChild))
 				procIdx++
 			}
+			return nil
 		},
-		func(p, id string, n int, lastObjTuple bool) {
+		func(p, id string, n int, lastObjTuple bool) error {
 			fPf("A%3d ---> %-70s[]%s -- [%d]\n", procIdx, p, id, n)
 			procIdx++
+			return nil
 		},
 	)
 }

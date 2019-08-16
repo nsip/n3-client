@@ -12,9 +12,10 @@ func TestYAMLScan(t *testing.T) {
 	cfg := c.FromFile("../build/config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 
-	databytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)                             //   *** change file name ***
-	YAMLScan(string(databytes), "ROOT", g.DELIPath, nil, g.XML, func(path, value, id string) { //   *** change idmark & DataType ***
+	databytes := must(ioutil.ReadFile("./files/xapi.json")).([]byte)                                  //   *** change file name ***
+	YAMLScan(string(databytes), "ROOT", g.DELIPath, nil, g.JSON, func(path, value, id string) error { //   *** change idmark & DataType ***
 		fPf("%s : %-70s : %s\n", id, path, value)
+		return nil
 	})
 }
 
