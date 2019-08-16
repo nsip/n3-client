@@ -36,3 +36,7 @@ ErrLog = "./errlog.txt"
   SampleTxtDir = "../gql/qTxt/"
   ParamPathDir = "../rest/parampath/"
 
+[Debug]
+  TrialPub = true
+  TrialQry = true
+

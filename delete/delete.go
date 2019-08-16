@@ -8,7 +8,9 @@ import (
 // Del :
 func Del(ctx, subject string) {
 	dTuple := &pb.SPOTuple{Subject: subject, Predicate: g.MARKDead}
-	pe(g.N3clt.Publish(dTuple, g.Cfg.RPC.Namespace, ctx))
+	if !g.Cfg.Debug.TrialPub {
+		pe(g.N3clt.Publish(dTuple, g.Cfg.RPC.Namespace, ctx))
+	}
 }
 
 // DelBat :

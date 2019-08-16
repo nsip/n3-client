@@ -14,6 +14,7 @@ func TestLoad(t *testing.T) {
 	fPln(cfg.Route)
 	fPln(cfg.RPC)
 	fPln(cfg.Query)
+	fPln(cfg.Debug)
 }
 
 // func TestSave(t *testing.T) {

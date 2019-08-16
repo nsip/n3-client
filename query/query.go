@@ -16,8 +16,10 @@ func query(ctx string, metaQry bool, spo []string) (s, p, o []string, v []int64)
 		panic("subject & predicate must be provided to general query. <empty string>-subject & predicate & object must be provided to id query")
 	}
 
-	for _, t := range g.N3clt.Query(qTuple, g.Cfg.RPC.Namespace, IF(!metaQry, ctx, ctx+"-meta").(string)) {
-		s, p, o, v = append(s, t.Subject), append(p, t.Predicate), append(o, t.Object), append(v, t.Version)
+	if !g.Cfg.Debug.TrialQry {
+		for _, t := range g.N3clt.Query(qTuple, g.Cfg.RPC.Namespace, IF(!metaQry, ctx, ctx+"-meta").(string)) {
+			s, p, o, v = append(s, t.Subject), append(p, t.Predicate), append(o, t.Object), append(v, t.Version)
+		}
 	}
 	return
 }

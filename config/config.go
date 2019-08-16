@@ -48,6 +48,11 @@ type query struct {
 	ParamPathDir string
 }
 
+type debug struct {
+	TrialPub bool
+	TrialQry bool
+}
+
 // ********************************************** //
 
 // Config is toml
@@ -60,6 +65,7 @@ type Config struct {
 	Route       route
 	RPC         rpc
 	Query       query
+	Debug       debug
 }
 
 // FromFile :

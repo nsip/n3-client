@@ -11,13 +11,6 @@ import (
 	"github.com/nsip/n3-messages/messages/pb"
 )
 
-// Send :
-func Send(ctx, subject, predicate, object string, ver int64) {
-	tuple := must(messages.NewTuple(subject, predicate, object)).(*pb.SPOTuple)
-	tuple.Version = ver
-	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
-}
-
 // Junk :
 func Junk(ctx string, n int) {
 	for i := 0; i < n; i++ {
@@ -28,11 +21,22 @@ func Junk(ctx string, n int) {
 	}
 }
 
+// Send :
+func Send(ctx, subject, predicate, object string, ver int64) {
+	tuple := must(messages.NewTuple(subject, predicate, object)).(*pb.SPOTuple)
+	tuple.Version = ver
+	if !g.Cfg.Debug.TrialPub {
+		pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+	}
+}
+
 // Terminate :
 func Terminate(ctx, objID, termID string, ver int64) {
 	tuple := must(messages.NewTuple(termID, g.MARKTerm, objID)).(*pb.SPOTuple)
 	tuple.Version = ver
-	pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+	if !g.Cfg.Debug.TrialPub {
+		pe(g.N3clt.Publish(tuple, g.Cfg.RPC.Namespace, ctx))
+	}
 }
 
 // RequireVer : verType ( "V" / "A" / "S" )

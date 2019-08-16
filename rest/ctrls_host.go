@@ -252,17 +252,15 @@ func HostHTTPAsync() {
 	api.DELETE(route.Del, delFromNode)
 	api.POST(route.Upload, postFileToNode)
 
-	// ************************************************* List all APP, API *************************************************
-	e.GET("/app", func(c echo.Context) error {
+	// *************************************** List all APP, API *************************************** //
+	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK,
-			fSf("%-40s -> %s\n", ipport+grp.APP+route.Pub, "n3client publishing page"))
-	})
-	e.GET("/api", func(c echo.Context) error {
-		return c.String(http.StatusOK,
-			fSf("%-40s -> %s\n", ipport+grp.API+route.Greeting, "for n3client running test")+
+			fSf("%-40s -> %s\n", ipport+grp.APP+route.Pub, "n3client publishing page")+
+				fSf("\n")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.Greeting, "for n3client running test")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.ID, "looking for object ID. (object*, and other params set in [/rest/parampath])")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.Obj, "(id*) [not implemented]")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.Scm, "(id*) [not implemented]")+
+				// fSf("%-40s -> %s\n", ipport+grp.API+route.Obj, "(id*) [not implemented]")+
+				// fSf("%-40s -> %s\n", ipport+grp.API+route.Scm, "(id*) [not implemented]")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.Pub, "publish  (dfltRoot*) put JSON or XML in request header")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.GQL, "(id*)")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.Del, "(id*)")+
