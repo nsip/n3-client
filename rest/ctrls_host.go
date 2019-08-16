@@ -105,13 +105,6 @@ func postFileToNode(c echo.Context) error {
 	OriExePathChk()
 	mtxPub.Lock()
 
-	name, pwd, root := c.FormValue("username"), c.FormValue("password"), c.FormValue("root")
-	fPln(name, pwd, root)
-
-	if g.CurCtx = ctxFromCredential(name, pwd); g.CurCtx == "" {
-		return c.String(http.StatusUnauthorized, "wrong username or password")
-	}
-
 	// Source
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -131,6 +124,7 @@ func postFileToNode(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "NOT JSON, CANNOT SEND")
 	}
 
+	root := c.FormValue("root")
 	if _, _, _, _, _, e := pub.Pub2Node(g.CurCtx, data, root); e != nil { //             *** preprocess, postprocess included ***
 		return e
 	}
@@ -224,21 +218,18 @@ func HostHTTPAsync() {
 		AllowCredentials: true,
 	}))
 
-	webloc := g.Cfg.Group.APP + g.Cfg.Route.Pub
+	grp, route := g.Cfg.Group, g.Cfg.Route
+	ipport := LocalIP() + fSf(":%d", g.Cfg.WebService.Port)
+
+	// APP
+	webloc := grp.APP + route.Pub
 	e.File(webloc, "../www/service.html")
 	e.Static(cdUL(webloc), "../www/") //             "/" is html - ele - <src>'s path
 
-	// Maybe Auth middleware dislikes long request body ? manually check
-	e.POST(g.Cfg.Route.FilePub, postFileToNode)
-
-	// Group
-	api := e.Group(g.Cfg.Group.API)
-	api.Use(middleware.Logger())
-	api.Use(middleware.Recover())
-	api.Use(middleware.BodyLimit("2G"))
+	// API Group
+	api := e.Group(grp.API)
 
 	uname := ""
-	// BasicAuth ( Big Body has ERR_CONNECTION_RESET in this )
 	api.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		fPln("---------------------in basicAuth-----------------------------", username, password)
 		if g.CurCtx = ctxFromCredential(username, password); g.CurCtx == "" {
@@ -250,20 +241,23 @@ func HostHTTPAsync() {
 
 	// api Route
 	// api.GET("/filetest", func(c echo.Context) error { return c.File("/home/qing/Desktop/index.html") })
-	api.GET(g.Cfg.Route.Greeting, func(c echo.Context) error {
+	api.GET(route.Greeting, func(c echo.Context) error {
 		return c.JSON(http.StatusOK, "Hello, "+uname+". n3client is running @ "+time.Now().Format("2006-01-02 15:04:05.000"))
 	})
-	api.GET(g.Cfg.Route.ID, getIDList)
-	api.GET(g.Cfg.Route.Obj, getObject)
-	api.GET(g.Cfg.Route.Scm, getSchema)
-	api.POST(g.Cfg.Route.Pub, postToNode)
-	api.POST(g.Cfg.Route.GQL, postQueryGQL)
-	api.DELETE(g.Cfg.Route.Del, delFromNode)
+	api.GET(route.ID, getIDList)
+	api.GET(route.Obj, getObject)
+	api.GET(route.Scm, getSchema)
+	api.POST(route.Pub, postToNode)
+	api.POST(route.GQL, postQueryGQL)
+	api.DELETE(route.Del, delFromNode)
+	api.POST(route.Upload, postFileToNode)
 
-	// *** List all API ***
+	// ************************************************* List all APP, API *************************************************
+	e.GET("/app", func(c echo.Context) error {
+		return c.String(http.StatusOK,
+			fSf("%-40s -> %s\n", ipport+grp.APP+route.Pub, "n3client publishing page"))
+	})
 	e.GET("/api", func(c echo.Context) error {
-		grp, route := g.Cfg.Group, g.Cfg.Route
-		ipport := LocalIP() + fSf(":%d", g.Cfg.WebService.Port)
 		return c.String(http.StatusOK,
 			fSf("%-40s -> %s\n", ipport+grp.API+route.Greeting, "for n3client running test")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.ID, "looking for object ID. (object*, and other params set in [/rest/parampath])")+
@@ -271,7 +265,8 @@ func HostHTTPAsync() {
 				fSf("%-40s -> %s\n", ipport+grp.API+route.Scm, "(id*) [not implemented]")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.Pub, "publish  (dfltRoot*) put JSON or XML in request header")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.GQL, "(id*)")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.Del, "(id*)"))
+				fSf("%-40s -> %s\n", ipport+grp.API+route.Del, "(id*)")+
+				fSf("%-40s -> %s\n", ipport+grp.API+route.Upload, "n3client file upload"))
 	})
 
 	// Server

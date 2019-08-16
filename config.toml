@@ -1,0 +1,38 @@
+Path = "../config.toml"
+ErrLog = "./errlog.txt"
+
+[FileWatcher]
+  Dir = "../inbound/"
+
+[WebService]
+  Port = 1323
+  Version = "0.1.0"  
+
+[Group]
+  APP = "/app"
+  API = "/api"
+
+[Route]
+  Greeting = "/v#/greeting"
+  ID = "/v#/id"
+  Pub = "/v#/pub"  
+  GQL = "/v#/gql"
+  Del = "/v#/del"
+  Obj = "/v#/obj"
+  Scm = "/v#/scm"
+  GQLTxt = "/v#/qrytxt"
+  Upload = "/v#/upload"
+
+[RPC]
+  Namespace = "gXjyJ7BuXpMtHcQskx1HGGb3muEPexZ7AcAT4Kz1HVx"
+  Server = "192.168.78.12"
+  Port = 5777
+  CtxList = ["demo", "demo1", "demo2"]
+  CtxPrivDef = "privctrl"
+  CtxPrivID = "ctxid"
+
+[Query]
+  SchemaDir = "../gql/qSchema/"
+  SampleTxtDir = "../gql/qTxt/"
+  ParamPathDir = "../rest/parampath/"
+

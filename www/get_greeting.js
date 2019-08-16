@@ -10,7 +10,7 @@ function greeting() {
 
     var ip = location.host;
     $.ajax({
-        url: 'http://' + ip + '/api/v0/greeting',
+        url: 'http://' + ip + '/api/v0.1.0/greeting',
         username: user,
         password: pwd,
         type: 'GET',

@@ -12,9 +12,8 @@ type filewatcher struct {
 }
 
 type webservice struct {
-	Port   int
-	VerAPP int
-	VerAPI int
+	Port    int
+	Version string
 }
 
 type group struct {
@@ -31,7 +30,7 @@ type route struct {
 	Obj      string
 	Scm      string
 	GQLTxt   string
-	FilePub  string
+	Upload   string
 }
 
 type rpc struct {
@@ -83,18 +82,10 @@ func (cfg *Config) set() *Config {
 	return cfg.modCfg()
 }
 
-// Save is
-func (cfg *Config) Save() {
-	defer func() { ph(recover(), cfg.ErrLog) }()
-	f := must(os.OpenFile(cfg.Path, os.O_WRONLY|os.O_TRUNC, 0666)).(*os.File)
-	defer f.Close()
-	pe(toml.NewEncoder(f).Encode(cfg))
-}
-
 func (cfg *Config) modCfg() *Config {
-
 	// *** replace version ***
-	ver := fSf("v%d", cfg.WebService.VerAPI)
+	cfgws := cfg.WebService
+	ver := fSf("v%s", cfgws.Version)
 	v := reflect.ValueOf(cfg.Route)
 	for i := 0; i < v.NumField(); i++ {
 		vv := S(v.Field(i).Interface().(string)).Replace("v#", ver).V()
@@ -102,3 +93,11 @@ func (cfg *Config) modCfg() *Config {
 	}
 	return cfg
 }
+
+// Save is
+// func (cfg *Config) Save() {
+// 	defer func() { ph(recover(), cfg.ErrLog) }()
+// 	f := must(os.OpenFile(cfg.Path, os.O_WRONLY|os.O_TRUNC, 0666)).(*os.File)
+// 	defer f.Close()
+// 	pe(toml.NewEncoder(f).Encode(cfg))
+// }

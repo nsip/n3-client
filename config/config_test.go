@@ -5,7 +5,7 @@ import (
 )
 
 func TestLoad(t *testing.T) {
-	cfg := FromFile("../build/config.toml")
+	cfg := FromFile("../config.toml")
 	fPln(cfg.Path)
 	fPln(cfg.ErrLog)
 	fPln(cfg.FileWatcher)
@@ -16,11 +16,11 @@ func TestLoad(t *testing.T) {
 	fPln(cfg.Query)
 }
 
-func TestSave(t *testing.T) {
-	cfg := FromFile("../build/config.toml")
-	cfg.Save()
-
-	cfg1 := FromFile("../build/config.toml")
-	fPln(cfg1.RPC)
-	fPln(cfg1.FileWatcher)
-}
+// func TestSave(t *testing.T) {
+// 	cfg := FromFile("../config.toml")
+// 	cfg.WebService.VerMajor = 1
+// 	cfg.Save()
+// 	cfg1 := FromFile("../config.toml")
+// 	fPln(cfg1.RPC)
+// 	fPln(cfg1.FileWatcher)
+// }

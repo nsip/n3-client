@@ -2,6 +2,10 @@
 
 set -e
 
+rm -rf ./build/
+mkdir build && cp config.toml ./build/ && cp main_test.txt ./build/main_test.go 
+mkdir ./build/debug_pub && mkdir ./build/debug_qry
+
 OK=0
 echo "building command line - privacy ..."
 cd ./cli-privacy/
