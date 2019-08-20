@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+ORIGINALPATH=`pwd`
 
 rm -rf ./build/
 mkdir build && cp config.toml ./build/ && cp main_test.txt ./build/main_test.go 
@@ -8,6 +9,11 @@ mkdir ./build/debug_pub && mkdir ./build/debug_qry
 
 OK=0
 echo "building command line - privacy ..."
+go get github.com/cdutwhu/go-gjxy
+cd $GOPATH/src/github.com/cdutwhu/go-gjxy
+git checkout 2c9653cf8d5b9a34021e85588dd6de48482abaac
+cd $ORIGINALPATH
+
 cd ./cli-privacy/
 go get
 go build -o privacy && mv privacy ../build/ && echo "OK: cli [privacy] is built and put into [./build] directory ... :)" && OK=1
