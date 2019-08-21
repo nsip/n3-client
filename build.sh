@@ -10,6 +10,7 @@ mkdir ./build/debug_pub && mkdir ./build/debug_qry
 OK=0
 echo "building command line - privacy ..."
 go get github.com/cdutwhu/go-gjxy
+GOPATH=`go env GOPATH`
 cd $GOPATH/src/github.com/cdutwhu/go-gjxy
 git checkout a59ce9ecc88bd8bb61e3de672a9d669554b01708
 cd $ORIGINALPATH
