@@ -43,6 +43,8 @@ window.onload = function () {
         root = $('#root').val();
 
         formdata = new FormData();
+        formdata.append('username', user);
+        formdata.append('password', pwd);
         formdata.append('root', root);
         jQuery.each(jQuery('#selectfile')[0].files, function (i, file) {
             formdata.append('file', file);
@@ -72,7 +74,7 @@ window.onload = function () {
         $.ajax({ // make an AJAX request
             type: "POST",
             method: "POST",
-            url: 'http://' + ip + '/api/v0.1.0/upload',
+            url: 'http://' + ip + '/file/v0.1.0/upload',
             username: user,
             password: pwd,
             contentType: false,

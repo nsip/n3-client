@@ -75,8 +75,8 @@ func JSONObjScan(json, dfltRoot string,
 	OnStructFetch func(string, string, []string, bool) error,
 	OnArrayFetch func(string, string, int, bool) error) (IDs, Objs []string, err error) {
 
-	if ok, eleType, n, eles := IsJSONArray(json); ok {
-		if eleType == JT_OBJ {
+	if ok, eleType, n, eles := IsJSONArrOnFmtL0(json); ok {
+		if eleType == J_OBJ {
 			for i := 1; i <= n; i++ {
 				if id, root, e := JSONModelInfo(eles[i-1], dfltRoot, g.DELIPath, OnStructFetch, OnArrayFetch); e != nil {
 					return nil, nil, e
@@ -95,47 +95,44 @@ func JSONObjScan(json, dfltRoot string,
 	return IDs, Objs, nil
 }
 
-// JSONArrDiv :
-func JSONArrDiv(json string, nDiv int) (jsonarrs []string, rem bool) {
-	if ok, eleType, n, eles := IsJSONArray(json); ok {
-		if eleType == JT_OBJ {
-			nPer, nRem := n/nDiv, n%nDiv
-
-			var lows, highs []int
-			if nRem != 0 {
-				lows, highs = make([]int, nDiv+1), make([]int, nDiv+1)
-				for i := 0; i < nDiv; i++ {
-					lows[i] = nPer * i
-					highs[i] = nPer*(i+1) - 1
-				}
-				lows[nDiv] = highs[nDiv-1] + 1
-				highs[nDiv] = n - 1
-			} else {
-				lows, highs = make([]int, nDiv), make([]int, nDiv)
-				for i := 0; i < nDiv; i++ {
-					lows[i] = nPer * i
-					highs[i] = nPer*(i+1) - 1
-				}
-			}
-
-			nPart := IF(nRem == 0, nDiv, nDiv+1).(int)
-			for i := 0; i < nPart; i++ {
-				l, h := lows[i], highs[i]
-				jsonarr := ""
-				for j := l; j <= h; j++ {
-					jsonarr += eles[j] + ",\n"
-				}
-				jsonarr = "[" + jsonarr[:len(jsonarr)-2] + "]"
-				pc(!IsJSON(jsonarr), fEf("JSONArrDiv result error"))
-				jsonarr = prepJSON(jsonarr)
-				jsonarrs = append(jsonarrs, jsonarr)
-			}
-
-			rem = nRem != 0
-		}
-	}
-	return
-}
+// // JSONArrDiv :
+// func JSONArrDiv(json string, nDiv int) (jsonarrs []string, rem bool) {
+// 	if ok, eleType, n, eles := IsJSONArr(json); ok {
+// 		if eleType == J_OBJ {
+// 			nPer, nRem := n/nDiv, n%nDiv
+// 			var lows, highs []int
+// 			if nRem != 0 {
+// 				lows, highs = make([]int, nDiv+1), make([]int, nDiv+1)
+// 				for i := 0; i < nDiv; i++ {
+// 					lows[i] = nPer * i
+// 					highs[i] = nPer*(i+1) - 1
+// 				}
+// 				lows[nDiv] = highs[nDiv-1] + 1
+// 				highs[nDiv] = n - 1
+// 			} else {
+// 				lows, highs = make([]int, nDiv), make([]int, nDiv)
+// 				for i := 0; i < nDiv; i++ {
+// 					lows[i] = nPer * i
+// 					highs[i] = nPer*(i+1) - 1
+// 				}
+// 			}
+// 			nPart := IF(nRem == 0, nDiv, nDiv+1).(int)
+// 			for i := 0; i < nPart; i++ {
+// 				l, h := lows[i], highs[i]
+// 				jsonarr := ""
+// 				for j := l; j <= h; j++ {
+// 					jsonarr += eles[j] + ",\n"
+// 				}
+// 				jsonarr = "[" + jsonarr[:len(jsonarr)-2] + "]"
+// 				pc(!IsJSON(jsonarr), fEf("JSONArrDiv result error"))
+// 				jsonarr = prepJSON(jsonarr)
+// 				jsonarrs = append(jsonarrs, jsonarr)
+// 			}
+// 			rem = nRem != 0
+// 		}
+// 	}
+// 	return
+// }
 
 func prepJSON(json string) string {
 

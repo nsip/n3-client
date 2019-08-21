@@ -24,6 +24,7 @@ var (
 	IF            = u.IF
 	mAssign       = u.MatchAssign
 	fPln          = fmt.Println
+	fPf           = fmt.Printf
 	fEf           = fmt.Errorf
 	fSf           = fmt.Sprintf
 	lPln          = log.Println

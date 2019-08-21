@@ -11,7 +11,7 @@ OK=0
 echo "building command line - privacy ..."
 go get github.com/cdutwhu/go-gjxy
 cd $GOPATH/src/github.com/cdutwhu/go-gjxy
-git checkout 2c9653cf8d5b9a34021e85588dd6de48482abaac
+git checkout a59ce9ecc88bd8bb61e3de672a9d669554b01708
 cd $ORIGINALPATH
 
 cd ./cli-privacy/

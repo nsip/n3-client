@@ -39,4 +39,3 @@ ErrLog = "./errlog.txt"
 [Debug]
   TrialPub = false
   TrialQry = false
-

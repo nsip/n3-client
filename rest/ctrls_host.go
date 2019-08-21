@@ -105,6 +105,13 @@ func postFileToNode(c echo.Context) error {
 	OriExePathChk()
 	mtxPub.Lock()
 
+	username := c.FormValue("username")
+	password := c.FormValue("password")
+	if g.CurCtx = ctxFromCredential(username, password); g.CurCtx == "" {
+		return c.String(http.StatusUnauthorized, "wrong username or password")
+	}
+	fPf("------------- uploading file @ %s - %s to <%s> -------------\n", username, password, g.CurCtx)
+
 	// Source
 	file, err := c.FormFile("file")
 	if err != nil {
@@ -126,7 +133,7 @@ func postFileToNode(c echo.Context) error {
 
 	root := c.FormValue("root")
 	if _, _, _, _, _, e := pub.Pub2Node(g.CurCtx, data, root); e != nil { //             *** preprocess, postprocess included ***
-		return e
+		return c.String(http.StatusBadRequest, e.Error())
 	}
 
 	return c.String(http.StatusOK, fmt.Sprintf("%s uploaded successfully", file.Filename))
@@ -226,6 +233,9 @@ func HostHTTPAsync() {
 	e.File(webloc, "../www/service.html")
 	e.Static(cdUL(webloc), "../www/") //             "/" is html - ele - <src>'s path
 
+	// *** big file posting has issue ***
+	e.POST("/file"+route.Upload, postFileToNode)
+
 	// API Group
 	api := e.Group(grp.API)
 
@@ -250,7 +260,7 @@ func HostHTTPAsync() {
 	api.POST(route.Pub, postToNode)
 	api.POST(route.GQL, postQueryGQL)
 	api.DELETE(route.Del, delFromNode)
-	api.POST(route.Upload, postFileToNode)
+	// api.POST(route.Upload, postFileToNode)
 
 	// *************************************** List all APP, API *************************************** //
 	e.GET("/", func(c echo.Context) error {
@@ -264,7 +274,8 @@ func HostHTTPAsync() {
 				fSf("%-40s -> %s\n", ipport+grp.API+route.Pub, "publish  (dfltRoot*) put JSON or XML in request header")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.GQL, "(id*)")+
 				fSf("%-40s -> %s\n", ipport+grp.API+route.Del, "(id*)")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.Upload, "n3client file upload"))
+				fSf("\n")+
+				fSf("%-40s -> %s\n", ipport+"/file"+route.Upload, "n3client file upload"))
 	})
 
 	// Server

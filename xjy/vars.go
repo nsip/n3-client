@@ -35,7 +35,8 @@ var (
 	JSONWrapRoot          = gjxy.JSONWrapRoot
 	JSONArrInfo           = gjxy.JSONArrInfo
 	JSONObjChildren       = gjxy.JSONObjChildren
-	IsJSONArray           = gjxy.IsJSONArray
+	IsJSONArr             = gjxy.IsJSONArr
+	IsJSONArrOnFmtL0      = gjxy.IsJSONArrOnFmtL0
 	IsJSONSingle          = gjxy.IsJSONSingle
 	IsJSON                = gjxy.IsJSON
 	XMLAttributes         = gjxy.XMLAttributes
@@ -51,14 +52,14 @@ var (
 )
 
 const (
-	JT_NULL = gjxy.JT_NULL
-	JT_OBJ  = gjxy.JT_OBJ
-	JT_ARR  = gjxy.JT_ARR
-	JT_STR  = gjxy.JT_STR
-	JT_NUM  = gjxy.JT_NUM
-	JT_BOOL = gjxy.JT_BOOL
-	JT_MIX  = gjxy.JT_MIX
-	JT_UNK  = gjxy.JT_UNK
+	J_NULL = gjxy.J_NULL
+	J_OBJ  = gjxy.J_OBJ
+	J_ARR  = gjxy.J_ARR
+	J_STR  = gjxy.J_STR
+	J_NUM  = gjxy.J_NUM
+	J_BOOL = gjxy.J_BOOL
+	J_MIX  = gjxy.J_MIX
+	J_UNK  = gjxy.J_UNK
 
 	QDouble = w.QDouble
 	ALL     = w.ALL

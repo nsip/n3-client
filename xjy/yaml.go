@@ -66,10 +66,10 @@ func YAMLScanFromJSONBat(json, dfltRoot, pDeli string, IDs []string, OnValueFetc
 		}
 		return nil
 	}
+	
+	if ok, jsonType, n, eles := IsJSONArrOnFmtL0(json); ok {
 
-	if ok, jsonType, n, eles := IsJSONArray(json); ok {
-
-		if jsonType == JT_OBJ {
+		if jsonType == J_OBJ {
 			for i := 1; i <= n; i++ {
 				thisjson := eles[i-1]
 
