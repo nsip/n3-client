@@ -81,19 +81,26 @@ func postToNode(c echo.Context) error {
 	OriExePathChk()
 	mtxPub.Lock()
 
+	fPln("@ *** postToNode")
+
 	root := c.QueryParam("dfltRoot")
 	// fPln(dfltRoot)
 	if root == "" {
+		fPln("@ postToNode 1")
 		return c.String(http.StatusBadRequest, "<dfltRoot> must be provided")
 	}
 
 	data := string(must(ioutil.ReadAll(c.Request().Body)).([]byte))
 	if data == "" {
+		fPln("@ postToNode 2")
 		return c.String(http.StatusBadRequest, "Nothing to be sent as BODY is empty")
 	}
 
+	ioutil.WriteFile("./postBody.json", []byte(data), 0777)
+
 	if _, _, nV, nS, nA, e := pub.Pub2Node(g.CurCtx, data, root); e != nil { //    *** preprocess, postprocess included ***
-		return e
+		fPln("@ postToNode 3")
+		return c.String(http.StatusBadRequest, "n3node error: "+e.Error())
 	} else {
 		return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 	}
@@ -165,6 +172,11 @@ func postQueryGQL(c echo.Context) error {
 	for k, v := range req.Variables {
 		mPV[k] = v.(string)
 	}
+
+	for k, v := range mPV {
+		fPln("---", k, " : ", v)
+	}
+	fPln(req.Query)
 
 	IDs := []string{}
 	// IDs = append(IDs, "ca669951-9511-4e53-ae92-50845d3bdcd6") // *** if param is hard-coded here, GraphiQL can show Schema-Doc ***
@@ -265,17 +277,17 @@ func HostHTTPAsync() {
 	// *************************************** List all APP, API *************************************** //
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK,
-			fSf("%-40s -> %s\n", ipport+grp.APP+route.Pub, "n3client publishing page")+
+			fSf("POST   %-40s -> %s\n", ipport+grp.APP+route.Pub, "n3client publishing page")+
 				fSf("\n")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.Greeting, "for n3client running test")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.ID, "looking for object ID. (object*, and other params set in [/rest/parampath])")+
+				fSf("GET    %-40s -> %s\n", ipport+grp.API+route.Greeting, "for n3client running test")+
+				fSf("GET    %-40s -> %s\n", ipport+grp.API+route.ID, "looking for object ID. (object*, and other params set in [/rest/parampath])")+
 				// fSf("%-40s -> %s\n", ipport+grp.API+route.Obj, "(id*) [not implemented]")+
 				// fSf("%-40s -> %s\n", ipport+grp.API+route.Scm, "(id*) [not implemented]")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.Pub, "publish  (dfltRoot*) put JSON or XML in request header")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.GQL, "(id*)")+
-				fSf("%-40s -> %s\n", ipport+grp.API+route.Del, "(id*)")+
+				fSf("POST   %-40s -> %s\n", ipport+grp.API+route.Pub, "publish  (dfltRoot*) put JSON or XML in request header")+
+				fSf("POST   %-40s -> %s\n", ipport+grp.API+route.GQL, "(id*)")+
+				fSf("DELETE %-40s -> %s\n", ipport+grp.API+route.Del, "(id*)")+
 				fSf("\n")+
-				fSf("%-40s -> %s\n", ipport+"/file"+route.Upload, "n3client file upload"))
+				fSf("POST   %-40s -> %s\n", ipport+"/file"+route.Upload, "n3client file upload"))
 	})
 
 	// Server

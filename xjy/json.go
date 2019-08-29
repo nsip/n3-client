@@ -38,7 +38,7 @@ func JSONObjInfo(json, dfltRoot, pDel string) (IDTag, ID, root string, autoID, a
 		IDTag, ID, autoID = "AutoID", uuid.New().String(), true
 	}
 
-	// fPln(IDTag, ID, autoID)
+	fPln("DEBUG: ", " IDTag: ", IDTag, " ID: ", ID, " autoID: ", autoID)
 
 	return
 }
