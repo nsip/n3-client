@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -31,6 +32,35 @@ AGAIN:
 	}
 }
 
+func queryParamPath(object string) (map[string]string, error) {
+	ppDir := g.Cfg.Query.ParamPathDir
+	for _, f := range must(ioutil.ReadDir(ppDir)).([]os.FileInfo) {
+		if f.Name() == object {
+			data := string(must(ioutil.ReadFile(ppDir + f.Name())).([]byte))
+			return S(data).KeyValueMap('\n', ':', '#'), nil
+		}
+	}
+	return nil, errors.New("<object>'s params-path file was not found, contact n3 admin to solve it")
+}
+
+// GetIDs :
+func GetIDs(object string, fields []string, values []string, all bool) ([]string, error) {
+	if n1, n2 := len(fields), len(values); n1 == n2 {
+		mPP, e := queryParamPath(object)
+		if e != nil {
+			return nil, e
+		}
+		mPV := map[string]interface{}{}
+		for i := 0; i < n1; i++ {
+			if _, ok := mPP[fields[i]]; ok {
+				mPV[fields[i]] = values[i]
+			}
+		}
+		return GetIDsInDB(g.CurCtx, mPP, mPV, object, all), nil
+	}
+	return nil, errors.New("fields' count & values' count are not identical")
+}
+
 // getIDList :
 func getIDList(c echo.Context) error {
 	defer func() { mtxID.Unlock() }()
@@ -38,28 +68,30 @@ func getIDList(c echo.Context) error {
 	mtxID.Lock()
 
 	params := c.QueryParams()
-	if object, ok := params["object"]; ok { //                             *** object Value only indicates the file to get parampath ***
-		mPP, mPV := map[string]string{}, map[string]interface{}{}
-		ppDir, foundPPFile := g.Cfg.Query.ParamPathDir, false
-		for _, f := range must(ioutil.ReadDir(ppDir)).([]os.FileInfo) {
-			if f.Name() == object[0] {
-				data := string(must(ioutil.ReadFile(ppDir + f.Name())).([]byte))
-				mPP = S(data).KeyValueMap('\n', ':', '#')
-				foundPPFile = true
-				break
-			}
+	if objects, ok := params["object"]; ok { //                             *** object Value only indicates the file to get parampath ***
+
+		k, v := GetMapKVs(params)
+		if vArr, ok := SlcD2ToD1(v); ok {
+			all, ok := params["all"]                                 // *** if "all=true", get all objects' ID including dead objects ***
+			getall := IF(ok && all[0] == "true", true, false).(bool) //
+			ids, _ := GetIDs(objects[0], k.([]string), vArr.([]string), getall)
+			return c.JSON(http.StatusAccepted, ids)
 		}
-		if !foundPPFile {
-			return c.JSON(http.StatusForbidden, "<object>'s params-path file was not found, contact n3-client admin to solve it")
-		}
-		for k, v := range params {
-			if _, ok := mPP[k]; ok {
-				mPV[k] = S(v[0]).T(BLANK).V()
-			}
-		}
-		all, ok := params["all"]
-		getall := IF(ok && all[0] == "true", true, false).(bool)
-		return c.JSON(http.StatusAccepted, GetIDs(g.CurCtx, mPP, mPV, object[0], getall))
+		return c.JSON(http.StatusInternalServerError, fEf("echo c.QueryParams() value is not array?"))
+
+		// mPP, e := queryParamPath(objects[0])
+		// if e == nil {
+		// 	mPV := map[string]interface{}{}
+		// 	for k, v := range params {
+		// 		if _, ok := mPP[k]; ok {
+		// 			mPV[k] = S(v[0]).T(BLANK).V()
+		// 		}
+		// 	}
+		// 	all, ok := params["all"]                                                               // *** if "all=true", get all objects' ID including dead objects ***
+		// 	getall := IF(ok && all[0] == "true", true, false).(bool)                               //
+		// 	return c.JSON(http.StatusAccepted, GetIDsInDB(g.CurCtx, mPP, mPV, objects[0], getall)) //
+		// }
+		// return c.JSON(http.StatusForbidden, e.Error())
 	}
 	return c.JSON(http.StatusBadRequest, "<object> must be provided")
 }
@@ -98,12 +130,12 @@ func postToNode(c echo.Context) error {
 
 	ioutil.WriteFile("./postBody.json", []byte(data), 0777)
 
-	if _, _, nV, nS, nA, e := pub.Pub2Node(g.CurCtx, data, root); e != nil { //    *** preprocess, postprocess included ***
+	_, _, nV, nS, nA, e := pub.Pub2Node(g.CurCtx, data, root) // *** preprocess, postprocess included ***
+	if e != nil {
 		fPln("@ postToNode 3")
 		return c.String(http.StatusBadRequest, "n3node error: "+e.Error())
-	} else {
-		return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 	}
+	return c.JSON(http.StatusAccepted, fSf("<%d> v-tuples, <%d> s-tuples, <%d> a-tuples have been sent", nV, nS, nA))
 }
 
 // postFileToNode :
@@ -219,6 +251,10 @@ func getSchema(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, id+" | this api is not implemented")
 }
 
+// ************************************************ HOST ************************************************ //
+// ************************************************ HOST ************************************************ //
+// ************************************************ HOST ************************************************ //
+// ************************************************ HOST ************************************************ //
 // ************************************************ HOST ************************************************ //
 
 // HostHTTPAsync : Host a HTTP Server for publishing xml json string(request body) to <n3-transport> grpc Server

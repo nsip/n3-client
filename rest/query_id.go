@@ -4,8 +4,8 @@ import (
 	q "github.com/nsip/n3-client/query"
 )
 
-// GetIDs :
-func GetIDs(ctx string, mParamPath map[string]string, mParamValue map[string]interface{}, object string, all bool) []string {
+// GetIDsInDB :
+func GetIDsInDB(ctx string, mParamPath map[string]string, mParamValue map[string]interface{}, object string, all bool) []string {
 
 	// mParamValueObj := map[string]interface{}{"object": object}
 	// for k, v := range mParamValue {

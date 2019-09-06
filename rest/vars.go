@@ -12,26 +12,36 @@ import (
 )
 
 type (
-	S  = w.Str
+	// S is
+	S = w.Str
+	// Ss is
 	Ss = w.Strs
 )
 
 var (
-	pe            = u.PanicOnError
-	pc            = u.PanicOnCondition
-	phe           = u.PanicHandleEx
-	must          = u.Must
-	IF            = u.IF
-	mAssign       = u.MatchAssign
-	fPln          = fmt.Println
-	fPf           = fmt.Printf
-	fEf           = fmt.Errorf
-	fSf           = fmt.Sprintf
-	lPln          = log.Println
-	sSpl          = strings.Split
+	// IF is
+	IF      = u.IF
+	pe      = u.PanicOnError
+	pc      = u.PanicOnCondition
+	phe     = u.PanicHandleEx
+	must    = u.Must
+	mAssign = u.MatchAssign
+	fPln    = fmt.Println
+	fPf     = fmt.Printf
+	fEf     = fmt.Errorf
+	fSf     = fmt.Sprintf
+	lPln    = log.Println
+	sSpl    = strings.Split
+	// IArrIntersect is
 	IArrIntersect = w.IArrIntersect
-	IArrRmRep     = w.IArrRmRep
-	IsJSON        = gjxy.IsJSON
+	// GetMapKVs is
+	GetMapKVs = w.GetMapKVs
+	// SlcD2ToD1 is
+	SlcD2ToD1 = w.SlcD2ToD1
+	// IArrRmRep is
+	IArrRmRep = w.IArrRmRep
+	// IsJSON is
+	IsJSON = gjxy.IsJSON
 
 	mtxQry = &sync.Mutex{}
 	mtxPub = &sync.Mutex{}
@@ -42,5 +52,6 @@ var (
 )
 
 const (
+	// BLANK is
 	BLANK = w.BLANK
 )
