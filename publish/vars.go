@@ -10,7 +10,8 @@ import (
 )
 
 type (
-	S = w.Str
+	S  = w.Str
+	Ss = w.Strs
 )
 
 var (
@@ -21,6 +22,7 @@ var (
 	must         = u.Must
 	IF           = u.IF
 	UTF8ToASCII  = w.UTF8ToASCII
+	IArrRmRep    = w.IArrRmRep
 	IsJSON       = gjxy.IsJSON
 	JSONWrapRoot = gjxy.JSONWrapRoot
 	fPln         = fmt.Println
