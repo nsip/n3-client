@@ -42,13 +42,16 @@ var (
 	IArrRmRep = w.IArrRmRep
 	// IsJSON is
 	IsJSON = gjxy.IsJSON
+	// Get1stObjInQry is
+	Get1stObjInQry = gjxy.Get1stObjInQry
 
-	mtxQry = &sync.Mutex{}
-	mtxPub = &sync.Mutex{}
-	mtxDel = &sync.Mutex{}
-	mtxID  = &sync.Mutex{}
-	mtxObj = &sync.Mutex{}
-	mtxScm = &sync.Mutex{}
+	mtxQry  = &sync.Mutex{}
+	mtxQry2 = &sync.Mutex{}
+	mtxPub  = &sync.Mutex{}
+	mtxDel  = &sync.Mutex{}
+	mtxID   = &sync.Mutex{}
+	mtxObj  = &sync.Mutex{}
+	mtxScm  = &sync.Mutex{}
 )
 
 const (

@@ -26,6 +26,7 @@ type route struct {
 	ID       string
 	Pub      string
 	GQL      string
+	GQL2     string
 	Del      string
 	Obj      string
 	Scm      string

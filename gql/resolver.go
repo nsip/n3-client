@@ -113,7 +113,12 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 
 	// fPln(root)
 	qSchema := string(must(ioutil.ReadFile(qSchemaDir + root + ".gql")).([]byte)) //  *** content must be related to resolver path ***
-	schema := qSchema + autoSchema                                                //  *** qSchema is mannually coded ***
+
+	schs := sSpl(qSchema, DELISchema)
+	pc(len(schs) < 2, fEf("qSchema header error, missing array schema?\n"))
+	qSchema = trueAssign(len(objIDs) == 1, len(objIDs) > 1, schs[0], schs[1], qSchema).(string)
+
+	schema := qSchema + autoSchema
 	for k, v := range mReplace {
 		schema = sRepAll(schema, k, v)
 	}
@@ -122,7 +127,7 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 
 	resolvers := map[string]interface{}{}
 	for _, fname := range qSchemaList(qSchemaDir) {
-		resolvers["QueryRoot/"+fname] = func(params *graphql.ResolveParams) (interface{}, error) { // *** PATH : related to <querySchema> ***
+		resolvers["Query/"+fname] = func(params *graphql.ResolveParams) (interface{}, error) { // *** PATH : related to <querySchema> ***
 			jsonBytes := rsvResource(objIDs, mJSON, mReplace) //                                      *** Get Reconstructed JSON ***
 			jsonMap := make(map[string]interface{})
 			pe(json.Unmarshal(jsonBytes, &jsonMap))
@@ -132,7 +137,7 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 
 	context := map[string]interface{}{}
 	// variables := map[string]interface{}{}
-	executor, _ := graphql.NewExecutor(schema, "QueryRoot", "", resolvers)
+	executor, _ := graphql.NewExecutor(schema, "Query", "", resolvers)
 	// executor.ResolveType = func(value interface{}) string {
 	// 	if object, ok := value.(map[string]interface{}); ok {
 	// 		return object["__typename"].(string)
@@ -154,7 +159,7 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 	// 	return nil, nil
 	// }
 
-	// resolvers["QueryRoot/staff"] = func(params *graphql.ResolveParams) (interface{}, error) {
+	// resolvers["Query/staff"] = func(params *graphql.ResolveParams) (interface{}, error) {
 	// 	if len(params.Field.Arguments) == 0 {
 	// 		return nil, nil
 	// 	}
@@ -187,7 +192,7 @@ func Query(ctx string, objIDs []string, qSchemaDir, qTxt string, variables map[s
 
 	// context := map[string]interface{}{}
 	// // variables := map[string]interface{}{}
-	// executor, _ := graphql.NewExecutor(schema, "QueryRoot", "", resolvers)
+	// executor, _ := graphql.NewExecutor(schema, "Query", "", resolvers)
 	// // executor.ResolveType = func(value interface{}) string {
 	// // 	if object, ok := value.(map[string]interface{}); ok {
 	// // 		return object["__typename"].(string)

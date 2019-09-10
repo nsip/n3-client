@@ -14,7 +14,7 @@ func mkSchemaQueryHead(qSchemaDir string, objects ...string) {
 		if _, e := os.Stat(fpath); e == nil {
 			return
 		} else if os.IsNotExist(e) {
-			schema := fSf("type QueryRoot {\n\t%s: %s\n}", obj, obj)
+			schema := fSf("type Query {\n\t%s: %s\n}\n%s\ntype Query {\n\t%s: [%s]\n}", obj, obj, DELISchema, obj, obj)
 			ioutil.WriteFile(fpath, []byte(schema), 0666)
 		} else {
 			panic("mkSchemaQueryHead error")

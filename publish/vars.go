@@ -28,3 +28,7 @@ var (
 	fSf          = fmt.Sprintf
 	sJ           = strings.Join
 )
+
+const (
+	DELISchema = "###"
+)

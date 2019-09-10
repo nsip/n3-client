@@ -27,7 +27,7 @@ func cdUL(dir string) string {
 func OriExePathChk() {
 AGAIN:
 	if path, _ := os.Getwd(); path != g.OriExePath {
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(50 * time.Millisecond)
 		goto AGAIN
 	}
 }
@@ -68,7 +68,7 @@ func getIDList(c echo.Context) error {
 	mtxID.Lock()
 
 	params := c.QueryParams()
-	if objects, ok := params["object"]; ok { //                             *** object Value only indicates the file to get parampath ***
+	if objects, ok := params["object"]; ok { //                         *** object Value only indicates the file to get parampath ***
 
 		k, v := GetMapKVs(params)
 		if vArr, ok := SlcD2ToD1(v); ok {
@@ -187,7 +187,6 @@ type Request struct {
 // postQueryGQL :
 func postQueryGQL(c echo.Context) error {
 	defer func() { mtxQry.Unlock() }()
-
 	OriExePathChk()
 	mtxQry.Lock()
 
@@ -199,7 +198,7 @@ func postQueryGQL(c echo.Context) error {
 
 	// ********************* GRAPHIQL client ********************* //
 	req := new(Request) //
-	pe(c.Bind(req))     //          *** ONLY <POST> echo can Bind OK ***
+	pe(c.Bind(req))     //          *** ONLY <POST> echo Bind OK ***
 	mPV := map[string]interface{}{}
 	for k, v := range req.Variables {
 		mPV[k] = v.(string)
@@ -229,10 +228,44 @@ func postQueryGQL(c echo.Context) error {
 	return c.JSON(http.StatusAccepted, "Nothing Found")
 }
 
+// postQueryGQL2 :
+func postQueryGQL2(c echo.Context) error {
+	defer func() { mtxQry2.Unlock() }()
+	OriExePathChk()
+	mtxQry2.Lock()
+
+	// ********************* GRAPHIQL client ********************* //
+	req := new(Request) //
+	pe(c.Bind(req))     //          *** ONLY <POST> echo Bind OK ***
+	mPV := map[string]interface{}{}
+	for k, v := range req.Variables {
+		mPV[k] = v.(string)
+	}
+
+	qrytxt := req.Query
+	if obj, e := Get1stObjInQry(qrytxt); e == nil {
+		IDs := []string{}
+		k, v := GetMapKVs(mPV)
+		ids, _ := GetIDs(obj, k.([]string), v.([]string), false)
+		for _, id := range ids {
+			fPln(id)
+			IDs = append(IDs, id)
+			if _, _, o, _ := q.Data(g.CurCtx, id, ""); o == nil || len(o) == 0 || o[0] == "" {
+				continue
+			}
+		}
+		if len(IDs) > 0 {
+			gqlrst := gql.Query(g.CurCtx, IDs, g.Cfg.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc)
+			return c.String(http.StatusAccepted, gqlrst)
+		}
+		return c.JSON(http.StatusAccepted, "Nothing Found (NO ID)")
+	}
+	return c.JSON(http.StatusAccepted, "Nothing Found (NO OBJECT)")
+}
+
 // getObject :
 func getObject(c echo.Context) error {
 	defer func() { mtxObj.Unlock() }()
-
 	OriExePathChk()
 	mtxObj.Lock()
 
@@ -243,7 +276,6 @@ func getObject(c echo.Context) error {
 // getSchema :
 func getSchema(c echo.Context) error {
 	defer func() { mtxScm.Unlock() }()
-
 	OriExePathChk()
 	mtxScm.Lock()
 
@@ -307,6 +339,7 @@ func HostHTTPAsync() {
 	api.GET(route.Scm, getSchema)
 	api.POST(route.Pub, postToNode)
 	api.POST(route.GQL, postQueryGQL)
+	api.POST(route.GQL2, postQueryGQL2)
 	api.DELETE(route.Del, delFromNode)
 	// api.POST(route.Upload, postFileToNode)
 

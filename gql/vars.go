@@ -21,6 +21,7 @@ var (
 	ph              = u.PanicHandle
 	must            = u.Must
 	IF              = u.IF
+	trueAssign      = u.TrueAssign
 	GetMapKeys      = w.GetMapKeys
 	IArrStrJoinEx   = w.IArrStrJoinEx
 	SortIntArr2D    = w.SortIntArr2D
@@ -50,7 +51,8 @@ var (
 )
 
 const (
-	DELIPath = " ~ "
+	DELIPath   = " ~ "
+	DELISchema = "###"
 )
 
 type valver struct {

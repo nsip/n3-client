@@ -26,7 +26,7 @@ func queryObject(ctx, id string) {
 		return
 	}
 
-	fPln(" ---------------------------------------------- ")
+	// fPln(" ---------------------------------------------- ")
 
 	s, p, o, v := q.Data(ctx, id, "::") //       *** Struct ***
 	if s != nil {
@@ -36,7 +36,7 @@ func queryObject(ctx, id string) {
 		}
 	}
 
-	fPln(" ---------------------------------------------- ")
+	// fPln(" ---------------------------------------------- ")
 
 	s, p, o, v = q.Data(ctx, id, "[]") //        *** Array ***
 	if s != nil {
@@ -47,7 +47,7 @@ func queryObject(ctx, id string) {
 		mIndicesList = mkIndicesList()
 	}
 
-	fPln(" ---------------------------------------------- ")
+	// fPln(" ---------------------------------------------- ")
 
 	s, p, o, v = q.Data(ctx, id, root) //        *** Values ***
 	if s != nil {

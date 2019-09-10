@@ -4,6 +4,8 @@ import (
 	"testing"
 )
 
+// 1) Ctrl+, -> Settings, 2) look for "go test", 3) [Build Flags], 4) [Add Item] add "-v"
+
 func TestLoad(t *testing.T) {
 	cfg := FromFile("../config.toml")
 	fPln(cfg.Path)
