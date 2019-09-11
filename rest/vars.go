@@ -20,18 +20,17 @@ type (
 
 var (
 	// IF is
-	IF      = u.IF
-	pe      = u.PanicOnError
-	pc      = u.PanicOnCondition
-	phe     = u.PanicHandleEx
-	must    = u.Must
-	mAssign = u.MatchAssign
-	fPln    = fmt.Println
-	fPf     = fmt.Printf
-	fEf     = fmt.Errorf
-	fSf     = fmt.Sprintf
-	lPln    = log.Println
-	sSpl    = strings.Split
+	IF   = u.IF
+	pe   = u.PanicOnError
+	pc   = u.PanicOnCondition
+	phe  = u.PanicHandleEx
+	must = u.Must
+	fPln = fmt.Println
+	fPf  = fmt.Printf
+	fEf  = fmt.Errorf
+	fSf  = fmt.Sprintf
+	lPln = log.Println
+	sSpl = strings.Split
 	// IArrIntersect is
 	IArrIntersect = w.IArrIntersect
 	// GetMapKVs is
