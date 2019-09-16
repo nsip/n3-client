@@ -25,8 +25,8 @@ ErrLog = "./errlog.txt"
   Upload = "/v#/upload"
 
 [RPC]
-  Namespace = "6ctsBirht4B7VsvLFpmkVUjsYbhVvggXnZoCP7XaFRtF"
-  Server = "192.168.78.15"
+  Namespace = "GdYh1auVHBsLGsoNHu1z7JWzs6cy3kmS1s4ZZssekBmd"
+  Server = "192.168.245.135"
   Port = 5777
   CtxList = ["demo", "demo1", "demo2"]
   CtxPrivDef = "privctrl"

@@ -4,7 +4,7 @@ set -e
 ORIGINALPATH=`pwd`
 
 rm -rf ./build/
-mkdir build && cp config.toml ./build/ && cp main_test.txt ./build/main_test.go 
+mkdir build && cp config.toml ./build/ && cp main_test.txt ./build/main_test.go && cp main.go ./build/main.go
 mkdir ./build/debug_pub && mkdir ./build/debug_qry
 
 OK=0
