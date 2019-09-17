@@ -37,6 +37,7 @@ cd $ORIGINALPATH
 
 
 cd ./cli-privacy/
+go get github.com/inconshreveable/mousetrap # for windows spf13
 go get
 
 GOARCH=amd64
@@ -44,8 +45,8 @@ LDFLAGS="-s -w"
 
 GOOS="linux" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o privacy
 mv privacy ../build/Linux64/
-GOOS="windows" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o privacy
-mv privacy ../build/Win64/
+GOOS="windows" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o privacy.exe
+mv privacy.exe ../build/Win64/
 GOOS="darwin" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o privacy
 mv privacy ../build/Mac/
 
@@ -61,11 +62,11 @@ if [ ! -f ./preprocess/util/jq ]; then
 fi
 go get
 
-GOOS="linux" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS"
+GOOS="linux" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o n3-client
 mv n3-client ./build/Linux64/
-GOOS="windows" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS"
-mv n3-client ./build/Win64/
-GOOS="darwin" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS"
+GOOS="windows" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o n3-client.exe
+mv n3-client.exe ./build/Win64/
+GOOS="darwin" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o n3-client
 mv n3-client ./build/Mac/
 
 echo "OK: [n3-client] is built and put into [./build] directory ..... :)"
