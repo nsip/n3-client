@@ -1,11 +1,8 @@
 package xjy
 
 import (
-	"io/ioutil"
-
 	"github.com/google/uuid"
 	g "github.com/nsip/n3-client/global"
-	pp "github.com/nsip/n3-client/preprocess"
 )
 
 // JSONObjInfo : (must have TOP-LEVEL "ID" like `"ID": "6690e6c9-3ef0-4ed3-8b37-7f3964730bee",` )
@@ -134,27 +131,27 @@ func JSONObjScan(json, dfltRoot string,
 // 	return
 // }
 
-func prepJSON(json string) string {
+// func prepJSON(json string) string {
 
-	// *** format json ***
+// 	// *** format json ***
 
-	// json = pp.FmtJSONStr(json, "../preprocess/util/", "./")
-	ioutil.WriteFile("../build/debug_pub/in.json", []byte(json), 0666)
-	json = pp.FmtJSONFile("../../build/debug_pub/in.json", "../preprocess/util/", "./")
-	ioutil.WriteFile("../build/debug_pub/infmt.json", []byte(json), 0666)
+// 	// json = pp.FmtJSONStr(json, "../preprocess/util/", "./")
+// 	ioutil.WriteFile("../build/debug_pub/in.json", []byte(json), 0666)
+// 	json = pp.FmtJSONFile("../../build/debug_pub/in.json", "../preprocess/util/", "./")
+// 	ioutil.WriteFile("../build/debug_pub/infmt.json", []byte(json), 0666)
 
-	// *** ': null' => ': "null"' ***
-	json = S(json).Replace(`": null`, `": "null"`).V()
+// 	// *** ': null' => ': "null"' ***
+// 	json = S(json).Replace(`": null`, `": "null"`).V()
 
-	// *** dealing with colon ***
-	if pp.HasColonInValue(json) {
-		json = pp.RplcValueColons(json)
-	}
+// 	// *** dealing with colon ***
+// 	if pp.HasColonInValue(json) {
+// 		json = pp.RplcValueColons(json)
+// 	}
 
-	// *** convert to ASCII ***
-	if ascii, ajson := UTF8ToASCII(json); !ascii {
-		fPln("is utf8")
-		return ajson
-	}
-	return json
-}
+// 	// *** convert to ASCII ***
+// 	if ascii, ajson := UTF8ToASCII(json); !ascii {
+// 		fPln("is utf8")
+// 		return ajson
+// 	}
+// 	return json
+// }

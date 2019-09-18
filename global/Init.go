@@ -7,7 +7,7 @@ import (
 
 // Init :
 func Init() {
-	Cfg = c.FromFile("../build/config.toml")
+	Cfg = c.FromFile("./config.toml", "../config.toml") // exe uses the first, unit tests use the second.
 	pc(Cfg == nil, fEf("Init Config @ Cfg"))
 
 	N3clt = n3grpc.NewClient(Cfg.RPC.Server, Cfg.RPC.Port)

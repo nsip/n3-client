@@ -9,14 +9,14 @@ import (
 )
 
 func TestJSONObjChildren(t *testing.T) {
-	cfg := c.FromFile("../build/config.toml")
+	cfg := c.FromFile("../config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 	jsonbytes := must(ioutil.ReadFile("./files/sample.json")).([]byte)
 	fPln(JSONObjChildren(string(jsonbytes)))
 }
 
 func TestJSONGetObjID(t *testing.T) {
-	cfg := c.FromFile("../build/config.toml")
+	cfg := c.FromFile("../config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 	jsonbytes := must(ioutil.ReadFile("./files/sample.json")).([]byte)
 	idTag, id, root, autoID, addRoot, jsonObj := JSONObjInfo(string(jsonbytes), "DefaultRoot", g.DELIPath)
@@ -29,7 +29,7 @@ func TestJSONGetObjID(t *testing.T) {
 }
 
 func TestJSONScanObjects(t *testing.T) {
-	cfg := c.FromFile("../build/config.toml")
+	cfg := c.FromFile("../config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 
 	data := string(must(ioutil.ReadFile("./files/xapi.json")).([]byte))
@@ -52,8 +52,8 @@ func TestJSONScanObjects(t *testing.T) {
 	)
 }
 
-func TestJSONArrDiv(t *testing.T) {
-	data := string(must(ioutil.ReadFile("./files/xapi10.json")).([]byte))
-	arrs, rem := JSONArrDiv(string(data), 3)
-	fPln(arrs[0], rem)
-}
+// func TestJSONArrDiv(t *testing.T) {
+// 	data := string(must(ioutil.ReadFile("./files/xapi10.json")).([]byte))
+// 	arrs, rem := JSONArrDiv(string(data), 3)
+// 	fPln(arrs[0], rem)
+// }

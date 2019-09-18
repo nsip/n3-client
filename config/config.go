@@ -12,8 +12,9 @@ type filewatcher struct {
 }
 
 type webservice struct {
-	Port    int
-	Version string
+	Port     int
+	Version  string
+	HTMLPath string
 }
 
 type group struct {

@@ -305,13 +305,13 @@ func HostHTTPAsync() {
 		AllowCredentials: true,
 	}))
 
-	grp, route := g.Cfg.Group, g.Cfg.Route
-	ipport := LocalIP() + fSf(":%d", g.Cfg.WebService.Port)
+	grp, route, web := g.Cfg.Group, g.Cfg.Route, g.Cfg.WebService
+	ipport := LocalIP() + fSf(":%d", web.Port)
 
 	// APP
-	webloc := grp.APP + route.Pub
-	e.File(webloc, "../www/service.html")
-	e.Static(cdUL(webloc), "../www/") //             "/" is html - ele - <src>'s path
+	webloc, htmlpath := grp.APP+route.Pub, web.HTMLPath
+	e.File(webloc, htmlpath)
+	e.Static(cdUL(webloc), S(htmlpath).RmTailFromLast("/").V()+"/") // "/" is html - ele - <src>'s path
 
 	// *** big file posting has issue ***
 	e.POST("/file"+route.Upload, postFileToNode)
@@ -360,17 +360,18 @@ func HostHTTPAsync() {
 	})
 
 	// Server
-	e.Start(fSf(":%d", g.Cfg.WebService.Port))
+	e.Start(fSf(":%d", web.Port))
 }
 
 func ctxFromCredential(uname, pwd string) string {
+	rpc := g.Cfg.RPC
 	switch {
 	case uname == "admin" && pwd == "admin":
-		return g.Cfg.RPC.CtxPrivDef
+		return rpc.CtxPrivDef
 	case uname == "user" && pwd == "user":
-		return g.Cfg.RPC.CtxList[0]
+		return rpc.CtxList[0]
 	case uname == "user1" && pwd == "user1":
-		return g.Cfg.RPC.CtxList[1]
+		return rpc.CtxList[1]
 	default:
 		return ""
 	}

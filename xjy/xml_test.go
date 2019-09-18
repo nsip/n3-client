@@ -27,7 +27,7 @@ func TestXMLObjStrByID(t *testing.T) {
 }
 
 func TestXMLInfoScan(t *testing.T) {
-	cfg := c.FromFile("../build/config.toml")
+	cfg := c.FromFile("../config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 
 	sifbytes := must(ioutil.ReadFile("./files/sif.xml")).([]byte)

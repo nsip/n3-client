@@ -11,9 +11,9 @@ func prepJSON(json string) string {
 	// *** format json ***
 
 	// json = pp.FmtJSONStr(json, "../preprocess/util/", "./")
-	ioutil.WriteFile("../build/debug_pub/in.json", []byte(json), 0666)
-	json = pp.FmtJSONFile("../../build/debug_pub/in.json", "../preprocess/util/", "./")
-	ioutil.WriteFile("../build/debug_pub/infmt.json", []byte(json), 0666)
+	ioutil.WriteFile("./debug_pub/in.json", []byte(json), 0666)    //
+	json = pp.FmtJSONFile("./debug_pub/in.json", "./")             // make sure a jq copy is in n3-client dir
+	ioutil.WriteFile("./debug_pub/infmt.json", []byte(json), 0666) //
 
 	// *** ': null' => ': "null"' ***
 	json = S(json).Replace(`": null`, `": "null"`).V()

@@ -3,7 +3,7 @@
 set -e
 ORIGINALPATH=`pwd`
 
-rm -rf ./build/
+rm -rf ./build
 
 mkdir -p build/Win64
 cp config.toml ./build/Win64/
@@ -55,13 +55,32 @@ OK=1
 cd -
 
 OK=0
-echo "building n3client ..."
-if [ ! -f ./preprocess/util/jq ]; then
-    echo "jq-linux64 not found!, let's get one"
-    curl -o jq -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && mv jq ./preprocess/util/ && chmod 777 ./preprocess/util/jq
-fi
-go get
+echo "fetching utils ..."
 
+JQ="jq-linux64"
+if [ ! -f ./preprocess/util/$JQ ]; then
+    echo "$JQ not found!, let's get one"
+    curl -o $JQ -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && mv $JQ ./preprocess/util/ && chmod 777 ./preprocess/util/$JQ
+fi
+cp ./preprocess/util/$JQ ./build/Linux64/jq
+cp ./preprocess/util/$JQ ./preprocess/util/jq
+
+JQ="jq-win64.exe"
+if [ ! -f ./preprocess/util/$JQ ]; then
+    echo "$JQ not found!, let's get one"
+    curl -o $JQ -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe && mv $JQ ./preprocess/util/
+fi
+cp ./preprocess/util/$JQ ./build/Win64/jq.exe
+
+JQ="jq-mac"
+if [ ! -f ./preprocess/util/$JQ ]; then
+    echo "$JQ not found!, let's get one"
+    curl -o $JQ -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64 && mv $JQ ./preprocess/util/ && chmod 777 ./preprocess/util/$JQ
+fi
+cp ./preprocess/util/$JQ ./build/Mac/jq
+
+echo "building n3client ..."
+go get
 GOOS="linux" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o n3-client
 mv n3-client ./build/Linux64/
 GOOS="windows" GOARCH="$GOARCH" go build -ldflags="$LDFLAGS" -o n3-client.exe

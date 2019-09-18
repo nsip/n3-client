@@ -2,11 +2,12 @@ Path = "../config.toml"
 ErrLog = "./errlog.txt"
 
 [FileWatcher]
-  Dir = "../inbound/"
+  Dir = "../../inbound/"
 
 [WebService]
   Port = 1323
   Version = "0.1.0"  
+  HTMLPath = "../../www/service.html"
 
 [Group]
   APP = "/app"
@@ -25,8 +26,8 @@ ErrLog = "./errlog.txt"
   Upload = "/v#/upload"
 
 [RPC]
-  Namespace = "GdYh1auVHBsLGsoNHu1z7JWzs6cy3kmS1s4ZZssekBmd"
-  Server = "192.168.245.135"
+  Namespace = "6BKVG4dBXniBJ9K7XvkfbwpVWXxh49XQr6PQPQfPTFFy"
+  Server = "192.168.78.15"
   Port = 5777
   CtxList = ["demo", "demo1", "demo2"]
   CtxPrivDef = "privctrl"

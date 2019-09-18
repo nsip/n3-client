@@ -9,7 +9,7 @@ import (
 )
 
 func TestYAMLScan(t *testing.T) {
-	cfg := c.FromFile("../build/config.toml")
+	cfg := c.FromFile("../config.toml")
 	defer func() { ph(recover(), cfg.ErrLog) }()
 
 	databytes := must(ioutil.ReadFile("./files/xapi.json")).([]byte)                                  //   *** change file name ***
