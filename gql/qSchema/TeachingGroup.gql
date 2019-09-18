@@ -1,0 +1,7 @@
+type Query {
+	TeachingGroup: TeachingGroup
+}
+###
+type Query {
+	TeachingGroup: [TeachingGroup]
+}

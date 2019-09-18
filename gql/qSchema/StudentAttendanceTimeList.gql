@@ -1,0 +1,7 @@
+type Query {
+	StudentAttendanceTimeList: StudentAttendanceTimeList
+}
+###
+type Query {
+	StudentAttendanceTimeList: [StudentAttendanceTimeList]
+}

@@ -14,6 +14,10 @@ func mkSchemaQueryHead(qSchemaDir string, objects ...string) {
 	objects = IArrRmRep(Ss(objects)).([]string)
 	// fPln("type objects count ", len(objects))
 
+	if _, e := os.Stat(qSchemaDir); e != nil && os.IsNotExist(e) {
+		os.Mkdir(qSchemaDir, os.ModePerm)
+	}
+
 	for _, obj := range objects {
 		fpath := qSchemaDir + obj + ".gql"
 		if _, e := os.Stat(fpath); e == nil {
@@ -37,9 +41,11 @@ func postpJSON(ctx, json string, IDs, Objs []string) {
 	// 	ioutil.WriteFile(fSf("../build/debug_pub/%s.json", ID), []byte(json), 0666)
 	// }
 
-	mkSchemaQueryHead(g.Cfg.Query.SchemaDir, Objs...) // *** create gql schema query header ***
+	qSchemaDir := g.Cfg.Query.SchemaDir
+	mkSchemaQueryHead(qSchemaDir, Objs...) // *** create gql schema query header ***
 }
 
 func postpXML(ctx, xml string, IDs, Objs []string) {
-	mkSchemaQueryHead(g.Cfg.Query.SchemaDir, Objs...) // *** create gql schema query header ***
+	qSchemaDir := g.Cfg.Query.SchemaDir
+	mkSchemaQueryHead(qSchemaDir, Objs...) // *** create gql schema query header ***
 }

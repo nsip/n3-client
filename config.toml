@@ -26,7 +26,7 @@ ErrLog = "./errlog.txt"
   Upload = "/v#/upload"
 
 [RPC]
-  Namespace = "6BKVG4dBXniBJ9K7XvkfbwpVWXxh49XQr6PQPQfPTFFy"
+  Namespace = "C55ubBy9AUu7fkxoqVU1nJvWbtbdccBuADvWbTiK78U9"
   Server = "192.168.78.15"
   Port = 5777
   CtxList = ["demo", "demo1", "demo2"]
@@ -34,9 +34,9 @@ ErrLog = "./errlog.txt"
   CtxPrivID = "ctxid"
 
 [Query]
-  SchemaDir = "../gql/qSchema/"
-  SampleTxtDir = "../gql/qTxt/"
-  ParamPathDir = "../rest/parampath/"
+  SchemaDir = "../../gql/qSchema/"
+  SampleTxtDir = "../../gql/qTxt/"
+  ParamPathDir = "../../rest/parampath/"
 
 [Debug]
   TrialPub = false

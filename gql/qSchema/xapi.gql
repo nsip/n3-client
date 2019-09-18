@@ -1,0 +1,7 @@
+type Query {
+	xapi: xapi
+}
+###
+type Query {
+	xapi: [xapi]
+}

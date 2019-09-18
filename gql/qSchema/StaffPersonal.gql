@@ -1,0 +1,7 @@
+type Query {
+	StaffPersonal: StaffPersonal
+}
+###
+type Query {
+	StaffPersonal: [StaffPersonal]
+}

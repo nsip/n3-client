@@ -221,7 +221,8 @@ func postQueryGQL(c echo.Context) error {
 	}
 
 	if len(IDs) >= 1 {
-		gqlrst := gql.Query(g.CurCtx, IDs, g.Cfg.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc) // *** gqlrst is already JSON string, use String to return ***
+		qSchemaDir := g.Cfg.Query.SchemaDir
+		gqlrst := gql.Query(g.CurCtx, IDs, qSchemaDir, req.Query, mPV, g.MpQryRstRplc) // *** gqlrst is already JSON string, use String to return ***
 		return c.String(http.StatusAccepted, gqlrst)
 	}
 
@@ -255,7 +256,8 @@ func postQueryGQL2(c echo.Context) error {
 			}
 		}
 		if len(IDs) > 0 {
-			gqlrst := gql.Query(g.CurCtx, IDs, g.Cfg.Query.SchemaDir, req.Query, mPV, g.MpQryRstRplc)
+			qSchemaDir := g.Cfg.Query.SchemaDir
+			gqlrst := gql.Query(g.CurCtx, IDs, qSchemaDir, req.Query, mPV, g.MpQryRstRplc)
 			return c.String(http.StatusAccepted, gqlrst)
 		}
 		return c.JSON(http.StatusAccepted, "Nothing Found (NO ID)")

@@ -1,0 +1,7 @@
+type Query {
+	StudentPersonal: StudentPersonal
+}
+###
+type Query {
+	StudentPersonal: [StudentPersonal]
+}

@@ -1,0 +1,7 @@
+type Query {
+	SchoolCourseInfo: SchoolCourseInfo
+}
+###
+type Query {
+	SchoolCourseInfo: [SchoolCourseInfo]
+}

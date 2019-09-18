@@ -1,0 +1,7 @@
+type Query {
+	Content: Content
+}
+###
+type Query {
+	Content: [Content]
+}
