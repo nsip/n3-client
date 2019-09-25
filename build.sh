@@ -106,16 +106,16 @@ OK=1
 echo $OK
 
 echo "ZIP Linux64"
-cd $ORIDINALPATH/build/Linux64
-zip -qr ../n3-client-Linux64-$VERSION.zip *
+cd $ORIGINALPATH/build/Linux64
+zip -qr ../n3-transport-Linux64-$VERSION.zip *
 
 echo "ZIP Win64"
-cd $ORIDINALPATH/build/Win64
-zip -qr ../n3-client-Win64-$VERSION.zip *
+cd $ORIGINALPATH/build/Win64
+zip -qr ../n3-transport-Win64-$VERSION.zip *
 
 echo "ZIP Mac"
-cd $ORIDINALPATH/build/Mac
-zip -qr ../n3-client-Mac-$VERSION.zip *
+cd $ORIGINALPATH/build/Mac
+zip -qr ../n3-transport-Mac-$VERSION.zip *
 
 if [ $OK == 1 ]; then
     echo "Successful: go into [./build] and run ......................... :)"
