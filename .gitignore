@@ -4,3 +4,6 @@
 n3-client
 build
 preprocess/util/jq
+preprocess/util/jq-linux64
+preprocess/util/jq-mac
+preprocess/util/jq-win64.exe

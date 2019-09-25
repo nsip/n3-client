@@ -72,6 +72,7 @@ if [ ! -f ./preprocess/util/$JQ ]; then
     curl -o $JQ -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && mv $JQ ./preprocess/util/ && chmod 777 ./preprocess/util/$JQ
 fi
 cp ./preprocess/util/$JQ ./build/Linux64/jq
+# XXX (depends on OS - we should move these
 cp ./preprocess/util/$JQ ./preprocess/util/jq
 
 JQ="jq-win64.exe"
