@@ -26,15 +26,24 @@ cp main.go ./build/Mac/main.go
 mkdir -p ./build/Mac/debug_pub
 mkdir -p ./build/Mac/debug_qry
 
+mv $GOPATH/src/github.com/cdutwhu/go-wrappers $GOPATH/src/github.com/cdutwhu/go-wrappers_OLD_$$
+
 OK=0
 echo "building command line - privacy ..."
 go get github.com/cdutwhu/go-gjxy
 GOPATH=`go env GOPATH`
 cd $GOPATH/src/github.com/cdutwhu/go-gjxy
-git pull
+git fetch
 git checkout master #30b39b932d92afa40d71cf77b941bd44110399b1
+git pull
 cd $ORIGINALPATH
 
+GOPATH=`go env GOPATH`
+cd $GOPATH/src/github.com/cdutwhu/go-util
+git fetch
+git checkout master
+git pull
+cd $ORIGINALPATH
 
 cd ./cli-privacy/
 go get github.com/inconshreveable/mousetrap # for windows spf13
