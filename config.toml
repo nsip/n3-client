@@ -27,7 +27,7 @@ ErrLog = "./errlog.txt"
 
 [RPC]
   Namespace = "C55ubBy9AUu7fkxoqVU1nJvWbtbdccBuADvWbTiK78U9"
-  Server = "192.168.78.15"
+  Server = "127.0.0.1"
   Port = 5777
   CtxList = ["demo", "demo1", "demo2"]
   CtxPrivDef = "privctrl"
