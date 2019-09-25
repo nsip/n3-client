@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERSION="v0.0.0"
+
 set -e
 ORIGINALPATH=`pwd`
 
@@ -102,6 +104,18 @@ echo "OK: [n3-client] is built and put into [./build] directory ..... :)"
 OK=1
 
 echo $OK
+
+echo "ZIP Linux64"
+cd $ORIDINALPATH/build/Linux64
+zip -qr ../n3-client-Linux64-$VERSION.zip *
+
+echo "ZIP Win64"
+cd $ORIDINALPATH/build/Win64
+zip -qr ../n3-client-Win64-$VERSION.zip *
+
+echo "ZIP Mac"
+cd $ORIDINALPATH/build/Mac
+zip -qr ../n3-client-Mac-$VERSION.zip *
 
 if [ $OK == 1 ]; then
     echo "Successful: go into [./build] and run ......................... :)"
