@@ -70,7 +70,7 @@ func getIDList(c echo.Context) error {
 	params := c.QueryParams()
 	if objects, ok := params["object"]; ok { //                         *** object Value only indicates the file to get parampath ***
 
-		k, v := GetMapKVs(params)
+		k, v := MapKVs(params)
 		if vArr, ok := SlcD2ToD1(v); ok {
 			all, ok := params["all"]                                 // *** if "all=true", get all objects' ID including dead objects ***
 			getall := IF(ok && all[0] == "true", true, false).(bool) //
@@ -246,7 +246,7 @@ func postQueryGQL2(c echo.Context) error {
 	qrytxt := req.Query
 	if obj, e := Get1stObjInQry(qrytxt); e == nil {
 		IDs := []string{}
-		k, v := GetMapKVs(mPV)
+		k, v := MapKVs(mPV)
 		ids, _ := GetIDs(obj, k.([]string), v.([]string), false)
 		for _, id := range ids {
 			fPln(id)
@@ -356,6 +356,7 @@ func HostHTTPAsync() {
 				// fSf("%-40s -> %s\n", ipport+grp.API+route.Scm, "(id*) [not implemented]")+
 				fSf("POST   %-40s -> %s\n", ipport+grp.API+route.Pub, "publish  (dfltRoot*) put JSON or XML in request header")+
 				fSf("POST   %-40s -> %s\n", ipport+grp.API+route.GQL, "(id*)")+
+				fSf("POST   %-40s -> %s\n", ipport+grp.API+route.GQL2, "[params-conditions]")+
 				fSf("DELETE %-40s -> %s\n", ipport+grp.API+route.Del, "(id*)")+
 				fSf("\n")+
 				fSf("POST   %-40s -> %s\n", ipport+"/file"+route.Upload, "n3client file upload"))

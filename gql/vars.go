@@ -22,7 +22,7 @@ var (
 	must            = u.Must
 	IF              = u.IF
 	trueAssign      = u.TrueAssign
-	GetMapKeys      = w.GetMapKeys
+	MapKeys         = u.MapKeys
 	IArrStrJoinEx   = w.IArrStrJoinEx
 	SortIntArr2D    = w.SortIntArr2D
 	IArrMake        = w.IArrMake

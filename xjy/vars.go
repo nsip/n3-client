@@ -24,9 +24,8 @@ var (
 	ph   = u.PanicHandle
 	pc   = u.PanicOnCondition
 	must = u.Must
-	IF   = u.IF
+	IF   = u.IF	
 
-	getMapKeys  = w.GetMapKeys
 	IArrEleIn   = w.IArrEleIn
 	UTF8ToASCII = w.UTF8ToASCII
 

@@ -20,21 +20,22 @@ type (
 
 var (
 	// IF is
-	IF   = u.IF
-	pe   = u.PanicOnError
-	pc   = u.PanicOnCondition
-	phe  = u.PanicHandleEx
-	must = u.Must
+	IF     = u.IF
+	pe     = u.PanicOnError
+	pc     = u.PanicOnCondition
+	phe    = u.PanicHandleEx
+	must   = u.Must
+	MapKVs = u.MapKVs
+
 	fPln = fmt.Println
 	fPf  = fmt.Printf
 	fEf  = fmt.Errorf
 	fSf  = fmt.Sprintf
 	lPln = log.Println
 	sSpl = strings.Split
+
 	// IArrIntersect is
 	IArrIntersect = w.IArrIntersect
-	// GetMapKVs is
-	GetMapKVs = w.GetMapKVs
 	// SlcD2ToD1 is
 	SlcD2ToD1 = w.SlcD2ToD1
 	// IArrRmRep is

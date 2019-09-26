@@ -105,9 +105,8 @@ func mkIndicesList() (rst map[string][][]int) {
 	rst = make(map[string][][]int)
 	if len(mArray) == 0 {
 		return
-	}
-	keys := GetMapKeys(mArray).([]string)
-	for _, k := range keys {
+	}	
+	for _, k := range MapKeys(mArray).([]string) {
 		s1, i2 := S(k).SplitEx(g.DELIPath, "#", "string", "int")
 		rKey := sJ(s1.([]string), g.DELIPath)
 		rst[rKey] = append(rst[rKey], i2.([]int))
@@ -142,9 +141,8 @@ func IPathListBymArr(path string) (rst []string) {
 func SubIPathListByPath(path string) (rst []string) {
 	if len(mIPathSubIPaths) == 0 {
 		return nil
-	}
-	mapKeys := GetMapKeys(mIPathSubIPaths).([]string)
-	for _, k := range mapKeys {
+	}	
+	for _, k := range MapKeys(mIPathSubIPaths).([]string) {
 		r1, _ := S(k).SplitEx(g.DELIPath, "#", "string", "int")
 		if sJ(r1.([]string), g.DELIPath) == path {
 			ipath := k

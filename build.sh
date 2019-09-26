@@ -3,6 +3,7 @@
 VERSION="v0.0.0"
 
 set -e
+GOPATH=`go env GOPATH`
 ORIGINALPATH=`pwd`
 
 rm -rf ./build
@@ -33,7 +34,6 @@ mv $GOPATH/src/github.com/cdutwhu/go-wrappers $GOPATH/src/github.com/cdutwhu/go-
 OK=0
 echo "building command line - privacy ..."
 go get github.com/cdutwhu/go-gjxy
-GOPATH=`go env GOPATH`
 cd $GOPATH/src/github.com/cdutwhu/go-gjxy
 git fetch
 git checkout master #30b39b932d92afa40d71cf77b941bd44110399b1
