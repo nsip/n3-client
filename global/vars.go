@@ -51,7 +51,7 @@ var (
 	fEf  = fmt.Errorf
 
 	must = u.Must
-	pc   = u.PC
+	pc   = u.PanicOnCondition
 	IF   = u.IF
 
 	IArrRmRep = w.IArrRmRep

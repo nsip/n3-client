@@ -24,9 +24,10 @@ var (
 	ph   = u.PanicHandle
 	pc   = u.PanicOnCondition
 	must = u.Must
-	IF   = u.IF	
+	IF   = u.IF
+	XIn  = u.XIn
 
-	IArrEleIn   = w.IArrEleIn
+	// IArrEleIn   = w.IArrEleIn
 	UTF8ToASCII = w.UTF8ToASCII
 
 	JSONChildValue        = gjxy.JSONChildValue

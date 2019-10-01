@@ -15,7 +15,7 @@ func JSONObjInfo(json, dfltRoot, pDel string) (IDTag, ID, root string, autoID, a
 	sidtag := "I will be the shortest length ID mark, the shortest ID Mark is what we wanted"
 	for _, child := range JSONObjChildren(jsonContent) {
 		Child := S(child)
-		if IArrEleIn(child, Ss{"id", "ID", "Id"}) || (Child.ToLower() == S(dfltRoot).ToLower()+"id") {
+		if XIn(child, []string{"id", "ID", "Id"}) || (Child.ToLower() == S(dfltRoot).ToLower()+"id") {
 			if id, _ := JSONXPathValue(jsonObj, root+pDel+child, pDel, []int{1, 1}...); S(id).IsUUID() {
 				sidtag = child
 				mMarkUUID[child] = id
