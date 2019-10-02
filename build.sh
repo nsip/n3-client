@@ -47,6 +47,10 @@ git checkout master
 git pull
 cd $ORIGINALPATH
 
+# HACK
+cd ../../cdutwhu/go-gjxy && git pull
+cd ../../cdutwhu/go-util && git pull
+
 cd ./cli-privacy/
 go get github.com/inconshreveable/mousetrap # for windows spf13
 go get
@@ -107,15 +111,16 @@ echo $OK
 
 echo "ZIP Linux64"
 cd $ORIGINALPATH/build/Linux64
-zip -qr ../n3-transport-Linux64-$VERSION.zip *
+zip -qr ../n3-client-Linux64-$VERSION.zip *
 
 echo "ZIP Win64"
 cd $ORIGINALPATH/build/Win64
-zip -qr ../n3-transport-Win64-$VERSION.zip *
+zip -qr ../n3-client-Win64-$VERSION.zip *
 
 echo "ZIP Mac"
 cd $ORIGINALPATH/build/Mac
-zip -qr ../n3-transport-Mac-$VERSION.zip *
+zip -qr ../n3-client-Mac-$VERSION.zip *
+
 
 if [ $OK == 1 ]; then
     echo "Successful: go into [./build] and run ......................... :)"
