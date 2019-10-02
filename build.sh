@@ -49,7 +49,9 @@ cd $ORIGINALPATH
 
 # HACK
 cd ../../cdutwhu/go-gjxy && git pull
+cd $ORIGINALPATH
 cd ../../cdutwhu/go-util && git pull
+cd $ORIGINALPATH
 
 cd ./cli-privacy/
 go get github.com/inconshreveable/mousetrap # for windows spf13
